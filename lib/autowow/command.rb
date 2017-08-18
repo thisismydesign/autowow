@@ -5,7 +5,7 @@ module Autowow
 
     def self.popen3_reader(*args)
       args.each do |arg|
-        self.class_eval("def #{arg};@#{arg}.read.chomp;end")
+        class_eval("def #{arg}; @#{arg} = @#{arg}.read.strip unless @#{arg}.is_a?(String); return @#{arg}; end")
       end
     end
 
