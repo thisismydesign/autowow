@@ -10,16 +10,16 @@ module Autowow
     end
 
     def branch_merged(working_dir = '.')
-      # TODO add `logger.error(*.stderr)` to every line
-      working_branch = Command.new('git', 'symbolic-ref', '--short', 'HEAD').execute.stdout
+      working_branch = Command.run_dry('git', 'symbolic-ref', '--short', 'HEAD').stdout
       return if working_branch.eql?('master')
 
-      pop_stash = Command.new('git', 'stash').execute.output_does_not_match?(%r{No local changes to save})
-      Command.new('git', 'checkout', 'master').execute
-      Command.new('git', 'pull').execute
-      Command.new('git', 'stash', 'pop').execute if pop_stash
-      Command.new('git', 'branch', '-D', working_branch).execute
-      logger.info(Command.new('git', 'status').execute.stdout)
+      pop_stash = Command.run('git', 'stash').output_does_not_match?(%r{No local changes to save})
+      Command.run('git', 'checkout', 'master')
+      Command.run('git', 'pull')
+      Command.run('git', 'stash', 'pop') if pop_stash
+      Command.run('git', 'branch', '-D', working_branch)
+      logger.info($/ + Command.run('git', 'branch').stdout)
+      logger.info($/ + Command.run('git', 'status').stdout)
     end
   end
 end
