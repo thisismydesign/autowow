@@ -5,7 +5,7 @@ require_relative 'vcs'
 module Autowow
   class CLI < Thor
 
-    # map %w(bm)  => :branch_merged
+    map %w(bm)  => :branch_merged
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged(working_dir = '.')
