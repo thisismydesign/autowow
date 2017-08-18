@@ -5,6 +5,14 @@ module Autowow
 
     include EasyLogging
 
+    def self.run(*args)
+      Command.new(*args).explain.chronic_execute
+    end
+
+    def self.run_dry(*args)
+      Command.new(*args).execute
+    end
+
     def self.popen3_reader(*args)
       args.each do |arg|
         class_eval("def #{arg}; @#{arg} = @#{arg}.read.strip unless @#{arg}.is_a?(String); return @#{arg}; end")
