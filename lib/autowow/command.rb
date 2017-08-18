@@ -22,7 +22,7 @@ module Autowow
     popen3_reader :stdin, :stdout, :stderr
     attr_reader :wait_thr
 
-    def initialize *args
+    def initialize(*args)
       @cmd = args
     end
 
