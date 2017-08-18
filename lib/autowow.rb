@@ -1,8 +1,6 @@
 require 'easy_logging'
-require 'open3'
 
-require_relative 'autowow/version'
-require_relative 'autowow/vcs'
+require_relative 'autowow/cli'
 
 module Autowow
   # Your code goes here...

@@ -23,7 +23,7 @@ module Autowow
     end
 
     def output_matches?(matcher)
-      @stdout.match(matcher)
+      stdout.match(matcher)
     end
 
     def output_does_not_match?(matcher)
