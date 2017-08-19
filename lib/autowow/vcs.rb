@@ -18,8 +18,8 @@ module Autowow
       Command.run('git', 'pull')
       Command.run('git', 'stash', 'pop') if pop_stash
       Command.run('git', 'branch', '-D', working_branch)
-      logger.info($/ + Command.run('git', 'branch').stdout)
-      logger.info($/ + Command.run('git', 'status').stdout)
+      logger.info(Command.run('git', 'branch').stdout)
+      logger.info(Command.run('git', 'status').stdout)
     end
   end
 end
