@@ -31,8 +31,9 @@ Gem::Specification.new do |spec|
   spec.executables   << 'aw'
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "easy_logging"
+  spec.add_dependency "easy_logging", ">= 0.3.0"
   spec.add_dependency "thor"
+  spec.add_dependency "colorize"
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "rake", "~> 10.0"

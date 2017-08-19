@@ -1,7 +1,12 @@
 require 'easy_logging'
 
+require_relative 'autowow/log_formatter'
+
+EasyLogging.level = Logger::DEBUG
+EasyLogging.formatter = proc do |severity, datetime, progname, msg|
+  Autowow::LogFormatter.beautify(severity, msg)
+end
+
 require_relative 'autowow/cli'
 
-module Autowow
-  # Your code goes here...
-end
+module Autowow; end
