@@ -10,6 +10,7 @@ module Autowow
     end
 
     def branch_merged(working_dir = '.')
+      logger.info(Command.run('git', 'status').stdout)
       working_branch = Command.run_dry('git', 'symbolic-ref', '--short', 'HEAD').stdout
       return if working_branch.eql?('master')
 
