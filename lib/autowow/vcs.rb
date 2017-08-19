@@ -12,7 +12,11 @@ module Autowow
     def branch_merged(working_dir = '.')
       logger.info(Command.run('git', 'status').stdout)
       working_branch = Command.run_dry('git', 'symbolic-ref', '--short', 'HEAD').stdout
-      return if working_branch.eql?('master')
+
+      if working_branch.eql?('master')
+        logger.error("#{$/}Nothing to do.")
+        return
+      end
 
       pop_stash = Command.run('git', 'stash').output_does_not_match?(%r{No local changes to save})
       Command.run('git', 'checkout', 'master')
