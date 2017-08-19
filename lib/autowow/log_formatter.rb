@@ -4,7 +4,7 @@ module Autowow
   class LogFormatter
     def self.beautify(severity, msg)
       log_msg = "#{msg}#{$/}"
-      log_msg = " * #{log_msg}" if severity.eql?('DEBUG')
+      log_msg = " $ #{log_msg}" if severity.eql?('DEBUG')
       color(severity, log_msg)
     end
 
