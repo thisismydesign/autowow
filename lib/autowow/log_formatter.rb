@@ -17,7 +17,7 @@ module Autowow
       when 'ERROR'
         msg.red
       else
-        msg.green
+        msg
       end
     end
   end
