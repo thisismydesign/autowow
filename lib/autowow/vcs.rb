@@ -25,6 +25,22 @@ module Autowow
       logger.info(status.stdout)
     end
 
+    def gem_release(working_dir = '.')
+      start_status = status.stdout
+      logger.info(start_status)
+      working_branch = current_branch
+      pop_stash = start_status.include?('Changes not staged for commit:')
+
+      stash if pop_stash
+      checkout('release')
+      Command.run('git', 'rebase', working_branch)
+      Command.run('git', 'push', 'origin', 'release')
+      checkout('master')
+      stash_pop if pop_stash
+
+      logger.info(status.stdout)
+    end
+
     def stash
       Command.run('git', 'stash').output_does_not_match?(%r{No local changes to save})
     end
