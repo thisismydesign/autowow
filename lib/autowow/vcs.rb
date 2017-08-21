@@ -13,7 +13,7 @@ module Autowow
       start_status = status.stdout
       logger.info(start_status)
       working_branch = current_branch
-      logger.error("#{$/}Nothing to do.") and return if working_branch.eql?('master')
+      logger.error("Nothing to do.") and return if working_branch.eql?('master')
       pop_stash = start_status.include?('Changes not staged for commit:')
 
       stash if pop_stash
