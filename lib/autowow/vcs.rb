@@ -10,12 +10,13 @@ module Autowow
     end
 
     def branch_merged(working_dir = '.')
-      logger.info(status.stdout)
+      start_status = status.stdout
+      logger.info(start_status)
       working_branch = current_branch
-
       logger.error("#{$/}Nothing to do.") and return if working_branch.eql?('master')
+      pop_stash = start_status.include?('Changes not staged for commit:')
 
-      pop_stash = stash
+      stash if pop_stash
       checkout('master')
       pull
       stash_pop if pop_stash
