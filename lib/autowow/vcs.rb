@@ -42,6 +42,21 @@ module Autowow
       logger.info(status.stdout)
     end
 
+    def update_projects(working_dirs = @working_dirs)
+      working_dirs.each do |working_dir|
+        # TODO: add handling of directories via extra param to popen3
+        # https://stackoverflow.com/a/10148084/2771889
+        Dir.chdir(working_dir) {
+          logger.info("Updating #{working_dir}")
+          start_status = status.stdout
+          logger.info(start_status)
+          logger.error("Not a git repository.") and next unless is_git?(start_status)
+          logger.error("Work in progress (not on master).") and next unless current_branch.eql?('master')
+          has_upstream? ? pull : pull_upstream
+        }
+      end
+    end
+
     def stash
       Command.run('git', 'stash').output_does_not_match?(%r{No local changes to save})
     end
@@ -62,6 +77,11 @@ module Autowow
       Command.run('git', 'pull')
     end
 
+    def pull_upstream
+      Command.run('git', 'fetch', 'upstream')
+      Command.run('git', 'fetch', 'upstream/master')
+    end
+
     def branch
       Command.run('git', 'branch')
     end
@@ -74,8 +94,20 @@ module Autowow
       Command.run('git', 'branch', '-D', branch)
     end
 
+    def remotes
+      Command.run('git', 'remote', '-v')
+    end
+
+    def has_upstream?
+      remotes.include('upstream')
+    end
+
     def uncommitted_changes?(start_status)
       !start_status.include?('nothing to commit, working tree clean')
+    end
+
+    def is_git?(start_status)
+      !start_status.include?('Not a git repository')
     end
   end
 end
