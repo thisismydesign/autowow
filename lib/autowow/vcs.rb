@@ -6,7 +6,7 @@ module Autowow
 
     def initialize
       # TODO make it configurable
-      @working_dirs = Dir.glob '~/repos/*/'
+      @working_dirs = Dir.glob(File.expand_path("~/repos/*/"))
     end
 
     def branch_merged(working_dir = '.')
@@ -47,12 +47,13 @@ module Autowow
         # TODO: add handling of directories via extra param to popen3
         # https://stackoverflow.com/a/10148084/2771889
         Dir.chdir(working_dir) {
-          logger.info("Updating #{working_dir}")
-          start_status = status.stdout
-          logger.info(start_status)
-          logger.error("Not a git repository.") and next unless is_git?(start_status)
-          logger.error("Work in progress (not on master).") and next unless current_branch.eql?('master')
-          has_upstream? ? pull : pull_upstream
+          logger.info("Updating #{working_dir} ...")
+          start_status = status_dry.stdout
+          logger.error("Skipped: not a git repository.") and next unless is_git?(start_status)
+          logger.error("Skipped: work in progress (not on master).") and next unless current_branch.eql?('master')
+          logger.error("Skipped: work in progress (uncommitted changes).") and next if uncommitted_changes?(start_status)
+          has_upstream? ? pull_upstream : pull
+          logger.info("Done.")
         }
       end
     end
@@ -69,6 +70,10 @@ module Autowow
       Command.run('git', 'status')
     end
 
+    def status_dry
+      Command.run_dry('git', 'status')
+    end
+
     def checkout(existing_branch)
       Command.run('git', 'checkout', existing_branch)
     end
@@ -79,7 +84,8 @@ module Autowow
 
     def pull_upstream
       Command.run('git', 'fetch', 'upstream')
-      Command.run('git', 'fetch', 'upstream/master')
+      Command.run('git', 'merge', 'upstream/master')
+      Command.run('git', 'push', 'origin', 'master')
     end
 
     def branch
@@ -99,7 +105,7 @@ module Autowow
     end
 
     def has_upstream?
-      remotes.include('upstream')
+      remotes.stdout.include?('upstream')
     end
 
     def uncommitted_changes?(start_status)
