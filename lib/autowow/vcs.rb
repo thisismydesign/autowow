@@ -14,7 +14,7 @@ module Autowow
       logger.info(start_status)
       working_branch = current_branch
       logger.error("Nothing to do.") and return if working_branch.eql?('master')
-      pop_stash = start_status.include?('Changes not staged for commit:')
+      pop_stash = uncommitted_changes?(start_status)
 
       stash if pop_stash
       checkout('master')
@@ -28,8 +28,8 @@ module Autowow
     def gem_release(working_dir = '.')
       start_status = status.stdout
       logger.info(start_status)
+      pop_stash = uncommitted_changes?(start_status)
       working_branch = current_branch
-      pop_stash = start_status.include?('Changes not staged for commit:')
 
       stash if pop_stash
       checkout('release')
@@ -71,6 +71,10 @@ module Autowow
 
     def branch_force_delete(branch)
       Command.run('git', 'branch', '-D', branch)
+    end
+
+    def uncommitted_changes?(start_status)
+      !start_status.include?('nothing to commit, working tree clean')
     end
   end
 end
