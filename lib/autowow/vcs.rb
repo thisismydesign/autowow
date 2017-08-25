@@ -28,8 +28,9 @@ module Autowow
     def gem_release(working_dir = '.')
       start_status = status.stdout
       logger.info(start_status)
-      pop_stash = uncommitted_changes?(start_status)
       working_branch = current_branch
+      logger.error("Not on master.") and return if working_branch.eql?('master')
+      pop_stash = uncommitted_changes?(start_status)
 
       stash if pop_stash
       checkout('release')
