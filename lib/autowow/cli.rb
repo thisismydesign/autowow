@@ -6,7 +6,7 @@ module Autowow
   class CLI < Thor
 
     map %w[bm] => :branch_merged
-    map %w[grls] => :branch_merged
+    map %w[grls] => :gem_release
     map %w[up] => :update_projects
 
     desc "branch_merged", "clean working branch and return to master"

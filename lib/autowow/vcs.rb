@@ -29,13 +29,14 @@ module Autowow
       start_status = status.stdout
       logger.info(start_status)
       working_branch = current_branch
-      logger.error("Not on master.") and return if working_branch.eql?('master')
+      logger.error("Not on master.") and return unless working_branch.eql?('master')
       pop_stash = uncommitted_changes?(start_status)
 
       stash if pop_stash
+      Command.run('git', 'fetch', '--all')
       checkout('release')
       Command.run('git', 'rebase', working_branch)
-      Command.run('git', 'push', 'origin', 'release')
+      Command.run('rake', 'release')
       checkout('master')
       stash_pop if pop_stash
 
