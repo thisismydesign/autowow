@@ -110,7 +110,7 @@ module Autowow
     end
 
     def uncommitted_changes?(start_status)
-      !start_status.include?('nothing to commit, working tree clean')
+      !(start_status.include?('nothing to commit, working tree clean') or start_status.include?('nothing added to commit but untracked files present'))
     end
 
     def is_git?(start_status)
