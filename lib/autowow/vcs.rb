@@ -1,8 +1,10 @@
 require_relative 'command'
+require_relative 'decorators/string_decorator'
 
 module Autowow
   class Vcs
     include EasyLogging
+    include StringDecorator
 
     def initialize
       # TODO make it configurable
@@ -57,6 +59,23 @@ module Autowow
           logger.info("Done.")
         }
       end
+    end
+
+    def clear_branches(working_dir = '.')
+      logger.info(Command.run('git', 'branch').stdout)
+      working_branch = current_branch
+      master_branch = 'master'
+
+      local_branches = Command.run('git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/').stdout
+      local_branches.each_line do |line|
+        local_branch = line.strip.reverse_chomp("'refs/heads/").chomp("'")
+        next if local_branch.eql?(master_branch) or local_branch.eql?(working_branch)
+        if Command.run_dry('git', 'log', local_branch, '--not', '--remotes').stdout.empty?
+          branch_force_delete(local_branch)
+        end
+      end
+
+      logger.info(Command.run('git', 'branch').stdout)
     end
 
     def stash
