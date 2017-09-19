@@ -27,24 +27,6 @@ module Autowow
       logger.info(status.stdout)
     end
 
-    def gem_release(working_dir = '.')
-      start_status = status.stdout
-      logger.info(start_status)
-      working_branch = current_branch
-      logger.error("Not on master.") and return unless working_branch.eql?('master')
-      pop_stash = uncommitted_changes?(start_status)
-
-      stash if pop_stash
-      Command.run('git', 'fetch', '--all')
-      checkout('release')
-      Command.run('git', 'rebase', working_branch)
-      Command.run('rake', 'release')
-      checkout('master')
-      stash_pop if pop_stash
-
-      logger.info(status.stdout)
-    end
-
     def update_projects(working_dirs = @working_dirs)
       working_dirs.each do |working_dir|
         # TODO: add handling of directories via extra param to popen3
@@ -78,61 +60,61 @@ module Autowow
       logger.info(Command.run('git', 'branch').stdout)
     end
 
-    def stash
+    def self.stash
       Command.run('git', 'stash').output_does_not_match?(%r{No local changes to save})
     end
 
-    def current_branch
+    def self.current_branch
       Command.run_dry('git', 'symbolic-ref', '--short', 'HEAD').stdout
     end
 
-    def status
+    def self.status
       Command.run('git', 'status')
     end
 
-    def status_dry
+    def self.status_dry
       Command.run_dry('git', 'status')
     end
 
-    def checkout(existing_branch)
+    def self.checkout(existing_branch)
       Command.run('git', 'checkout', existing_branch)
     end
 
-    def pull
+    def self.pull
       Command.run('git', 'pull')
     end
 
-    def pull_upstream
+    def self.pull_upstream
       Command.run('git', 'fetch', 'upstream')
       Command.run('git', 'merge', 'upstream/master')
       Command.run('git', 'push', 'origin', 'master')
     end
 
-    def branch
+    def self.branch
       Command.run('git', 'branch')
     end
 
-    def stash_pop
+    def self.stash_pop
       Command.run('git', 'stash', 'pop')
     end
 
-    def branch_force_delete(branch)
+    def self.branch_force_delete(branch)
       Command.run('git', 'branch', '-D', branch)
     end
 
-    def remotes
+    def self.remotes
       Command.run('git', 'remote', '-v')
     end
 
-    def has_upstream?
+    def self.has_upstream?
       remotes.stdout.include?('upstream')
     end
 
-    def uncommitted_changes?(start_status)
+    def self.uncommitted_changes?(start_status)
       !(start_status.include?('nothing to commit, working tree clean') or start_status.include?('nothing added to commit but untracked files present'))
     end
 
-    def is_git?(start_status)
+    def self.is_git?(start_status)
       !start_status.include?('Not a git repository')
     end
   end

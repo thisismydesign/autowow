@@ -1,6 +1,7 @@
 require 'thor'
 
 require_relative 'vcs'
+require_relative 'gem'
 
 module Autowow
   class CLI < Thor
@@ -16,8 +17,8 @@ module Autowow
     end
 
     desc "gem_release", "release gem and return to master"
-    def gem_release(working_dir = '.')
-      Autowow::Vcs.new.gem_release(working_dir)
+    def gem_release
+      Autowow::Gem.gem_release
     end
 
     desc "update_projects", "updates idle projects"
