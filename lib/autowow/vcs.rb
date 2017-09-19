@@ -32,7 +32,7 @@ module Autowow
           logger.warning("Skipped: not a git repository.") and next unless is_git?(start_status)
           logger.warning("Skipped: work in progress (not on master).") and next unless current_branch.eql?('master')
           logger.warning("Skipped: work in progress (uncommitted changes).") and next if uncommitted_changes?(start_status)
-          has_upstream? ? pull_upstream : pull
+          has_upstream?(remotes.stdout) ? pull_upstream : pull
           logger.info("Done.")
         }
       end
@@ -103,8 +103,8 @@ module Autowow
       Command.run_dry('git', 'remote', '-v')
     end
 
-    def self.has_upstream?
-      remotes.stdout.include?('upstream')
+    def self.has_upstream?(remotes)
+      remotes.include?('upstream')
     end
 
     def self.uncommitted_changes?(start_status)
