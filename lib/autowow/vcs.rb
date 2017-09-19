@@ -23,7 +23,7 @@ module Autowow
     end
 
     def self.update_projects
-      Dir.glob(File.expand_path('.')).each do |working_dir|
+      Dir.glob(File.expand_path('./*/')).each do |working_dir|
         # TODO: add handling of directories via extra param to popen3
         # https://stackoverflow.com/a/10148084/2771889
         Dir.chdir(working_dir) {
