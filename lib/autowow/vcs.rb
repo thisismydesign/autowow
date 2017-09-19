@@ -1,3 +1,8 @@
+require 'uri'
+require 'net/https'
+require 'net/http'
+require 'json'
+
 require_relative 'command'
 require_relative 'decorators/string_decorator'
 
@@ -30,6 +35,7 @@ module Autowow
           logger.info("Updating #{working_dir} ...")
           start_status = status_dry
           logger.warning("Skipped: not a git repository.") and next unless is_git?(start_status)
+          # TODO: we can safely update if we're not on master
           logger.warning("Skipped: work in progress (not on master).") and next unless current_branch.eql?('master')
           logger.warning("Skipped: work in progress (uncommitted changes).") and next if uncommitted_changes?(start_status)
           has_upstream?(remotes.stdout) ? pull_upstream : pull
@@ -53,6 +59,29 @@ module Autowow
       end
 
       logger.info(branch.stdout)
+    end
+
+    def self.add_upstream
+      start_status = status_dry
+      logger.error("Not a git repository.") and return unless is_git?(start_status)
+      remote_list = remotes.stdout
+      logger.info(remote_list)
+      logger.error("Already has upstream.") and return if has_upstream?(remote_list)
+
+      url = URI.parse(origin_push_url(remote_list))
+      host = "api.#{url.host}"
+      path = "/repos#{url.path}"
+      request = Net::HTTP.new(host, url.port)
+      request.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request.use_ssl = url.scheme == 'https'
+      response = request.get(path)
+      logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}") and return unless response.kind_of?(Net::HTTPSuccess)
+      parsed_response = JSON.parse(response.body)
+      logger.info('Not a fork.') and return unless parsed_response['fork']
+      parent_url = parsed_response.dig('parent', 'html_url')
+      add_remote('upstream', parent_url)
+
+      logger.info(remotes.stdout)
     end
 
     def self.stash
@@ -113,6 +142,23 @@ module Autowow
 
     def self.is_git?(start_status)
       !start_status.include?('Not a git repository')
+    end
+
+    def self.origin_push_url(remotes)
+      origin_push_url_https(remotes) or origin_push_url_ssl(remotes)
+    end
+
+    def self.origin_push_url_https(remotes)
+      remotes[%r{(?<=origin(\s))http(s?)://[a-zA-Z-_./]*(?=(\s)\(push\))}]
+    end
+
+    def self.origin_push_url_ssl(remotes)
+      url = remotes[%r{(?<=origin(\s)git@)[a-zA-Z-_./:]*(?=(\.)git(\s)\(push\))}]
+      "https://#{url.gsub(':', '/')}" if url
+    end
+
+    def self.add_remote(name, url)
+      Command.run('git', 'remote', 'add', name, url)
     end
   end
 end
