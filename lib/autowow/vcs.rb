@@ -6,11 +6,6 @@ module Autowow
     include EasyLogging
     include StringDecorator
 
-    def initialize
-      # TODO make it configurable
-      @working_dirs = Dir.glob(File.expand_path("~/repos/*/"))
-    end
-
     def branch_merged(working_dir = '.')
       start_status = status.stdout
       logger.info(start_status)
@@ -27,8 +22,8 @@ module Autowow
       logger.info(status.stdout)
     end
 
-    def update_projects(working_dirs = @working_dirs)
-      working_dirs.each do |working_dir|
+    def update_projects
+      Dir.glob(File.expand_path('.')).each do |working_dir|
         # TODO: add handling of directories via extra param to popen3
         # https://stackoverflow.com/a/10148084/2771889
         Dir.chdir(working_dir) {
