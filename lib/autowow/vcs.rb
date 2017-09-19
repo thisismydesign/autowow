@@ -6,7 +6,7 @@ module Autowow
     include EasyLogging
     include StringDecorator
 
-    def branch_merged(working_dir = '.')
+    def branch_merged
       start_status = status.stdout
       logger.info(start_status)
       working_branch = current_branch
@@ -38,7 +38,7 @@ module Autowow
       end
     end
 
-    def clear_branches(working_dir = '.')
+    def clear_branches
       logger.info(Command.run('git', 'branch').stdout)
       working_branch = current_branch
       master_branch = 'master'

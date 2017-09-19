@@ -12,8 +12,8 @@ module Autowow
     map %w[cb] => :clear_branches
 
     desc "branch_merged", "clean working branch and return to master"
-    def branch_merged(working_dir = '.')
-      Autowow::Vcs.new.branch_merged(working_dir)
+    def branch_merged
+      Autowow::Vcs.new.branch_merged
     end
 
     desc "gem_release", "release gem and return to master"
@@ -27,8 +27,8 @@ module Autowow
     end
 
     desc "clear_branches", "removes unused branches"
-    def clear_branches(working_dir = '.')
-      Autowow::Vcs.new.clear_branches(working_dir)
+    def clear_branches
+      Autowow::Vcs.new.clear_branches
     end
   end
 end
