@@ -103,7 +103,7 @@ module Autowow
     end
 
     def self.remotes
-      Command.run('git', 'remote', '-v')
+      Command.run_dry('git', 'remote', '-v')
     end
 
     def self.has_upstream?
