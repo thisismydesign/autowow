@@ -6,7 +6,7 @@ module Autowow
     include EasyLogging
     include StringDecorator
 
-    def branch_merged
+    def self.branch_merged
       start_status = status.stdout
       logger.info(start_status)
       working_branch = current_branch
@@ -22,7 +22,7 @@ module Autowow
       logger.info(status.stdout)
     end
 
-    def update_projects
+    def self.update_projects
       Dir.glob(File.expand_path('.')).each do |working_dir|
         # TODO: add handling of directories via extra param to popen3
         # https://stackoverflow.com/a/10148084/2771889
@@ -38,7 +38,7 @@ module Autowow
       end
     end
 
-    def clear_branches
+    def self.clear_branches
       logger.info(Command.run('git', 'branch').stdout)
       working_branch = current_branch
       master_branch = 'master'

@@ -13,7 +13,7 @@ module Autowow
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
-      Autowow::Vcs.new.branch_merged
+      Autowow::Vcs.branch_merged
     end
 
     desc "gem_release", "release gem and return to master"
@@ -23,12 +23,12 @@ module Autowow
 
     desc "update_projects", "updates idle projects"
     def update_projects
-      Autowow::Vcs.new.update_projects
+      Autowow::Vcs.update_projects
     end
 
     desc "clear_branches", "removes unused branches"
     def clear_branches
-      Autowow::Vcs.new.clear_branches
+      Autowow::Vcs.clear_branches
     end
   end
 end
