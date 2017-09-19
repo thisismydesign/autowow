@@ -7,7 +7,7 @@ module Autowow
     include StringDecorator
 
     def self.branch_merged
-      start_status = status.stdout
+      start_status = status
       logger.info(start_status)
       working_branch = current_branch
       logger.error("Nothing to do.") and return if working_branch.eql?('master')
@@ -19,7 +19,7 @@ module Autowow
       stash_pop if pop_stash
       branch_force_delete(working_branch)
 
-      logger.info(status.stdout)
+      logger.info(status)
     end
 
     def self.update_projects
@@ -28,7 +28,7 @@ module Autowow
         # https://stackoverflow.com/a/10148084/2771889
         Dir.chdir(working_dir) {
           logger.info("Updating #{working_dir} ...")
-          start_status = status_dry.stdout
+          start_status = status_dry
           logger.error("Skipped: not a git repository.") and next unless is_git?(start_status)
           logger.error("Skipped: work in progress (not on master).") and next unless current_branch.eql?('master')
           logger.error("Skipped: work in progress (uncommitted changes).") and next if uncommitted_changes?(start_status)
@@ -64,11 +64,13 @@ module Autowow
     end
 
     def self.status
-      Command.run('git', 'status')
+      status = Command.run('git', 'status')
+      status.stdout + status.stderr
     end
 
     def self.status_dry
-      Command.run_dry('git', 'status')
+      status = Command.run_dry('git', 'status')
+      status.stdout + status.stderr
     end
 
     def self.checkout(existing_branch)

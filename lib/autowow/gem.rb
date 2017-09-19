@@ -6,7 +6,7 @@ module Autowow
     include EasyLogging
 
     def self.gem_release
-      start_status = Vcs.status.stdout
+      start_status = Vcs.status
       logger.info(start_status)
       working_branch = Vcs.current_branch
       logger.error("Not on master.") and return unless working_branch.eql?('master')
@@ -20,7 +20,7 @@ module Autowow
       Vcs.checkout('master')
       Vcs.stash_pop if pop_stash
 
-      logger.info(status.stdout)
+      logger.info(status)
     end
 
     def self.release
