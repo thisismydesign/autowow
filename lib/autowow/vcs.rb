@@ -29,9 +29,9 @@ module Autowow
         Dir.chdir(working_dir) {
           logger.info("Updating #{working_dir} ...")
           start_status = status_dry
-          logger.error("Skipped: not a git repository.") and next unless is_git?(start_status)
-          logger.error("Skipped: work in progress (not on master).") and next unless current_branch.eql?('master')
-          logger.error("Skipped: work in progress (uncommitted changes).") and next if uncommitted_changes?(start_status)
+          logger.warning("Skipped: not a git repository.") and next unless is_git?(start_status)
+          logger.warning("Skipped: work in progress (not on master).") and next unless current_branch.eql?('master')
+          logger.warning("Skipped: work in progress (uncommitted changes).") and next if uncommitted_changes?(start_status)
           has_upstream? ? pull_upstream : pull
           logger.info("Done.")
         }
