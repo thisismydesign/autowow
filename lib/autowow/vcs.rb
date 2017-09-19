@@ -39,7 +39,7 @@ module Autowow
     end
 
     def self.clear_branches
-      logger.info(Command.run('git', 'branch').stdout)
+      logger.info(branch.stdout)
       working_branch = current_branch
       master_branch = 'master'
 
@@ -52,7 +52,7 @@ module Autowow
         end
       end
 
-      logger.info(Command.run('git', 'branch').stdout)
+      logger.info(branch.stdout)
     end
 
     def self.stash
