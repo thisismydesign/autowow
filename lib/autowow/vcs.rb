@@ -73,8 +73,8 @@ module Autowow
       start_status = status_dry
       logger.error("Not a git repository.") and return unless is_git?(start_status)
       remote_list = remotes.stdout
-      logger.info(remote_list)
       logger.error("Already has upstream.") and return if has_upstream?(remote_list)
+      logger.info(remote_list)
 
       url = URI.parse(origin_push_url(remote_list))
       host = "api.#{url.host}"

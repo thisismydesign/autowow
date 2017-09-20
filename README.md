@@ -44,7 +44,9 @@ Prerequisites: no uncommitted changes on master
 
 #### Add upstream
 
-* Adds parent repository as a remote called 'upstream' 
+* Adds parent repository as remote 'upstream'
+
+Prerequisites: doesn't have remote called 'upstream'
 
 ### Gem
 
