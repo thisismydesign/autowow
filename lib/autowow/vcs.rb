@@ -47,7 +47,6 @@ module Autowow
           has_upstream?(remotes.stdout) ? pull_upstream : pull
           checkout(working_branch) unless working_branch == current_branch
           stash_pop if pop_stash
-          # logger.info("Done.")
         }
       end
     end
