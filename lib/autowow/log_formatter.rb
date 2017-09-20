@@ -13,7 +13,7 @@ module Autowow
       when 'DEBUG'
         msg.yellow
       when 'WARN'
-        msg.orange
+        msg.light_red
       when 'ERROR'
         msg.red
       else
