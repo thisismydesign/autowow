@@ -7,16 +7,21 @@
 | Release | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=release)](https://travis-ci.org/thisismydesign/autowow)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/autowow/badge.svg?branch=release)](https://coveralls.io/github/thisismydesign/autowow?branch=release)   [![Gem Version](https://badge.fury.io/rb/autowow.svg)](https://badge.fury.io/rb/autowow)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/autowow?type=total)](https://rubygems.org/gems/autowow) |
 | Development | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=master)](https://travis-ci.org/thisismydesign/autowow)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/autowow/badge.svg?branch=master)](https://coveralls.io/github/thisismydesign/autowow?branch=master) |
 
-### VCS
-
 Generally commands
 * start by outputting the status before execution
 * end by outputting the status after execution
+* are safe
+  * only touch files via other commands (e.g. `git`)
+  * do not cause conflicted state
 * hard check for prerequisites
 * store and restore uncommitted changes
 * output executed commands that cause any change
 * execute in current directory
-* take directory as parameter to execute elsewhere
+
+### VCS
+
+Commands related to version control systems.
+Currently only Git and the GitHub API are supported.
 
 #### Branch merged
 
@@ -25,24 +30,30 @@ Generally commands
 
 Prerequisites: not on master
 
+#### Update projects
+
+* Updates local repositories
+* Updates remote forks
+
+Prerequisites: no uncommitted changes on master
+
+#### Clear branches
+
+* Removes branches without not pushed changes 
+* Keeps current and master branches
+
+#### Add upstream
+
+* Adds parent repository as a remote called 'upstream' 
+
+### Gem
+
 #### Gem release
 
 * Rebases `release` branch to master
 * Releases gem via `rake release`
 
 Prerequisites: on master
-
-#### Update projects
-
-* Updates local repositories
-* Updates remote forks
-
-Prerequisites: on master, no uncommitted changes
-
-#### Clear branches
-
-* Removes branches without not pushed changes 
-* Keeps current and master branches
 
 ## Installation
 
