@@ -34,12 +34,20 @@ module Autowow
         Dir.chdir(working_dir) {
           logger.info("Updating #{working_dir} ...")
           start_status = status_dry
-          logger.warning("Skipped: not a git repository.") and next unless is_git?(start_status)
-          # TODO: we can safely update if we're not on master
-          logger.warning("Skipped: work in progress (not on master).") and next unless current_branch.eql?('master')
-          logger.warning("Skipped: work in progress (uncommitted changes).") and next if uncommitted_changes?(start_status)
+          working_branch = current_branch
+          logger.warn("Skipped: not a git repository.") and next unless is_git?(start_status)
+          logger.warn("Skipped: uncommitted changes on master.") and next if uncommitted_changes?(start_status) and working_branch.eql?('master')
+
+          pop_stash = false
+          unless working_branch.eql?('master')
+            pop_stash = uncommitted_changes?(start_status)
+            stash if pop_stash
+            checkout('master')
+          end
           has_upstream?(remotes.stdout) ? pull_upstream : pull
-          logger.info("Done.")
+          checkout(working_branch) unless working_branch == current_branch
+          stash_pop if pop_stash
+          # logger.info("Done.")
         }
       end
     end
