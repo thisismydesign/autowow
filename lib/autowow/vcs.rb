@@ -86,7 +86,7 @@ module Autowow
       parsed_response = JSON.parse(response.body)
       logger.info('Not a fork.') and return unless parsed_response['fork']
       parent_url = parsed_response.dig('parent', 'html_url')
-      add_remote('upstream', parent_url)
+      add_remote('upstream', parent_url) unless parent_url.to_s.empty?
 
       logger.info(remotes.stdout)
     end
