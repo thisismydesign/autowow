@@ -23,6 +23,13 @@ Generally commands
 Commands related to version control systems.
 Currently only Git and the GitHub API are supported.
 
+#### Hi
+
+Day starter routine
+
+* Updates projects (runs 'Update projects')
+* Shows latest and deprecated repos
+
 #### Branch merged
 
 * Switches to master and pulls your merged changes

@@ -5,6 +5,8 @@ require 'json'
 
 require_relative 'command'
 require_relative 'decorators/string_decorator'
+require_relative 'fs'
+require_relative 'time_difference'
 
 module Autowow
   class Vcs
@@ -31,7 +33,7 @@ module Autowow
       if is_git?(start_status)
         update_project
       else
-        Dir.glob(File.expand_path('./*/')).each do |working_dir|
+        Fs.ls_dirs.each do |working_dir|
           # TODO: add handling of directories via extra param to popen3
           # https://stackoverflow.com/a/10148084/2771889
           Dir.chdir(working_dir) do
@@ -90,6 +92,27 @@ module Autowow
       add_remote('upstream', parent_url) unless parent_url.to_s.empty?
 
       logger.info(remotes.stdout)
+    end
+
+    def self.hi
+      logger.info("\nHang on, your projects are being updated...\n\n")
+      update_projects
+
+      logger.info("\nGood morning!\n\n")
+
+      latest = Fs.latest
+      time_diff = TimeDifference.between(File.mtime(latest), Time.now).humanize_higher_than(:days).downcase
+      time_diff_text = time_diff.empty? ? 'recently' : "#{time_diff} ago"
+      logger.info("It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n")
+
+      unit = 1
+      quantity = :months
+      old_projects = Fs.older_than(quantity, unit)
+      logger.info("The following projects have not been touched for more than #{unit} #{quantity}, maybe consider removing them?") unless old_projects.empty?
+      old_projects.each do |project|
+        time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
+        logger.info("  #{File.basename(project)} (#{time_diff})")
+      end
     end
 
     def self.stash

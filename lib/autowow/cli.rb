@@ -36,5 +36,10 @@ module Autowow
     def add_upstream
       Autowow::Vcs.add_upstream
     end
+
+    desc "hi", "day starter routine"
+    def hi
+      Autowow::Vcs.hi
+    end
   end
 end
