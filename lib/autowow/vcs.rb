@@ -41,7 +41,8 @@ module Autowow
 
     def self.update_project
       start_status = status_dry
-      logger.warn("Skipped: not a git repository.") and return unless is_git?(start_status)
+      return unless is_git?(start_status)
+      logger.info("Updating #{File.expand_path('.')} ...")
       logger.warn("Skipped: uncommitted changes on master.") and return if uncommitted_changes?(start_status) and current_branch.eql?('master')
 
       on_branch('master') do
