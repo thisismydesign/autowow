@@ -1,13 +1,22 @@
 # Autowow
 
-#### Automates way of working.
+#### Set of commands to AUTOmate Way Of Working
 
 | Branch | Status |
 | ------ | ------ |
 | Release | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=release)](https://travis-ci.org/thisismydesign/autowow)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/autowow/badge.svg?branch=release)](https://coveralls.io/github/thisismydesign/autowow?branch=release)   [![Gem Version](https://badge.fury.io/rb/autowow.svg)](https://badge.fury.io/rb/autowow)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/autowow?type=total)](https://rubygems.org/gems/autowow) |
 | Development | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=master)](https://travis-ci.org/thisismydesign/autowow)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/autowow/badge.svg?branch=master)](https://coveralls.io/github/thisismydesign/autowow?branch=master) |
 
-Generally commands
+## Usage
+
+
+Install from source as `rake install`.
+
+Run `autowow` or `aw` to see available commands.
+
+## Commands
+
+Commands in general
 * start by outputting the status before execution
 * end by outputting the status after execution
 * are safe
@@ -64,26 +73,6 @@ Prerequisites: doesn't have remote called 'upstream'
 * Releases gem via `rake release`
 
 Prerequisites: on master
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'autowow'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install autowow
-
-## Usage
-
-Execute `aw` to see the manual.
 
 ## Feedback
 
