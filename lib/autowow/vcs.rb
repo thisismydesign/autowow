@@ -88,17 +88,20 @@ module Autowow
     def self.hi
       logger.info("\nHang on, your projects are being updated...\n\n")
       update_projects
-
       logger.info("\nGood morning!\n\n")
+      check_latest_project
+      check_projects_older_than(1, :months)
+    end
 
+    def self.check_latest_project
       latest = Fs.latest
       time_diff = TimeDifference.between(File.mtime(latest), Time.now).humanize_higher_than(:days).downcase
       time_diff_text = time_diff.empty? ? 'recently' : "#{time_diff} ago"
       logger.info("It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n")
+    end
 
-      unit = 1
-      quantity = :months
-      old_projects = Fs.older_than(quantity, unit)
+    def self.check_projects_older_than(unit, quantity)
+      old_projects = Fs.older_than(unit, quantity)
       logger.info("The following projects have not been touched for more than #{unit} #{quantity}, maybe consider removing them?") unless old_projects.empty?
       old_projects.each do |project|
         time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
