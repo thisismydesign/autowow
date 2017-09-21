@@ -33,7 +33,7 @@ module Autowow
       if is_git?(start_status)
         update_project
       else
-        for_all_dirs do
+        for_dirs do
           update_project
         end
       end
@@ -208,7 +208,7 @@ module Autowow
       stash_pop if pop_stash
     end
 
-    def self.for_all_dirs
+    def self.for_dirs
       Fs.ls_dirs.each do |working_dir|
         # TODO: add handling of directories via extra param to popen3
         # https://stackoverflow.com/a/10148084/2771889
