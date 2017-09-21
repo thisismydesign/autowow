@@ -6,12 +6,12 @@ module Autowow
       Dir.glob(File.expand_path('./*/'))
     end
 
-    def self.latest
-      ls_dirs.sort_by{ |f| File.mtime(f) }.reverse!.first
+    def self.latest(files)
+      files.sort_by{ |f| File.mtime(f) }.reverse!.first
     end
 
-    def self.older_than(unit, quantity)
-      ls_dirs.select do |dir|
+    def self.older_than(files, quantity, unit)
+      files.select do |dir|
         TimeDifference.between(File.mtime(dir), Time.now).public_send("in_#{unit}") > quantity
       end
     end
@@ -26,9 +26,8 @@ module Autowow
       end
     end
 
-    def self.in_place_or_subdirs
-      start_status = status_dry
-      if is_git?(start_status)
+    def self.in_place_or_subdirs(in_place)
+      if in_place
         yield
       else
         for_dirs do

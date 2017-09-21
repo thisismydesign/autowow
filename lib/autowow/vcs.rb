@@ -29,7 +29,7 @@ module Autowow
     end
 
     def self.update_projects
-      Fs.in_place_or_subdirs do
+      Fs.in_place_or_subdirs(is_git?(status_dry)) do
         update_project
       end
     end
@@ -94,14 +94,18 @@ module Autowow
     end
 
     def self.check_latest_project
-      latest = Fs.latest
+      latest = latest_repo
       time_diff = TimeDifference.between(File.mtime(latest), Time.now).humanize_higher_than(:days).downcase
       time_diff_text = time_diff.empty? ? 'recently' : "#{time_diff} ago"
       logger.info("It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n")
     end
 
-    def self.check_projects_older_than(unit, quantity)
-      old_projects = Fs.older_than(unit, quantity)
+    def self.latest_repo
+      Fs.latest(git_projects)
+    end
+
+    def self.check_projects_older_than(quantity, unit)
+      old_projects = Fs.older_than(git_projects, quantity, unit)
       logger.info("The following projects have not been touched for more than #{unit} #{quantity}, maybe consider removing them?") unless old_projects.empty?
       old_projects.each do |project|
         time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
@@ -204,6 +208,14 @@ module Autowow
       stash if pop_stash
       yield
       stash_pop if pop_stash
+    end
+
+    def self.git_projects
+      Fs.ls_dirs.select do |dir|
+        Dir.chdir(dir) do
+          is_git?(status_dry)
+        end
+      end
     end
   end
 end
