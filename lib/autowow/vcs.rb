@@ -27,20 +27,28 @@ module Autowow
     end
 
     def self.update_projects
-      # TODO: do it for current folder if repo
-      Dir.glob(File.expand_path('./*/')).each do |working_dir|
-        # TODO: add handling of directories via extra param to popen3
-        # https://stackoverflow.com/a/10148084/2771889
-        Dir.chdir(working_dir) do
-          logger.info("Updating #{working_dir} ...")
-          start_status = status_dry
-          logger.warn("Skipped: not a git repository.") and next unless is_git?(start_status)
-          logger.warn("Skipped: uncommitted changes on master.") and next if uncommitted_changes?(start_status) and current_branch.eql?('master')
-
-          on_branch('master') do
-            has_upstream?(remotes.stdout) ? pull_upstream : pull
+      start_status = status_dry
+      if is_git?(start_status)
+        update_project
+      else
+        Dir.glob(File.expand_path('./*/')).each do |working_dir|
+          # TODO: add handling of directories via extra param to popen3
+          # https://stackoverflow.com/a/10148084/2771889
+          Dir.chdir(working_dir) do
+            logger.info("Updating #{working_dir} ...")
+            update_project
           end
         end
+      end
+    end
+
+    def self.update_project
+      start_status = status_dry
+      logger.warn("Skipped: not a git repository.") and return unless is_git?(start_status)
+      logger.warn("Skipped: uncommitted changes on master.") and return if uncommitted_changes?(start_status) and current_branch.eql?('master')
+
+      on_branch('master') do
+        has_upstream?(remotes.stdout) ? pull_upstream : pull
       end
     end
 

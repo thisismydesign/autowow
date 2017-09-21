@@ -34,6 +34,7 @@ Prerequisites: not on master
 
 * Updates local repositories
 * Updates remote forks
+* Searches for repositories on paths: `.`, `./*/`
 
 Prerequisites: no uncommitted changes on master
 
