@@ -164,7 +164,7 @@ module Autowow
     def self.on_branch(branch)
       keep_changes do
         working_branch = current_branch
-        switch_needed = working_branch.eql?(branch)
+        switch_needed = !working_branch.eql?(branch)
         checkout(branch) if switch_needed
 
         yield
