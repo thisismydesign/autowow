@@ -16,38 +16,31 @@ module Autowow
       logger.info(start_status)
       working_branch = current_branch
       logger.error("Nothing to do.") and return if working_branch.eql?('master')
-      pop_stash = uncommitted_changes?(start_status)
 
-      stash if pop_stash
-      checkout('master')
-      pull
-      stash_pop if pop_stash
+      keep_changes do
+        checkout('master')
+        pull
+      end
       branch_force_delete(working_branch)
 
       logger.info(status)
     end
 
     def self.update_projects
+      # TODO: do it for current folder if repo
       Dir.glob(File.expand_path('./*/')).each do |working_dir|
         # TODO: add handling of directories via extra param to popen3
         # https://stackoverflow.com/a/10148084/2771889
-        Dir.chdir(working_dir) {
+        Dir.chdir(working_dir) do
           logger.info("Updating #{working_dir} ...")
           start_status = status_dry
-          working_branch = current_branch
           logger.warn("Skipped: not a git repository.") and next unless is_git?(start_status)
-          logger.warn("Skipped: uncommitted changes on master.") and next if uncommitted_changes?(start_status) and working_branch.eql?('master')
+          logger.warn("Skipped: uncommitted changes on master.") and next if uncommitted_changes?(start_status) and current_branch.eql?('master')
 
-          pop_stash = false
-          unless working_branch.eql?('master')
-            pop_stash = uncommitted_changes?(start_status)
-            stash if pop_stash
-            checkout('master')
+          on_branch('master') do
+            has_upstream?(remotes.stdout) ? pull_upstream : pull
           end
-          has_upstream?(remotes.stdout) ? pull_upstream : pull
-          checkout(working_branch) unless working_branch == current_branch
-          stash_pop if pop_stash
-        }
+        end
       end
     end
 
@@ -166,6 +159,26 @@ module Autowow
 
     def self.add_remote(name, url)
       Command.run('git', 'remote', 'add', name, url)
+    end
+
+    def self.on_branch(branch)
+      keep_changes do
+        working_branch = current_branch
+        switch_needed = working_branch.eql?(branch)
+        checkout(branch) if switch_needed
+
+        yield
+
+        checkout(working_branch) if switch_needed
+      end
+    end
+
+    def self.keep_changes
+      status = status_dry
+      pop_stash = uncommitted_changes?(status)
+      stash if pop_stash
+      yield
+      stash_pop if pop_stash
     end
   end
 end

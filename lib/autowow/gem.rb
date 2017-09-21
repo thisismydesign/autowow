@@ -10,15 +10,12 @@ module Autowow
       logger.info(start_status)
       working_branch = Vcs.current_branch
       logger.error("Not on master.") and return unless working_branch.eql?('master')
-      pop_stash = Vcs.uncommitted_changes?(start_status)
 
-      Vcs.stash if pop_stash
-      Command.run('git', 'fetch', '--all')
-      Vcs.checkout('release')
-      Command.run('git', 'rebase', working_branch)
-      release
-      Vcs.checkout('master')
-      Vcs.stash_pop if pop_stash
+      on_branch('release') do
+        Vcs.pull
+        Command.run('git', 'rebase', working_branch)
+        release
+      end
 
       logger.info(status)
     end
