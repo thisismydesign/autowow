@@ -175,20 +175,28 @@ module Autowow
     end
 
     def self.origin_push_url(remotes)
-      # Order is important as `origin_push_url_ssl` would match "#{url}.git"
-      origin_push_url_ssl(remotes) or origin_push_url_https_dot_git(remotes) or origin_push_url_https(remotes)
+      # Order is important: first try to match "url" in "#{url}.git" as non-dot_git matchers would include ".git" in the match
+      origin_push_url_ssl_dot_git(remotes) or
+          origin_push_url_ssl(remotes)or
+          origin_push_url_https_dot_git(remotes) or
+          origin_push_url_https(remotes)
     end
 
     def self.origin_push_url_https(remotes)
-      remotes[%r{(?<=origin(\s))http(s?)://[a-zA-Z\-_\./]*(?=(\s)\(push\))}]
+      remotes[%r{(?<=origin(\s))http(s?)://[a-zA-Z\-_./]*(?=(\s)\(push\))}]
     end
 
     def self.origin_push_url_https_dot_git(remotes)
-      remotes[%r{(?<=origin(\s))http(s?)://[a-zA-Z\-_\./]*(?=(\.)git(\s)\(push\))}]
+      remotes[%r{(?<=origin(\s))http(s?)://[a-zA-Z\-_./]*(?=(\.)git(\s)\(push\))}]
+    end
+
+    def self.origin_push_url_ssl_dot_git(remotes)
+      url = remotes[%r{(?<=origin(\s)git@)[a-zA-Z\-_./:]*(?=(\.)git(\s)\(push\))}]
+      "https://#{url.gsub(':', '/')}" if url
     end
 
     def self.origin_push_url_ssl(remotes)
-      url = remotes[%r{(?<=origin(\s)git@)[a-zA-Z\-_\./:]*(?=(\.)git(\s)\(push\))}]
+      url = remotes[%r{(?<=origin(\s)git@)[a-zA-Z\-_./:]*(?=(\s)\(push\))}]
       "https://#{url.gsub(':', '/')}" if url
     end
 
