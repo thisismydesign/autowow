@@ -82,7 +82,7 @@ module Autowow
 
     def self.hi
       logger.info("\nHang on, your projects are being updated...\n\n")
-      # update_projects
+      update_projects
       logger.info("\nGood morning!\n\n")
       check_latest_project
       check_projects_older_than(1, :months)
