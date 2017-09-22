@@ -80,19 +80,21 @@ module Autowow
       logger.info(remotes.stdout)
     end
 
+    # TODO: add remotes, remove unused branches
     def self.hi
+      latest_project_info = get_latest_project_info
       logger.info("\nHang on, updating your local projects and remote forks...\n\n")
       update_projects
       logger.info("\nGood morning!\n\n")
-      check_latest_project
+      logger.info(latest_project_info)
       check_projects_older_than(1, :months)
     end
 
-    def self.check_latest_project
+    def self.get_latest_project_info
       latest = latest_repo
       time_diff = TimeDifference.between(File.mtime(latest), Time.now).humanize_higher_than(:days).downcase
       time_diff_text = time_diff.empty? ? 'recently' : "#{time_diff} ago"
-      logger.info("It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n")
+      "It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n"
     end
 
     def self.latest_repo
