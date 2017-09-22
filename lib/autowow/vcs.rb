@@ -50,13 +50,8 @@ module Autowow
       working_branch = current_branch
       master_branch = 'master'
 
-      local_branches = Command.run('git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/').stdout
-      local_branches.each_line do |line|
-        local_branch = line.strip.reverse_chomp("'refs/heads/").chomp("'")
-        next if local_branch.eql?(master_branch) or local_branch.eql?(working_branch)
-        if Command.run_dry('git', 'log', local_branch, '--not', '--remotes').stdout.empty?
-          branch_force_delete(local_branch)
-        end
+      (branches - [master_branch, working_branch]).each do |branch|
+        branch_force_delete(branch) if branch_pushed(branch)
       end
 
       logger.info(branch.stdout)
@@ -87,7 +82,7 @@ module Autowow
 
     def self.hi
       logger.info("\nHang on, your projects are being updated...\n\n")
-      update_projects
+      # update_projects
       logger.info("\nGood morning!\n\n")
       check_latest_project
       check_projects_older_than(1, :months)
@@ -106,8 +101,12 @@ module Autowow
 
     def self.check_projects_older_than(quantity, unit)
       old_projects = Fs.older_than(git_projects, quantity, unit)
-      logger.info("The following projects have not been touched for more than #{unit} #{quantity}, maybe consider removing them?") unless old_projects.empty?
-      old_projects.each do |project|
+      deprecated_projects = old_projects.reject do |project|
+        Dir.chdir(project) { branches.reject{ |branch| branch_pushed(branch) }.any? }
+      end
+
+      logger.info("The following projects have not been touched for more than #{quantity} #{unit} and all changes have been pushed, maybe consider removing them?") unless deprecated_projects.empty?
+      deprecated_projects.each do |project|
         time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
         logger.info("  #{File.basename(project)} (#{time_diff})")
       end
@@ -216,6 +215,15 @@ module Autowow
           is_git?(status_dry)
         end
       end
+    end
+
+    def self.branch_pushed(branch)
+      Command.run_dry('git', 'log', branch, '--not', '--remotes').stdout.empty?
+    end
+
+    def self.branches
+      branches = Command.run_dry('git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/').stdout
+      branches.each_line.map { |line| line.strip[%r{(?<='refs/heads/)(.*)(?=')}] }
     end
   end
 end

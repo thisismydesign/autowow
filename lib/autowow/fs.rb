@@ -16,8 +16,8 @@ module Autowow
       end
     end
 
-    def self.for_dirs
-      Fs.ls_dirs.each do |working_dir|
+    def self.for_dirs(dirs)
+      dirs.each do |working_dir|
         # TODO: add handling of directories via extra param to popen3
         # https://stackoverflow.com/a/10148084/2771889
         Dir.chdir(working_dir) do
@@ -30,7 +30,7 @@ module Autowow
       if in_place
         yield
       else
-        for_dirs do
+        for_dirs(ls_dirs) do
           yield
         end
       end
