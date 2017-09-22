@@ -81,7 +81,7 @@ module Autowow
     end
 
     def self.hi
-      logger.info("\nHang on, updating your projects and remote forks...\n\n")
+      logger.info("\nHang on, updating your local projects and remote forks...\n\n")
       update_projects
       logger.info("\nGood morning!\n\n")
       check_latest_project
