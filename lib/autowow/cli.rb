@@ -41,5 +41,10 @@ module Autowow
     def hi
       Autowow::Vcs.hi
     end
+
+    desc "hi!", "day starter routine for a new start"
+    def hi!
+      Autowow::Vcs.hi!
+    end
   end
 end

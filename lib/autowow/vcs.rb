@@ -80,14 +80,28 @@ module Autowow
       logger.info(remotes.stdout)
     end
 
-    # TODO: add remotes, remove unused branches
     def self.hi
       latest_project_info = get_latest_project_info
       logger.info("\nHang on, updating your local projects and remote forks...\n\n")
-      update_projects
+      git_projects.each do |project|
+        Dir.chdir(project) do
+          logger.info("\nGetting #{project} in shape...")
+          yield
+          update_project
+        end
+      end
       logger.info("\nGood morning!\n\n")
       logger.info(latest_project_info)
       check_projects_older_than(1, :months)
+    end
+
+    def self.hi!
+      hi do
+        logger.info('Removing unused branches...')
+        clear_branches
+        logger.info('Adding upstream...')
+        add_upstream
+      end
     end
 
     def self.get_latest_project_info

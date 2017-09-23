@@ -32,13 +32,6 @@ Commands in general
 Commands related to version control systems.
 Currently only Git and the GitHub API are supported.
 
-#### Hi
-
-Day starter routine
-
-* Updates projects (runs 'Update projects')
-* Shows latest and deprecated repos
-
 #### Branch merged
 
 * Switches to master and pulls your merged changes
@@ -64,6 +57,20 @@ Prerequisites: no uncommitted changes on master
 * Adds parent repository as remote 'upstream'
 
 Prerequisites: doesn't have remote called 'upstream'
+
+#### Hi
+
+Day starter routine
+
+* Updates projects (runs 'Update projects')
+* Shows latest and deprecated repos
+
+#### Hi!
+
+Day starter routine for a new start
+
+* Runs 'Add upstream' and 'Clear branches' for all projects
+* Runs 'Hi'
 
 ### Gem
 
