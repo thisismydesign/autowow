@@ -86,7 +86,7 @@ module Autowow
       git_projects.each do |project|
         Dir.chdir(project) do
           logger.info("\nGetting #{project} in shape...")
-          yield
+          yield if block_given?
           update_project
         end
       end
