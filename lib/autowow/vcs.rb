@@ -61,7 +61,7 @@ module Autowow
       start_status = status_dry
       logger.error("Not a git repository.") and return unless is_git?(start_status)
       remote_list = remotes.stdout
-      logger.error("Already has upstream.") and return if has_upstream?(remote_list)
+      logger.warn("Already has upstream.") and return if has_upstream?(remote_list)
       logger.info(remote_list)
 
       url = URI.parse(origin_push_url(remote_list))
@@ -73,7 +73,7 @@ module Autowow
       response = request.get(path)
       logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}") and return unless response.kind_of?(Net::HTTPSuccess)
       parsed_response = JSON.parse(response.body)
-      logger.info('Not a fork.') and return unless parsed_response['fork']
+      logger.warn('Not a fork.') and return unless parsed_response['fork']
       parent_url = parsed_response.dig('parent', 'html_url')
       add_remote('upstream', parent_url) unless parent_url.to_s.empty?
 
