@@ -2,6 +2,8 @@ require_relative 'time_difference'
 
 module Autowow
   class Fs
+    using RefinedTimeDifference
+
     def self.ls_dirs
       Dir.glob(File.expand_path('./*/'))
     end

@@ -13,6 +13,8 @@ module Autowow
     include EasyLogging
     include StringDecorator
 
+    using RefinedTimeDifference
+
     def self.branch_merged
       start_status = status
       logger.info(start_status)
