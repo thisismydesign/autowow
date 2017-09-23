@@ -1,4 +1,10 @@
 require "bundler/setup"
+
+require 'simplecov'
+SimpleCov.add_filter ['spec']
+require "coveralls"
+Coveralls.wear!
+
 require "autowow"
 
 RSpec.configure do |config|
@@ -12,3 +18,5 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+RSPEC_ROOT = File.dirname __FILE__

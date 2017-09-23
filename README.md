@@ -82,9 +82,16 @@ I can only tailor this project to fit use-cases I know about - which are usually
 
 Please let me know if you make use of this project so that I can prioritize further efforts.
 
-## Development
+## Conventions
 
-This gem is developed using Bundler conventions. A good overview can be found [here](http://bundler.io/v1.14/guides/creating_gem.html).
+This gem is developed using the following conventions:
+- [Bundler's guide for developing a gem](http://bundler.io/v1.14/guides/creating_gem.html)
+- [Better Specs](http://www.betterspecs.org/)
+- [Semantic versioning](http://semver.org/)
+- [RubyGems' guide on gem naming](http://guides.rubygems.org/name-your-gem/)
+- [RFC memo about key words used to Indicate Requirement Levels](https://tools.ietf.org/html/rfc2119)
+- [Bundler improvements](https://github.com/thisismydesign/bundler-improvements)
+- [Minimal dependencies](http://www.mikeperham.com/2016/02/09/kill-your-dependencies/)
 
 ## Contributing
 
