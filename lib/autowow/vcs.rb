@@ -2,6 +2,7 @@ require 'uri'
 require 'net/https'
 require 'net/http'
 require 'json'
+require 'launchy'
 
 require_relative 'command'
 require_relative 'decorators/string_decorator'
@@ -104,6 +105,10 @@ module Autowow
         logger.info('Adding upstream...')
         add_upstream
       end
+    end
+
+    def self.open
+      Launchy.open(origin_push_url(remotes.stdout))
     end
 
     def self.get_latest_project_info

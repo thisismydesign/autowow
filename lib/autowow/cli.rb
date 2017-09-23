@@ -46,5 +46,10 @@ module Autowow
     def hi!
       Autowow::Vcs.hi!
     end
+
+    desc "open", "opens project URL in browser"
+    def open
+      Autowow::Vcs.open
+    end
   end
 end

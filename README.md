@@ -72,6 +72,10 @@ Day starter routine for a new start
 * Runs 'Add upstream' and 'Clear branches' for all projects
 * Runs 'Hi'
 
+#### Open
+
+* Opens project in browser
+
 ### Gem
 
 #### Gem release
