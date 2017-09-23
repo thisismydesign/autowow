@@ -16,7 +16,7 @@ RSpec.describe Autowow::Vcs do
 
     it 'matches ssh format' do
       remote = 'origin	git@github.com:thisismydesign/autowow (push)'
-      expect(Autowow::Vcs.origin_push_url(remote)).to eq('https://github.com/thisismydesign/autowow')
+      expect(Autowow::Vcs.origin_push_url(remote)).to eq(expected)
     end
 
     it 'matches ssh .git format' do
@@ -27,6 +27,11 @@ RSpec.describe Autowow::Vcs do
     it 'matches dashes' do
       remote = 'origin	git@github.com:thisismydesign/auto-wow.git (push)'
       expect(Autowow::Vcs.origin_push_url(remote)).to eq('https://github.com/thisismydesign/auto-wow')
+    end
+
+    it 'matches underscores' do
+      remote = 'origin	git@github.com:thisismydesign/auto_wow.git (push)'
+      expect(Autowow::Vcs.origin_push_url(remote)).to eq('https://github.com/thisismydesign/auto_wow')
     end
 
     it 'matches origin' do
