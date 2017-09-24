@@ -157,6 +157,10 @@ module Autowow
       Command.run('git', 'checkout', existing_branch)
     end
 
+    def self.create(branch)
+      Command.run('git', 'checkout', '-b', branch)
+    end
+
     def self.pull
       Command.run('git', 'pull')
     end
@@ -229,7 +233,10 @@ module Autowow
       keep_changes do
         working_branch = current_branch
         switch_needed = !working_branch.eql?(branch)
-        checkout(branch) if switch_needed
+        if switch_needed
+          result = checkout(branch)
+          create(branch) if result.stderr.eql?("error: pathspec '#{branch}' did not match any file(s) known to git.")
+        end
 
         yield
 
