@@ -11,13 +11,13 @@ module Autowow
       working_branch = Vcs.current_branch
       logger.error("Not on master.") and return unless working_branch.eql?('master')
 
-      on_branch('release') do
+      Vcs.on_branch('release') do
         Vcs.pull
         Command.run('git', 'rebase', working_branch)
         release
       end
 
-      logger.info(status)
+      logger.info(Vcs.status)
     end
 
     def self.release
