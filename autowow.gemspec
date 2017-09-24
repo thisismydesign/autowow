@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Csaba Apagyi"]
   spec.email         = ["csaba.apagyi@xing.com"]
 
-  spec.summary       = %q{}
   spec.description   = %q{}
+  spec.summary       = %q{Set of commands to AUTOmate Way Of Working}
   spec.homepage      = "https://github.com/thisismydesign/autowow"
   spec.license       = "MIT"
 
