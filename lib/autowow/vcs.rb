@@ -159,6 +159,7 @@ module Autowow
 
     def self.create(branch)
       Command.run('git', 'checkout', '-b', branch)
+      Command.run('git', 'push', '--set-upstream', 'origin', branch)
     end
 
     def self.pull
