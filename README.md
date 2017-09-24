@@ -9,10 +9,11 @@
 
 ## Usage
 
-
 Install from source as `rake install`.
 
 Run `autowow` or `aw` to see available commands.
+
+*Disclaimer: Use it on your own responsibility. Some commands may be tailored to my use case but as always pull requests and issues are welcomed.*
 
 ## Commands
 
