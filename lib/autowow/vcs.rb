@@ -269,5 +269,13 @@ module Autowow
       branches = Command.run_dry('git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/').stdout
       branches.each_line.map { |line| line.strip[%r{(?<='refs/heads/)(.*)(?=')}] }
     end
+
+    def self.push
+      Command.run('git', 'push')
+    end
+
+    def self.rebase(branch)
+      Command.run('git', 'rebase', branch)
+    end
   end
 end
