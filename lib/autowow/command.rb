@@ -10,7 +10,7 @@ module Autowow
     end
 
     def self.run_dry(*args)
-      Command.new(*args).check.execute
+      Command.new(*args).silent_check.execute
     end
 
     def self.popen3_reader(*args)
@@ -48,13 +48,19 @@ module Autowow
       self
     end
 
-    def check
+    def silent_check
       @stdin, @stdout, @stderr, @wait_thr = Open3.popen3('which', @cmd[0])
       unless output_matches?(not_empty_matcher)
-        logger.info("Skipping '#{@cmd.join(' ')}' because command '#{@cmd[0]}' is not found.")
+        yield if block_given?
         @cmd = []
       end
       self
+    end
+
+    def check
+      silent_check do
+        logger.info("Skipping '#{@cmd.join(' ')}' because command '#{@cmd[0]}' is not found.")
+      end
     end
 
     def output_matches?(matcher)
