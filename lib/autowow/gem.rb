@@ -24,5 +24,9 @@ module Autowow
     def self.release
       Command.run('rake', 'release')
     end
+
+    def self.clean
+      Command.run('gem', 'clean')
+    end
   end
 end

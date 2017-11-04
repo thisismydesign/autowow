@@ -51,5 +51,10 @@ module Autowow
     def open
       Autowow::Vcs.open
     end
+
+    desc "clean", "cleans sproject"
+    def clean
+      Autowow::Gem.clean
+    end
   end
 end

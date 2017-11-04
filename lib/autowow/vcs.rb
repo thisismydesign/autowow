@@ -8,6 +8,7 @@ require_relative 'command'
 require_relative 'decorators/string_decorator'
 require_relative 'fs'
 require_relative 'time_difference'
+require_relative 'gem'
 
 module Autowow
   class Vcs
