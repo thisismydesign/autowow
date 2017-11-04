@@ -107,7 +107,7 @@ This gem is developed using the following conventions:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/your_gem.
+Bug reports and pull requests are welcome on GitHub at https://github.com/thisismydesign/autowow.
 
 ## License
 
