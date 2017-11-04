@@ -90,6 +90,13 @@ Prerequisites: on master
 
 * Removes unused gems
 
+### Ruby
+
+#### Ruby versions
+
+* Shows Ruby versions in use
+* Searches for repositories on paths: `.`, `./*/`
+
 ## Feedback
 
 Any feedback is much appreciated.

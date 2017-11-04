@@ -12,6 +12,7 @@ module Autowow
     map %w[cb] => :clear_branches
     map %w[au] => :add_upstream
     map %w[gc] => :gem_clean
+    map %w[rv] => :ruby_versions
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -56,6 +57,11 @@ module Autowow
     desc "gem_clean", "cleans unused gems"
     def gem_clean
       Autowow::Gem.clean
+    end
+
+    desc "ruby_versions", "shows ruby versions in use"
+    def ruby_versions
+      Autowow::Ruby.versions
     end
   end
 end
