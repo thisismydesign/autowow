@@ -5,7 +5,7 @@ module Autowow
     using RefinedTimeDifference
 
     def self.ls_dirs
-      Dir.glob(File.expand_path('./*/'))
+      Dir.glob(File.expand_path('./*/')).select {|f| File.directory? f}
     end
 
     def self.latest(files)
