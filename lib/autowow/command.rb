@@ -6,11 +6,11 @@ module Autowow
     include EasyLogging
 
     def self.run(*args)
-      Command.new(*args).explain.chronic_execute
+      Command.new(*args).check.explain.chronic_execute
     end
 
     def self.run_dry(*args)
-      Command.new(*args).execute
+      Command.new(*args).check.execute
     end
 
     def self.popen3_reader(*args)
@@ -38,13 +38,22 @@ module Autowow
     end
 
     def execute
-      @stdin, @stdout, @stderr, @wait_thr = Open3.popen3(*@cmd)
+      @stdin, @stdout, @stderr, @wait_thr = Open3.popen3(*@cmd) unless @cmd.empty?
       self
     end
 
     def chronic_execute
-      @stdin, @stdout, @stderr, @wait_thr = Open3.popen3(*@cmd)
+      @stdin, @stdout, @stderr, @wait_thr = Open3.popen3(*@cmd) unless @cmd.empty?
       logger.error(stderr) unless stderr.empty?
+      self
+    end
+
+    def check
+      @stdin, @stdout, @stderr, @wait_thr = Open3.popen3('which', @cmd[0])
+      unless output_matches?(not_empty_matcher)
+        logger.info("Skipping '#{@cmd.join(' ')}' because command '#{@cmd[0]}' is not found.")
+        @cmd = []
+      end
       self
     end
 
@@ -56,5 +65,8 @@ module Autowow
       !output_matches?(matcher)
     end
 
+    def not_empty_matcher
+      %r{.*\S.*}
+    end
   end
 end
