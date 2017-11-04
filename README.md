@@ -86,7 +86,7 @@ Day starter routine for a new start
 
 Prerequisites: on master
 
-#### Clean
+#### Gem clean
 
 * Removes unused gems
 
