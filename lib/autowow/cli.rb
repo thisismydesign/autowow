@@ -11,6 +11,7 @@ module Autowow
     map %w[up] => :update_projects
     map %w[cb] => :clear_branches
     map %w[au] => :add_upstream
+    map %w[gc] => :gem_clean
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -52,8 +53,8 @@ module Autowow
       Autowow::Vcs.open
     end
 
-    desc "clean", "cleans sproject"
-    def clean
+    desc "gem_clean", "cleans unused gems"
+    def gem_clean
       Autowow::Gem.clean
     end
   end
