@@ -105,6 +105,8 @@ module Autowow
         clear_branches
         logger.info('Adding upstream...')
         add_upstream
+        logger.info('Removing unused gems...')
+        logger.info(Gem.clean.stdout)
       end
     end
 
