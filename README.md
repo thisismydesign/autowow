@@ -66,6 +66,8 @@ Day starter routine
 * Updates projects (runs 'Update projects')
 * Shows latest and deprecated repos
 
+Prerequisites: in a directory that contains git repos, not in the repo itself
+
 #### Hi!
 
 Day starter routine for a new start
