@@ -75,7 +75,10 @@ module Autowow
       request.verify_mode = OpenSSL::SSL::VERIFY_NONE
       request.use_ssl = url.scheme == 'https'
       response = request.get(path)
+
+      logger.error('Repository moved / renamed. Update remote or implement redirect handling. :)') if response.kind_of?(Net::HTTPRedirection)
       logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}") and return unless response.kind_of?(Net::HTTPSuccess)
+
       parsed_response = JSON.parse(response.body)
       logger.warn('Not a fork.') and return unless parsed_response['fork']
       parent_url = parsed_response.dig('parent', 'html_url')
