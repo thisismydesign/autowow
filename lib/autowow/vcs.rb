@@ -76,15 +76,19 @@ module Autowow
       request.use_ssl = url.scheme == 'https'
       response = request.get(path)
 
-      logger.error('Repository moved / renamed. Update remote or implement redirect handling. :)') if response.kind_of?(Net::HTTPRedirection)
-      logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}") and return unless response.kind_of?(Net::HTTPSuccess)
-
-      parsed_response = JSON.parse(response.body)
-      logger.warn('Not a fork.') and return unless parsed_response['fork']
-      parent_url = parsed_response.dig('parent', 'html_url')
-      add_remote('upstream', parent_url) unless parent_url.to_s.empty?
-
-      logger.info(remotes.stdout)
+      if response.kind_of?(Net::HTTPRedirection)
+        logger.error('Repository moved / renamed. Update remote or implement redirect handling. :)')
+      elsif response.kind_of?(Net::HTTPNotFound)
+        logger.error('Repository not found. Maybe it is private.')
+      elsif response.kind_of?(Net::HTTPSuccess)
+        parsed_response = JSON.parse(response.body)
+        logger.warn('Not a fork.') and return unless parsed_response['fork']
+        parent_url = parsed_response.dig('parent', 'html_url')
+        add_remote('upstream', parent_url) unless parent_url.to_s.empty?
+        logger.info(remotes.stdout)
+      else
+        logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}")
+      end
     end
 
     def self.hi
