@@ -61,7 +61,7 @@ module Autowow
 
     desc "ruby_versions", "shows ruby versions in use"
     def ruby_versions
-      Autowow::Ruby.versions
+      logger.info(Autowow::Ruby.used_versions)
     end
   end
 end
