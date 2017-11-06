@@ -9,6 +9,7 @@ require_relative 'decorators/string_decorator'
 require_relative 'fs'
 require_relative 'time_difference'
 require_relative 'gem'
+require_relative 'ruby'
 
 module Autowow
   class Vcs
@@ -105,6 +106,7 @@ module Autowow
       logger.info("\nGood morning!\n\n")
       logger.info(latest_project_info)
       check_projects_older_than(1, :months)
+      logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?\n  #{Ruby.obsolete_versions.join("\n  ")}")
     end
 
     def self.hi!

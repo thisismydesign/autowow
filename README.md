@@ -65,6 +65,7 @@ Day starter routine
 
 * Updates projects (runs 'Update projects')
 * Shows latest and deprecated repos
+* Shows deprecated Ruby versions
 
 Prerequisites: in a directory that contains git repos, not in the repo itself
 
