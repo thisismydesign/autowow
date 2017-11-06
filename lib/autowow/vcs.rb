@@ -85,7 +85,7 @@ module Autowow
     end
 
     def self.hi
-      logger.error("In a git repository. Try 1 level higher.") && exit if is_git?(status_dry)
+      logger.error("In a git repository. Try 1 level higher.") && return if is_git?(status_dry)
       latest_project_info = get_latest_project_info
       logger.info("\nHang on, updating your local projects and remote forks...\n\n")
       git_projects.each do |project|
@@ -101,6 +101,7 @@ module Autowow
     end
 
     def self.hi!
+      logger.error("In a git repository. Try 1 level higher.") && return if is_git?(status_dry)
       hi do
         logger.info('Removing unused branches...')
         clear_branches
