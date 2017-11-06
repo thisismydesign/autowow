@@ -92,6 +92,18 @@ module Autowow
       end
     end
 
+    def self.greet(latest_project_info = nil)
+      logger.info("\nGood morning!\n\n")
+      if is_git?(status_dry)
+        logger.error('Inside repo, cannot show report about all repos.')
+      else
+        latest_project_info ||= get_latest_project_info
+        logger.info(latest_project_info)
+        check_projects_older_than(1, :months)
+      end
+      logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?\n  #{Ruby.obsolete_versions.join("\n  ")}")
+    end
+
     def self.hi
       logger.error("In a git repository. Try 1 level higher.") && return if is_git?(status_dry)
       latest_project_info = get_latest_project_info
@@ -103,10 +115,7 @@ module Autowow
           update_project
         end
       end
-      logger.info("\nGood morning!\n\n")
-      logger.info(latest_project_info)
-      check_projects_older_than(1, :months)
-      logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?\n  #{Ruby.obsolete_versions.join("\n  ")}")
+      greet(latest_project_info)
     end
 
     def self.hi!
