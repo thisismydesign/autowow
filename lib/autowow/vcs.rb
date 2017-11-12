@@ -46,12 +46,12 @@ module Autowow
       logger.warn("Skipped: uncommitted changes on master.") and return if uncommitted_changes?(start_status) and current_branch.eql?('master')
 
       on_branch('master') do
-        has_upstream?(remotes.stdout) ? pull_upstream : pull
+        has_upstream?(remotes.out) ? pull_upstream : pull
       end
     end
 
     def self.clear_branches
-      logger.info(branch.stdout)
+      logger.info(branch.out)
       working_branch = current_branch
       master_branch = 'master'
 
@@ -59,13 +59,13 @@ module Autowow
         branch_force_delete(branch) if branch_pushed(branch)
       end
 
-      logger.info(branch.stdout)
+      logger.info(branch.out)
     end
 
     def self.add_upstream
       start_status = status_dry
       logger.error("Not a git repository.") and return unless is_git?(start_status)
-      remote_list = remotes.stdout
+      remote_list = remotes.out
       logger.warn("Already has upstream.") and return if has_upstream?(remote_list)
       logger.info(remote_list)
 
@@ -86,7 +86,7 @@ module Autowow
         logger.warn('Not a fork.') and return unless parsed_response['fork']
         parent_url = parsed_response.dig('parent', 'html_url')
         add_remote('upstream', parent_url) unless parent_url.to_s.empty?
-        logger.info(remotes.stdout)
+        logger.info(remotes.out)
       else
         logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}")
       end
@@ -126,12 +126,12 @@ module Autowow
         logger.info('Adding upstream...')
         add_upstream
         logger.info('Removing unused gems...')
-        logger.info(Gem.clean.stdout)
+        logger.info(Gem.clean.out)
       end
     end
 
     def self.open
-      Launchy.open(origin_push_url(remotes.stdout))
+      Launchy.open(origin_push_url(remotes.out))
     end
 
     def self.get_latest_project_info
@@ -159,21 +159,21 @@ module Autowow
     end
 
     def self.stash
-      Command.run('git', 'stash').output_does_not_match?(%r{No local changes to save})
+      Command.run('git', 'stash')
     end
 
     def self.current_branch
-      Command.run_dry('git', 'symbolic-ref', '--short', 'HEAD').stdout
+      Command.run_dry('git', 'symbolic-ref', '--short', 'HEAD').out
     end
 
     def self.status
       status = Command.run('git', 'status')
-      status.stdout + status.stderr
+      status.out + status.err
     end
 
     def self.status_dry
       status = Command.run_dry('git', 'status')
-      status.stdout + status.stderr
+      status.out + status.err
     end
 
     def self.checkout(existing_branch)
@@ -259,7 +259,7 @@ module Autowow
         switch_needed = !working_branch.eql?(branch)
         if switch_needed
           result = checkout(branch)
-          create(branch) if result.stderr.eql?("error: pathspec '#{branch}' did not match any file(s) known to git.")
+          create(branch) if result.err.eql?("error: pathspec '#{branch}' did not match any file(s) known to git.")
         end
 
         yield
@@ -285,11 +285,11 @@ module Autowow
     end
 
     def self.branch_pushed(branch)
-      Command.run_dry('git', 'log', branch, '--not', '--remotes').stdout.empty?
+      Command.run_dry('git', 'log', branch, '--not', '--remotes').out.empty?
     end
 
     def self.branches
-      branches = Command.run_dry('git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/').stdout
+      branches = Command.run_dry('git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/').out
       branches.each_line.map { |line| line.strip[%r{(?<='refs/heads/)(.*)(?=')}] }
     end
 
@@ -300,5 +300,7 @@ module Autowow
     def self.rebase(branch)
       Command.run('git', 'rebase', branch)
     end
+
+    # TODO: methods should return array of commands, way of execution should be determined by executor
   end
 end
