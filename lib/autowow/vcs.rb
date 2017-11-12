@@ -126,7 +126,7 @@ module Autowow
         logger.info('Adding upstream...')
         add_upstream
         logger.info('Removing unused gems...')
-        logger.info(Gem.clean.out)
+        Command.run_with_output(Gem.clean)
       end
     end
 

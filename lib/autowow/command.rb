@@ -26,6 +26,10 @@ module Autowow
     @@quiet_executer = TTY::Command.new(printer: :null)
     @@progress_executer = TTY::Command.new(printer: :progress)
 
+    def self.run_with_output(*args)
+      @@pretty_executer.run(*args)
+    end
+
     def self.run(*args)
       @@simple_executer.run(*args)
     end

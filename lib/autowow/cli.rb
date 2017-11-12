@@ -22,7 +22,7 @@ module Autowow
 
     desc "gem_release", "release gem and return to master"
     def gem_release
-      Autowow::Gem.gem_release
+      Autowow::Features.gem_release
     end
 
     desc "update_projects", "updates idle projects"
@@ -57,7 +57,7 @@ module Autowow
 
     desc "gem_clean", "cleans unused gems"
     def gem_clean
-      Autowow::Gem.clean
+      Autowow::Features.gem_clean
     end
 
     desc "ruby_versions", "shows ruby versions in use"
