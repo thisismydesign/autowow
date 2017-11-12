@@ -26,17 +26,24 @@ module Autowow
     @@quiet_executer = TTY::Command.new(printer: :null)
     @@progress_executer = TTY::Command.new(printer: :progress)
 
-    def self.run_with_output(*args)
+    def self.run_with_output(args)
       @@pretty_executer.run(*args)
     end
 
-    def self.run(*args)
+    def self.run(args)
       @@simple_executer.run(*args)
     end
 
-    def self.run_dry(*args)
+    def self.run_dry(args)
       @@quiet_executer.run(*args)
     end
 
+    def self.clean_lines(text)
+      text.each_line.map(&:strip).reject(&:empty?)
+    end
+
+    def self.exists?(cmd)
+      @@quiet_executer.run!('which', cmd).success?
+    end
   end
 end

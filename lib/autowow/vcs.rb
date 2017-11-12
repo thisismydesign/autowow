@@ -8,8 +8,8 @@ require_relative 'command'
 require_relative 'decorators/string_decorator'
 require_relative 'fs'
 require_relative 'time_difference'
-require_relative 'gem'
-require_relative 'ruby'
+require_relative 'commands/gem'
+require_relative 'commands/rbenv'
 
 module Autowow
   class Vcs
@@ -126,7 +126,7 @@ module Autowow
         logger.info('Adding upstream...')
         add_upstream
         logger.info('Removing unused gems...')
-        Command.run_with_output(Gem.clean)
+        Command.run_with_output(Commands::Gem.clean)
       end
     end
 
@@ -159,56 +159,56 @@ module Autowow
     end
 
     def self.stash
-      Command.run('git', 'stash')
+      Command.run(['git', 'stash'])
     end
 
     def self.current_branch
-      Command.run_dry('git', 'symbolic-ref', '--short', 'HEAD').out
+      Command.run_dry(['git', 'symbolic-ref', '--short', 'HEAD']).out
     end
 
     def self.status
-      status = Command.run('git', 'status')
+      status = Command.run(['git', 'status'])
       status.out + status.err
     end
 
     def self.status_dry
-      status = Command.run_dry('git', 'status')
+      status = Command.run_dry(['git', 'status'])
       status.out + status.err
     end
 
     def self.checkout(existing_branch)
-      Command.run('git', 'checkout', existing_branch)
+      Command.run(['git', 'checkout', existing_branch])
     end
 
     def self.create(branch)
-      Command.run('git', 'checkout', '-b', branch)
-      Command.run('git', 'push', '--set-upstream', 'origin', branch)
+      Command.run(['git', 'checkout', '-b', branch])
+      Command.run(['git', 'push', '--set-upstream', 'origin', branch])
     end
 
     def self.pull
-      Command.run('git', 'pull')
+      Command.run(['git', 'pull'])
     end
 
     def self.pull_upstream
-      Command.run('git', 'fetch', 'upstream')
-      Command.run('git', 'merge', 'upstream/master')
-      Command.run('git', 'push', 'origin', 'master')
+      Command.run(['git', 'fetch', 'upstream'])
+      Command.run(['git', 'merge', 'upstream/master'])
+      Command.run(['git', 'push', 'origin', 'master'])
     end
 
     def self.branch
-      Command.run('git', 'branch')
+      Command.run(['git', 'branch'])
     end
 
     def self.stash_pop
-      Command.run('git', 'stash', 'pop')
+      Command.run(['git', 'stash', 'pop'])
     end
 
     def self.branch_force_delete(branch)
-      Command.run('git', 'branch', '-D', branch)
+      Command.run(['git', 'branch', '-D', branch])
     end
 
     def self.remotes
-      Command.run_dry('git', 'remote', '-v')
+      Command.run_dry(['git', 'remote', '-v'])
     end
 
     def self.has_upstream?(remotes)
@@ -250,7 +250,7 @@ module Autowow
     end
 
     def self.add_remote(name, url)
-      Command.run('git', 'remote', 'add', name, url)
+      Command.run(['git', 'remote', 'add', name, url])
     end
 
     def self.on_branch(branch)
@@ -285,20 +285,20 @@ module Autowow
     end
 
     def self.branch_pushed(branch)
-      Command.run_dry('git', 'log', branch, '--not', '--remotes').out.empty?
+      Command.run_dry(['git', 'log', branch, '--not', '--remotes']).out.empty?
     end
 
     def self.branches
-      branches = Command.run_dry('git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/').out
+      branches = Command.run_dry(['git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/']).out
       branches.each_line.map { |line| line.strip[%r{(?<='refs/heads/)(.*)(?=')}] }
     end
 
     def self.push
-      Command.run('git', 'push')
+      Command.run(['git', 'push'])
     end
 
     def self.rebase(branch)
-      Command.run('git', 'rebase', branch)
+      Command.run(['git', 'rebase', branch])
     end
 
     # TODO: methods should return array of commands, way of execution should be determined by executor

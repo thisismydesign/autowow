@@ -1,7 +1,10 @@
 require 'thor'
 
+require_relative 'features/rbenv'
+require_relative 'features/gem'
+
 require_relative 'vcs'
-require_relative 'gem'
+require_relative 'commands/gem'
 
 module Autowow
   class CLI < Thor
@@ -22,7 +25,7 @@ module Autowow
 
     desc "gem_release", "release gem and return to master"
     def gem_release
-      Autowow::Features.gem_release
+      Autowow::Features::Gem.gem_release
     end
 
     desc "update_projects", "updates idle projects"
@@ -57,12 +60,12 @@ module Autowow
 
     desc "gem_clean", "cleans unused gems"
     def gem_clean
-      Autowow::Features.gem_clean
+      Autowow::Features::Gem.gem_clean
     end
 
     desc "ruby_versions", "shows ruby versions in use"
     def ruby_versions
-      logger.info(Autowow::Ruby.used_versions)
+      Autowow::Features::Rbenv.ruby_versions
     end
 
     desc "greet", "shows report of repos"
