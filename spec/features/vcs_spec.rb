@@ -99,4 +99,10 @@ RSpec.describe Autowow::Features::Vcs do
       end
     end
   end
+
+  describe '.greet' do
+    it 'does not fail' do
+      expect { Autowow::Features::Vcs.greet }.to_not raise_error
+    end
+  end
 end

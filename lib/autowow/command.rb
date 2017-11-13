@@ -38,6 +38,10 @@ module Autowow
       @@quiet_executer.run(*args)
     end
 
+    def self.run_dry!(args)
+      @@quiet_executer.run!(*args)
+    end
+
     def self.clean_lines(text)
       text.each_line.map(&:strip).reject(&:empty?)
     end

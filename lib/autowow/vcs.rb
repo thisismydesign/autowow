@@ -77,18 +77,6 @@ module Autowow
       end
     end
 
-    def self.greet(latest_project_info = nil)
-      logger.info("\nGood morning!\n\n")
-      if is_git?(status_dry)
-        logger.error('Inside repo, cannot show report about all repos.')
-      else
-        latest_project_info ||= get_latest_project_info
-        logger.info(latest_project_info)
-        check_projects_older_than(1, :months)
-      end
-      logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?\n  #{Ruby.obsolete_versions.join("\n  ")}")
-    end
-
     def self.hi
       logger.error("In a git repository. Try 1 level higher.") && return if is_git?(status_dry)
       latest_project_info = get_latest_project_info
@@ -119,29 +107,7 @@ module Autowow
       Launchy.open(origin_push_url(remotes.out))
     end
 
-    def self.get_latest_project_info
-      latest = latest_repo
-      time_diff = TimeDifference.between(File.mtime(latest), Time.now).humanize_higher_than(:days).downcase
-      time_diff_text = time_diff.empty? ? 'recently' : "#{time_diff} ago"
-      "It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n"
-    end
 
-    def self.latest_repo
-      Fs.latest(git_projects)
-    end
-
-    def self.check_projects_older_than(quantity, unit)
-      old_projects = Fs.older_than(git_projects, quantity, unit)
-      deprecated_projects = old_projects.reject do |project|
-        Dir.chdir(project) { branches.reject{ |branch| branch_pushed(branch) }.any? }
-      end
-
-      logger.info("The following projects have not been touched for more than #{quantity} #{unit} and all changes have been pushed, maybe consider removing them?") unless deprecated_projects.empty?
-      deprecated_projects.each do |project|
-        time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
-        logger.info("  #{File.basename(project)} (#{time_diff})")
-      end
-    end
 
     def self.create(branch)
       Command.run(['git', 'checkout', '-b', branch])

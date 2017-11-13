@@ -21,7 +21,7 @@ module Autowow
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
-      Autowow::Vcs.branch_merged
+      Autowow::Features::Vcs.branch_merged
     end
 
     desc "gem_release", "release gem and return to master"
@@ -71,7 +71,7 @@ module Autowow
 
     desc "greet", "shows report of repos"
     def greet
-      Autowow::Vcs.greet
+      Autowow::Features::Vcs.greet
     end
   end
 end
