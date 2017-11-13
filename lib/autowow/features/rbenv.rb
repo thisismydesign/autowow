@@ -8,8 +8,8 @@ module Autowow
   module Features
     module Rbenv
       include Commands::Rbenv
-      include Features::Vcs
       include Features::Fs
+      include Features::Vcs
 
       def ruby_versions
         logger.info(used_versions)

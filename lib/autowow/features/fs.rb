@@ -3,6 +3,7 @@ require_relative '../time_difference'
 module Autowow
   module Features
     module Fs
+      includes Features::Rbenv
       using RefinedTimeDifference
 
       def ls_dirs
