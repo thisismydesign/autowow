@@ -54,6 +54,7 @@ RSpec.describe Autowow::Features::Vcs do
 
       after do
         Autowow::Command.run_dry(['git', 'stash', 'pop'])
+        Autowow::Command.run_dry(['git', 'reset', file_name])
         File.delete(file_name)
       end
 
@@ -74,7 +75,11 @@ RSpec.describe Autowow::Features::Vcs do
     let(:working_branch) { 'new_branch' }
 
     before do
-      Autowow::Command.run_dry(['git', 'checkout', '-b', working_branch])
+      Autowow::Command.run_dry(['git', 'checkout', '-b', working_branch]) rescue nil
+    end
+
+    after do
+      Autowow::Command.run_dry(['git', 'branch', '-D', working_branch]) rescue nil
     end
 
     it 'returns to master and removes working branch' do
@@ -90,6 +95,7 @@ RSpec.describe Autowow::Features::Vcs do
       end
 
       after do
+        Autowow::Command.run_dry(['git', 'reset', file_name])
         File.delete(file_name)
       end
 

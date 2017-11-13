@@ -5,26 +5,28 @@ require_relative 'rbenv'
 module Autowow
   module Features
     class Vcs
+      extend Commands::Vcs
+
       include EasyLogging
 
       using RefinedTimeDifference
 
       def self.branch_merged
-        Command.run_with_output(Commands::Vcs.status)
-        working_branch = Command.run_dry(Commands::Vcs.current_branch).out.strip
+        Command.run_with_output(git_status)
+        working_branch = Command.run_dry(current_branch).out.strip
         logger.error("Nothing to do.") and return if working_branch.eql?('master')
 
         keep_changes do
-          Command.run(Commands::Vcs.checkout('master'))
-          Command.run(Commands::Vcs.pull)
+          Command.run(checkout('master'))
+          Command.run(pull)
         end
-        Command.run(Commands::Vcs.branch_force_delete(working_branch))
+        Command.run(branch_force_delete(working_branch))
 
-        Command.run_with_output(Commands::Vcs.status)
+        Command.run_with_output(git_status)
       end
 
       def self.branch_pushed(branch)
-        Command.run_dry(Commands::Vcs.changes_not_on_remote(branch)).out.empty?
+        Command.run_dry(changes_not_on_remote(branch)).out.empty?
       end
 
       def self.greet(latest_project_info = nil)
@@ -70,7 +72,7 @@ module Autowow
       end
 
       def self.branches
-        Command.clean_lines(Command.run_dry(Commands::Vcs.branches).out).each.map { |line| line[%r{(?<=refs/heads/)(.*)}] }
+        Command.clean_lines(Command.run_dry(branch_list).out).each.map { |line| line[%r{(?<=refs/heads/)(.*)}] }
       end
 
       def self.uncommitted_changes?(status)
@@ -78,18 +80,18 @@ module Autowow
       end
 
       def self.keep_changes
-        status = Command.run_dry(Commands::Vcs.status).out
+        status = Command.run_dry(git_status).out
         pop_stash = uncommitted_changes?(status)
-        Command.run_dry(Commands::Vcs.stash) if pop_stash
+        Command.run_dry(stash) if pop_stash
         begin
           yield if block_given?
         ensure
-          Command.run_dry(Commands::Vcs.stash_pop) if pop_stash
+          Command.run_dry(stash_pop) if pop_stash
         end
       end
 
       def self.is_git?
-        Fs.git_folder_present && Command.run_dry!(Commands::Vcs.status).success?
+        Fs.git_folder_present && Command.run_dry!(git_status).success?
       end
 
       def self.git_projects

@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe Autowow::Features::Rbenv do
   describe '.aliases' do
     it 'returns hash' do
-      aliases = Autowow::Features::Rbenv.aliases
+      aliases = Autowow::Features::Rbenv.ruby_aliases
       expect(aliases).to be_kind_of(Hash)
     end
   end

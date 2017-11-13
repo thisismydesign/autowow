@@ -1,15 +1,15 @@
 module Autowow
   module Commands
-    class Rbenv
-      def self.version
+    module Rbenv
+      def version
         ['rbenv', 'local']
       end
 
-      def self.alias
+      def aliases
         ['rbenv', 'alias']
       end
 
-      def self.installed_versions
+      def installed_versions
         ['rbenv', 'versions', '--bare', '--skip-aliases']
       end
     end

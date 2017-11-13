@@ -4,6 +4,7 @@ module Autowow
   module Features
     class Gem
       include EasyLogging
+      extend Commands::Gem
 
       def self.gem_release
         start_status = Vcs.status
@@ -15,14 +16,14 @@ module Autowow
         Vcs.on_branch('release') do
           Vcs.pull
           Vcs.rebase(working_branch)
-          Command.run(Commands::Gem.release)
+          Command.run(release)
         end
 
         logger.info(Vcs.status)
       end
 
       def self.gem_clean
-        Command.run(Commands::Gem.clean)
+        Command.run(clean)
       end
     end
   end
