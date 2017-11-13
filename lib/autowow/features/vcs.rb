@@ -4,6 +4,22 @@ require_relative 'fs'
 module Autowow
   module Features
     class Vcs
+      include EasyLogging
+
+      def self.branch_merged
+        Command.run_with_output(Commands::Vcs.status)
+        working_branch = Command.run_dry(Commands::Vcs.current_branch).out.strip
+        logger.error("Nothing to do.") and return if working_branch.eql?('master')
+
+        keep_changes do
+          Command.run(Commands::Vcs.checkout('master'))
+          Command.run(Commands::Vcs.pull)
+        end
+        Command.run(Commands::Vcs.branch_force_delete(working_branch))
+
+        Command.run_with_output(Commands::Vcs.status)
+      end
+
       def self.branch_pushed(branch)
         Command.run_dry(Commands::Vcs.changes_not_on_remote(branch)).out.empty?
       end

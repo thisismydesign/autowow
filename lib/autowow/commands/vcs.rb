@@ -30,6 +30,22 @@ module Autowow
       def self.stash_pop
         ['git', 'stash', 'pop']
       end
+
+      def self.current_branch
+        ['git', 'symbolic-ref', '--short', 'HEAD']
+      end
+
+      def self.checkout(existing_branch)
+        ['git', 'checkout', existing_branch]
+      end
+
+      def self.pull
+        ['git', 'pull']
+      end
+
+      def self.branch_force_delete(branch)
+        ['git', 'branch', '-D', branch]
+      end
     end
   end
 end

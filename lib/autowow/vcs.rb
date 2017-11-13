@@ -18,21 +18,6 @@ module Autowow
 
     using RefinedTimeDifference
 
-    def self.branch_merged
-      start_status = status
-      logger.info(start_status)
-      working_branch = current_branch
-      logger.error("Nothing to do.") and return if working_branch.eql?('master')
-
-      keep_changes do
-        checkout('master')
-        pull
-      end
-      branch_force_delete(working_branch)
-
-      logger.info(status)
-    end
-
     def self.update_projects
       Fs.in_place_or_subdirs(is_git?(status_dry)) do
         update_project
@@ -158,21 +143,9 @@ module Autowow
       end
     end
 
-    def self.current_branch
-      Command.run_dry(['git', 'symbolic-ref', '--short', 'HEAD']).out
-    end
-
-    def self.checkout(existing_branch)
-      Command.run(['git', 'checkout', existing_branch])
-    end
-
     def self.create(branch)
       Command.run(['git', 'checkout', '-b', branch])
       Command.run(['git', 'push', '--set-upstream', 'origin', branch])
-    end
-
-    def self.pull
-      Command.run(['git', 'pull'])
     end
 
     def self.pull_upstream
@@ -187,10 +160,6 @@ module Autowow
 
     def self.stash_pop
       Command.run(['git', 'stash', 'pop'])
-    end
-
-    def self.branch_force_delete(branch)
-      Command.run(['git', 'branch', '-D', branch])
     end
 
     def self.remotes
@@ -245,8 +214,5 @@ module Autowow
         checkout(working_branch) if switch_needed
       end
     end
-
-
-
   end
 end
