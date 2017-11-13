@@ -5,8 +5,7 @@ require_relative 'rbenv'
 module Autowow
   module Features
     module Vcs
-      extend Commands::Vcs
-
+      include Commands::Vcs
       include EasyLogging
 
       using RefinedTimeDifference

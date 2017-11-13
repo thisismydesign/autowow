@@ -1,25 +1,27 @@
 require_relative '../commands/gem'
 
+# TODO
 module Autowow
   module Features
     module Gem
       include EasyLogging
-      extend Commands::Gem
+      include Commands::Gem
+      include Commands::Vcs
+      include Features::Vcs
 
       def gem_release
-        start_status = Vcs.status
-        logger.info(start_status)
-        working_branch = Vcs.current_branch
+        Command.run_with_output(git_status)
+        working_branch = Command.run_dry(current_branch).out.strip
         logger.error("Not on master.") and return unless working_branch.eql?('master')
-        Vcs.push
+        push
 
-        Vcs.on_branch('release') do
-          Vcs.pull
-          Vcs.rebase(working_branch)
+        on_branch('release') do
+          pull
+          rebase(working_branch)
           Command.run(release)
         end
 
-        logger.info(Vcs.status)
+        Command.run_with_output(git_status)
       end
 
       def gem_clean

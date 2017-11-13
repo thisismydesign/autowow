@@ -1,5 +1,4 @@
 require_relative '../time_difference'
-require_relative '../vcs'
 
 module Autowow
   module Features
