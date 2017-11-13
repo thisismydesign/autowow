@@ -1,4 +1,5 @@
 require 'easy_logging'
+require 'reflection_utils'
 
 require_relative 'autowow/log_formatter'
 

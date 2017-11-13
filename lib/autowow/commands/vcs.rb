@@ -46,14 +46,8 @@ module Autowow
       def branch_force_delete(branch)
         ['git', 'branch', '-D', branch]
       end
-    end
 
-    # TODO: do this pattern for all methods
-    # https://stackoverflow.com/questions/322470/can-i-invoke-an-instance-method-on-a-ruby-module-without-including-it
-    # https://stackoverflow.com/questions/10039039/why-self-method-of-module-cannot-become-a-singleton-method-of-class
-    Vcs.module_eval do
-      module_function(:current_branch)
-      public(:current_branch)
+      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end

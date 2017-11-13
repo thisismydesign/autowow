@@ -8,6 +8,8 @@ module Autowow
       def clean
         ['gem', 'clean']
       end
+
+      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end

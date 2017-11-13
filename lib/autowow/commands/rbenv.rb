@@ -12,6 +12,8 @@ module Autowow
       def installed_versions
         ['rbenv', 'versions', '--bare', '--skip-aliases']
       end
+
+      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end
