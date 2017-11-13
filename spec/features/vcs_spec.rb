@@ -5,13 +5,13 @@ RSpec.describe Autowow::Features::Vcs do
 
   describe '.branch_pushed' do
     it 'returns boolean' do
-      expect(Autowow::Features::Vcs.branch_pushed('master')).to be_in([true, false])
+      expect(described_class.branch_pushed('master')).to be_in([true, false])
     end
   end
 
   describe '.branches' do
     it 'returns array' do
-      branches = Autowow::Features::Vcs.branches
+      branches = described_class.branches
       expect(branches).to be_kind_of(Array)
       expect(branches.size).to be >= 1
       expect(branches).to include('master')
@@ -31,14 +31,14 @@ RSpec.describe Autowow::Features::Vcs do
       end
 
       it 'stashes changes before executing block and pops stash afterwards' do
-        Autowow::Features::Vcs.keep_changes do
+        described_class.keep_changes do
           expect(File.file?(file_name)).to be_falsey
         end
         expect(File.file?(file_name)).to be_truthy
       end
 
       it 'pops stash if error occurs in block' do
-        Autowow::Features::Vcs.keep_changes do
+        described_class.keep_changes do
           raise 'error'
         end rescue nil
         expect(File.file?(file_name)).to be_truthy
@@ -59,7 +59,7 @@ RSpec.describe Autowow::Features::Vcs do
       end
 
       it 'does not pop stash' do
-        Autowow::Features::Vcs.keep_changes
+        described_class.keep_changes
         expect(File.file?(file_name)).to be_falsey
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   describe '.git_projects' do
     it 'returns an array' do
-      expect(Autowow::Features::Vcs.git_projects).to be_kind_of(Array)
+      expect(described_class.git_projects).to be_kind_of(Array)
     end
   end
 
@@ -83,9 +83,9 @@ RSpec.describe Autowow::Features::Vcs do
     end
 
     it 'returns to master and removes working branch' do
-      Autowow::Features::Vcs.branch_merged
+      described_class.branch_merged
       expect(Autowow::Command.run_dry(Autowow::Commands::Vcs.current_branch).out.strip).to eq('master')
-      expect(Autowow::Features::Vcs.branches.include?(working_branch)).to be_falsey
+      expect(described_class.branches.include?(working_branch)).to be_falsey
     end
 
     context 'when there are changes' do
@@ -100,7 +100,7 @@ RSpec.describe Autowow::Features::Vcs do
       end
 
       it 'carries over the changes to master' do
-        Autowow::Features::Vcs.branch_merged
+        described_class.branch_merged
         expect(File.file?(file_name)).to be_truthy
       end
     end
@@ -108,7 +108,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   describe '.greet' do
     it 'does not fail' do
-      expect { Autowow::Features::Vcs.greet }.to_not raise_error
+      expect { described_class.greet }.to_not raise_error
     end
   end
 end
