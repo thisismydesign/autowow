@@ -5,14 +5,14 @@ require_relative 'fs'
 
 module Autowow
   module Features
-    class Rbenv
+    module Rbenv
       extend Commands::Rbenv
 
-      def self.ruby_versions
+      def ruby_versions
         logger.info(used_versions)
       end
 
-      def self.used_versions
+      def used_versions
         rubies = []
         Fs.in_place_or_subdirs(Vcs.is_git?) do
           result = Command.run_dry(version).out
@@ -21,7 +21,7 @@ module Autowow
         rubies.uniq
       end
 
-      def self.ruby_aliases
+      def ruby_aliases
         ret = {}
         Command.clean_lines(Command.run_dry(aliases).out).each do |line|
           ret[line.split(' => ')[0]] = line.split(' => ')[1]
@@ -29,7 +29,7 @@ module Autowow
         ret
       end
 
-      def self.obsolete_versions
+      def obsolete_versions
         alias_map = ruby_aliases
         used_versions_and_aliases = used_versions
         used_versions.each do |v|
@@ -37,6 +37,8 @@ module Autowow
         end
         Command.clean_lines(Command.run_dry(installed_versions).out) - used_versions_and_aliases
       end
+
+      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end
