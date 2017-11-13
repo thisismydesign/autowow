@@ -2,6 +2,7 @@ require 'thor'
 
 require_relative 'features/rbenv'
 require_relative 'features/gem'
+require_relative 'features/vcs'
 
 require_relative 'vcs'
 require_relative 'commands/gem'

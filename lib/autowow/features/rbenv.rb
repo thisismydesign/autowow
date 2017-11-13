@@ -1,6 +1,8 @@
 require_relative '../commands/rbenv'
 require_relative '../commands/vcs'
 
+require_relative 'fs'
+
 module Autowow
   module Features
     class Rbenv
@@ -10,7 +12,7 @@ module Autowow
 
       def self.used_versions
         rubies = []
-        Fs.in_place_or_subdirs(Vcs.is_git?(Vcs.status_dry)) do
+        Fs.in_place_or_subdirs(Vcs.is_git?(Command.run_dry(Commands::Vcs.status).out)) do
           result = Command.run_dry(Commands::Rbenv.version).out
           rubies.concat(Command.clean_lines(result))
         end

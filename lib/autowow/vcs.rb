@@ -6,7 +6,7 @@ require 'launchy'
 
 require_relative 'command'
 require_relative 'decorators/string_decorator'
-require_relative 'fs'
+require_relative 'features/fs'
 require_relative 'time_difference'
 require_relative 'commands/gem'
 require_relative 'commands/rbenv'
@@ -158,22 +158,8 @@ module Autowow
       end
     end
 
-    def self.stash
-      Command.run(['git', 'stash'])
-    end
-
     def self.current_branch
       Command.run_dry(['git', 'symbolic-ref', '--short', 'HEAD']).out
-    end
-
-    def self.status
-      status = Command.run(['git', 'status'])
-      status.out + status.err
-    end
-
-    def self.status_dry
-      status = Command.run_dry(['git', 'status'])
-      status.out + status.err
     end
 
     def self.checkout(existing_branch)
@@ -213,14 +199,6 @@ module Autowow
 
     def self.has_upstream?(remotes)
       remotes.include?('upstream')
-    end
-
-    def self.uncommitted_changes?(start_status)
-      !(start_status.include?('nothing to commit, working tree clean') or start_status.include?('nothing added to commit but untracked files present'))
-    end
-
-    def self.is_git?(start_status)
-      !start_status.include?('Not a git repository')
     end
 
     def self.origin_push_url(remotes)
@@ -268,39 +246,7 @@ module Autowow
       end
     end
 
-    def self.keep_changes
-      status = status_dry
-      pop_stash = uncommitted_changes?(status)
-      stash if pop_stash
-      yield
-      stash_pop if pop_stash
-    end
 
-    def self.git_projects
-      Fs.ls_dirs.select do |dir|
-        Dir.chdir(dir) do
-          is_git?(status_dry)
-        end
-      end
-    end
 
-    def self.branch_pushed(branch)
-      Command.run_dry(['git', 'log', branch, '--not', '--remotes']).out.empty?
-    end
-
-    def self.branches
-      branches = Command.run_dry(['git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/']).out
-      branches.each_line.map { |line| line.strip[%r{(?<='refs/heads/)(.*)(?=')}] }
-    end
-
-    def self.push
-      Command.run(['git', 'push'])
-    end
-
-    def self.rebase(branch)
-      Command.run(['git', 'rebase', branch])
-    end
-
-    # TODO: methods should return array of commands, way of execution should be determined by executor
   end
 end
