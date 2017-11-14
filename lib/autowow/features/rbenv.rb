@@ -8,8 +8,6 @@ module Autowow
   module Features
     module Rbenv
       include Commands::Rbenv
-      include Features::Fs
-      include Features::Vcs
 
       def ruby_versions
         logger.info(used_versions)
@@ -17,7 +15,7 @@ module Autowow
 
       def used_versions
         rubies = []
-        in_place_or_subdirs(is_git?) do
+        Fs.in_place_or_subdirs(Vcs.is_git?) do
           result = Command.run_dry(version).out
           rubies.concat(Command.clean_lines(result))
         end

@@ -7,8 +7,7 @@ module Autowow
     module Vcs
       include EasyLogging
       include Commands::Vcs
-      include Features::Rbenv
-      include Features::Fs
+
       using RefinedTimeDifference
 
       def branch_merged
@@ -38,7 +37,7 @@ module Autowow
           logger.info(latest_project_info)
           check_projects_older_than(1, :months)
         end
-        obsolete_rubies = obsolete_versions
+        obsolete_rubies = Rbenv.obsolete_versions
         if obsolete_rubies.any?
           logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?")
           obsolete_rubies.each do |ruby_verion|
@@ -48,7 +47,7 @@ module Autowow
       end
 
       def check_projects_older_than(quantity, unit)
-        old_projects = older_than(git_projects, quantity, unit)
+        old_projects = Fs.older_than(git_projects, quantity, unit)
         deprecated_projects = old_projects.reject do |project|
           Dir.chdir(project) { branches.reject{ |branch| branch_pushed(branch) }.any? }
         end
@@ -68,7 +67,7 @@ module Autowow
       end
 
       def latest_repo
-        latest(git_projects)
+        Fs.latest(git_projects)
       end
 
       def branches
@@ -91,11 +90,11 @@ module Autowow
       end
 
       def is_git?
-        git_folder_present && Command.run_dry!(git_status).success?
+        Fs.git_folder_present && Command.run_dry!(git_status).success?
       end
 
       def git_projects
-        ls_dirs.select do |dir|
+        Fs.ls_dirs.select do |dir|
           Dir.chdir(dir) do
             is_git?
           end

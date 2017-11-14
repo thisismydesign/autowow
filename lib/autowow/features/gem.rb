@@ -1,4 +1,5 @@
 require_relative '../commands/gem'
+require_relative 'fs'
 
 # TODO
 module Autowow
@@ -7,7 +8,6 @@ module Autowow
       include EasyLogging
       include Commands::Gem
       include Commands::Vcs
-      include Features::Vcs
 
       def gem_release
         Command.run_with_output(git_status)
@@ -15,7 +15,7 @@ module Autowow
         logger.error("Not on master.") and return unless working_branch.eql?('master')
         push
 
-        on_branch('release') do
+        Vcs.on_branch('release') do
           pull
           rebase(working_branch)
           Command.run(release)
