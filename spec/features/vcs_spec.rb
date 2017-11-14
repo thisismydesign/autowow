@@ -23,7 +23,7 @@ RSpec.describe Autowow::Features::Vcs do
     context 'when there are changes' do
       before do
         File.open(file_name, "w+") { |file| file.write(file_name) }
-        Autowow::Command.run_dry(['git', 'add', file_name])
+        Autowow::Executor.quiet.run(['git', 'add', file_name])
       end
 
       after do
@@ -48,13 +48,13 @@ RSpec.describe Autowow::Features::Vcs do
     context 'when there are no changes' do
       before do
         File.open(file_name, "w+") { |file| file.write(file_name) }
-        Autowow::Command.run_dry(['git', 'add', file_name])
-        Autowow::Command.run_dry(['git', 'stash'])
+        Autowow::Executor.quiet.run(['git', 'add', file_name])
+        Autowow::Executor.quiet.run(['git', 'stash'])
       end
 
       after do
-        Autowow::Command.run_dry(['git', 'stash', 'pop'])
-        Autowow::Command.run_dry(['git', 'reset', file_name])
+        Autowow::Executor.quiet.run(['git', 'stash', 'pop'])
+        Autowow::Executor.quiet.run(['git', 'reset', file_name])
         File.delete(file_name)
       end
 
@@ -75,27 +75,27 @@ RSpec.describe Autowow::Features::Vcs do
     let(:working_branch) { 'new_branch' }
 
     before do
-      Autowow::Command.run_dry(['git', 'checkout', '-b', working_branch]) rescue nil
+      Autowow::Executor.quiet.run(['git', 'checkout', '-b', working_branch]) rescue nil
     end
 
     after do
-      Autowow::Command.run_dry(['git', 'branch', '-D', working_branch]) rescue nil
+      Autowow::Executor.quiet.run(['git', 'branch', '-D', working_branch]) rescue nil
     end
 
     it 'returns to master and removes working branch' do
       described_class.branch_merged
-      expect(Autowow::Command.run_dry(Autowow::Commands::Vcs.current_branch).out.strip).to eq('master')
+      expect(Autowow::Executor.quiet.run(Autowow::Commands::Vcs.current_branch).out.strip).to eq('master')
       expect(described_class.branches.include?(working_branch)).to be_falsey
     end
 
     context 'when there are changes' do
       before do
         File.open(file_name, "w+") { |file| file.write(file_name) }
-        Autowow::Command.run_dry(['git', 'add', file_name])
+        Autowow::Executor.quiet.run(['git', 'add', file_name])
       end
 
       after do
-        Autowow::Command.run_dry(['git', 'reset', file_name])
+        Autowow::Executor.quiet.run(['git', 'reset', file_name])
         File.delete(file_name)
       end
 

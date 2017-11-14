@@ -4,8 +4,6 @@ require 'net/http'
 require 'json'
 require 'launchy'
 
-require_relative 'command'
-require_relative 'decorators/string_decorator'
 require_relative 'features/fs'
 require_relative 'time_difference'
 require_relative 'commands/gem'

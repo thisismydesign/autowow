@@ -7,25 +7,27 @@ module Autowow
     module Vcs
       include EasyLogging
       include Commands::Vcs
+      include Executor
+      include StringDecorator
 
       using RefinedTimeDifference
 
       def branch_merged
-        Command.run_with_output(git_status)
-        working_branch = Command.run_dry(current_branch).out.strip
+        pretty_with_output.run(git_status)
+        working_branch = quiet.run(current_branch).out.strip
         logger.error("Nothing to do.") and return if working_branch.eql?('master')
 
         keep_changes do
-          Command.run(checkout('master'))
-          Command.run(pull)
+          pretty.run(checkout('master'))
+          pretty.run(pull)
         end
-        Command.run(branch_force_delete(working_branch))
+        pretty.run(branch_force_delete(working_branch))
 
-        Command.run_with_output(git_status)
+        pretty_with_output.run(git_status)
       end
 
       def branch_pushed(branch)
-        Command.run_dry(changes_not_on_remote(branch)).out.empty?
+        quiet.run(changes_not_on_remote(branch)).out.empty?
       end
 
       def greet(latest_project_info = nil)
@@ -71,7 +73,7 @@ module Autowow
       end
 
       def branches
-        Command.clean_lines(Command.run_dry(branch_list).out).each.map { |line| line[%r{(?<=refs/heads/)(.*)}] }
+        quiet.run(branch_list).out.clean_lines.map { |line| line[%r{(?<=refs/heads/)(.*)}] }
       end
 
       def uncommitted_changes?(status)
@@ -79,18 +81,18 @@ module Autowow
       end
 
       def keep_changes
-        status = Command.run_dry(git_status).out
+        status = quiet.run(git_status).out
         pop_stash = uncommitted_changes?(status)
-        Command.run_dry(stash) if pop_stash
+        quiet.run(stash) if pop_stash
         begin
           yield if block_given?
         ensure
-          Command.run_dry(stash_pop) if pop_stash
+          quiet.run(stash_pop) if pop_stash
         end
       end
 
       def is_git?
-        Fs.git_folder_present && Command.run_dry!(git_status).success?
+        Fs.git_folder_present && quiet.run!(git_status).success?
       end
 
       def git_projects

@@ -8,10 +8,11 @@ module Autowow
       include EasyLogging
       include Commands::Gem
       include Commands::Vcs
+      include Executor
 
       def gem_release
-        Command.run_with_output(git_status)
-        working_branch = Command.run_dry(current_branch).out.strip
+        pretty_with_output.run(git_status)
+        working_branch = quiet.run(current_branch).out.strip
         logger.error("Not on master.") and return unless working_branch.eql?('master')
         push
 
@@ -21,7 +22,7 @@ module Autowow
           Command.run(release)
         end
 
-        Command.run_with_output(git_status)
+        pretty_with_output.run(git_status)
       end
 
       def gem_clean

@@ -8,6 +8,8 @@ module Autowow
   module Features
     module Rbenv
       include Commands::Rbenv
+      include Executor
+      include StringDecorator
 
       def ruby_versions
         logger.info(used_versions)
@@ -16,15 +18,15 @@ module Autowow
       def used_versions
         rubies = []
         Fs.in_place_or_subdirs(Vcs.is_git?) do
-          result = Command.run_dry(version).out
-          rubies.concat(Command.clean_lines(result))
+          result = quiet.run(version).out
+          rubies.concat(result.clean_lines)
         end
         rubies.uniq
       end
 
       def ruby_aliases
         ret = {}
-        Command.clean_lines(Command.run_dry(aliases).out).each do |line|
+        quiet.run(aliases).out.clean_lines.each do |line|
           ret[line.split(' => ')[0]] = line.split(' => ')[1]
         end
         ret
@@ -36,7 +38,7 @@ module Autowow
         used_versions.each do |v|
           used_versions_and_aliases.push(alias_map[v]) if alias_map.has_key?(v)
         end
-        Command.clean_lines(Command.run_dry(installed_versions).out) - used_versions_and_aliases
+        quiet.run(installed_versions).out.clean_lines - used_versions_and_aliases
       end
 
       include ReflectionUtils::CreateModuleFunctions
