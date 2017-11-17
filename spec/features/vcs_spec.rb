@@ -84,7 +84,7 @@ RSpec.describe Autowow::Features::Vcs do
 
     it 'returns to master and removes working branch' do
       described_class.branch_merged
-      expect(Autowow::Executor.quiet.run(Autowow::Commands::Vcs.current_branch).out.strip).to eq('master')
+      expect(described_class.working_branch).to eq('master')
       expect(described_class.branches.include?(working_branch)).to be_falsey
     end
 
@@ -109,6 +109,36 @@ RSpec.describe Autowow::Features::Vcs do
   describe '.greet' do
     it 'does not fail' do
       expect { described_class.greet }.to_not raise_error
+    end
+  end
+
+  describe '.working_branch' do
+    it 'returns current branch' do
+      expect(described_class.working_branch).to eq('master')
+    end
+  end
+
+  describe '.on_branch' do
+    let(:branch) { 'new_branch' }
+
+    after do
+      Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
+    end
+
+    it 'switches to branch, executes block and switches back to start branch' do
+      start_branch = described_class.working_branch
+      described_class.on_branch(branch) do
+        expect(described_class.working_branch).to eq(branch)
+      end
+      expect(described_class.working_branch).to eq(start_branch)
+    end
+
+    it 'switches back to start branch if error occurs in block' do
+      start_branch = described_class.working_branch
+      described_class.on_branch(branch) do
+        raise 'error'
+      end rescue nil
+      expect(described_class.working_branch).to eq(start_branch)
     end
   end
 end

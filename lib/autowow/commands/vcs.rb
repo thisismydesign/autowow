@@ -47,6 +47,14 @@ module Autowow
         ['git', 'branch', '-D', branch]
       end
 
+      def create(branch)
+        ['git', 'checkout', '-b', branch]
+      end
+
+      def set_upstream(remote, branch)
+        ['git', 'push', '--set-upstream', remote, branch]
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end

@@ -12,18 +12,39 @@ module Autowow
 
       using RefinedTimeDifference
 
+      def on_branch(branch)
+        keep_changes do
+          start_branch = working_branch
+          switch_needed = !start_branch.eql?(branch)
+          if switch_needed
+            result = pretty.run!(checkout(branch))
+            pretty.run(create(branch)) unless result.success?
+          end
+
+          begin
+            yield if block_given?
+          ensure
+            pretty.run(checkout(start_branch)) if switch_needed
+          end
+        end
+      end
+
       def branch_merged
         pretty_with_output.run(git_status)
-        working_branch = quiet.run(current_branch).out.strip
-        logger.error("Nothing to do.") and return if working_branch.eql?('master')
+        branch = working_branch
+        logger.error("Nothing to do.") and return if branch.eql?('master')
 
         keep_changes do
           pretty.run(checkout('master'))
           pretty.run(pull)
         end
-        pretty.run(branch_force_delete(working_branch))
+        pretty.run(branch_force_delete(branch))
 
         pretty_with_output.run(git_status)
+      end
+
+      def working_branch
+        quiet.run(current_branch).out.strip
       end
 
       def branch_pushed(branch)

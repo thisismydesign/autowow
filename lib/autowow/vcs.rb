@@ -105,13 +105,6 @@ module Autowow
       Launchy.open(origin_push_url(remotes.out))
     end
 
-
-
-    def self.create(branch)
-      Command.run(['git', 'checkout', '-b', branch])
-      Command.run(['git', 'push', '--set-upstream', 'origin', branch])
-    end
-
     def self.pull_upstream
       Command.run(['git', 'fetch', 'upstream'])
       Command.run(['git', 'merge', 'upstream/master'])
@@ -164,19 +157,6 @@ module Autowow
       Command.run(['git', 'remote', 'add', name, url])
     end
 
-    def self.on_branch(branch)
-      keep_changes do
-        working_branch = current_branch
-        switch_needed = !working_branch.eql?(branch)
-        if switch_needed
-          result = checkout(branch)
-          create(branch) if result.err.eql?("error: pathspec '#{branch}' did not match any file(s) known to git.")
-        end
 
-        yield
-
-        checkout(working_branch) if switch_needed
-      end
-    end
   end
 end
