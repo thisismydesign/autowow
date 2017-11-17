@@ -16,22 +16,9 @@ module Autowow
 
     using RefinedTimeDifference
 
-    def self.update_projects
-      Fs.in_place_or_subdirs(is_git?(status_dry)) do
-        update_project
-      end
-    end
 
-    def self.update_project
-      start_status = status_dry
-      return unless is_git?(start_status)
-      logger.info("Updating #{File.expand_path('.')} ...")
-      logger.warn("Skipped: uncommitted changes on master.") and return if uncommitted_changes?(start_status) and current_branch.eql?('master')
 
-      on_branch('master') do
-        has_upstream?(remotes.out) ? pull_upstream : pull
-      end
-    end
+
 
     def self.clear_branches
       logger.info(branch.out)
@@ -105,11 +92,7 @@ module Autowow
       Launchy.open(origin_push_url(remotes.out))
     end
 
-    def self.pull_upstream
-      Command.run(['git', 'fetch', 'upstream'])
-      Command.run(['git', 'merge', 'upstream/master'])
-      Command.run(['git', 'push', 'origin', 'master'])
-    end
+
 
     def self.branch
       Command.run(['git', 'branch'])
@@ -119,13 +102,9 @@ module Autowow
       Command.run(['git', 'stash', 'pop'])
     end
 
-    def self.remotes
-      Command.run_dry(['git', 'remote', '-v'])
-    end
 
-    def self.has_upstream?(remotes)
-      remotes.include?('upstream')
-    end
+
+
 
     def self.origin_push_url(remotes)
       # Order is important: first try to match "url" in "#{url}.git" as non-dot_git matchers would include ".git" in the match

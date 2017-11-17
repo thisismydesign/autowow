@@ -141,4 +141,10 @@ RSpec.describe Autowow::Features::Vcs do
       expect(described_class.working_branch).to eq(start_branch)
     end
   end
+
+  describe '.update_project' do
+    it 'does not fail' do
+      expect { described_class.update_project }.to_not raise_error
+    end
+  end
 end

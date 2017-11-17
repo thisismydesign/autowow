@@ -12,6 +12,38 @@ module Autowow
 
       using RefinedTimeDifference
 
+      def update_projects
+        Fs.in_place_or_subdirs(is_git?) do
+          update_project
+        end
+      end
+
+      def update_project
+        return unless is_git?
+        logger.info("Updating #{File.expand_path('.')} ...")
+        status = quiet.run(git_status).out
+        if uncommitted_changes?(status) and working_branch.eql?('master')
+          logger.warn("Skipped: uncommitted changes on master.") and return
+        end
+
+        on_branch('master') do
+          has_upstream? ? pull_upstream : pretty.run(pull)
+        end
+      end
+
+      def pull_upstream
+        upstream_remote = 'upstream'
+        remote = 'origin'
+        branch = 'master'
+        pretty.run(fetch(upstream_remote)).out
+        pretty.run(merge("#{upstream_remote}/#{branch}")).out
+        pretty.run(push(remote, branch))
+      end
+
+      def has_upstream?
+        quiet.run(remotes).out.include?('upstream')
+      end
+
       def on_branch(branch)
         keep_changes do
           start_branch = working_branch

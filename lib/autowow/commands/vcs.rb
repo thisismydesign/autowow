@@ -11,8 +11,8 @@ module Autowow
         # ['git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/']
       end
 
-      def push
-        ['git', 'push']
+      def push(branch = nil, remote = nil)
+        ['git', 'push'] + [branch, remote].compact
       end
 
       def rebase(branch)
@@ -53,6 +53,18 @@ module Autowow
 
       def set_upstream(remote, branch)
         ['git', 'push', '--set-upstream', remote, branch]
+      end
+
+      def remotes
+        ['git', 'remote', '-v']
+      end
+
+      def fetch(remote)
+        ['git', 'fetch', remote]
+      end
+
+      def merge(compare)
+        ['git', 'merge', compare]
       end
 
       include ReflectionUtils::CreateModuleFunctions
