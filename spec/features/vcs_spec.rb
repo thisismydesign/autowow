@@ -143,8 +143,18 @@ RSpec.describe Autowow::Features::Vcs do
   end
 
   describe '.update_project' do
+    let(:branch) { 'new_branch' }
+
+    after do
+      Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
+    end
+
     it 'does not fail' do
       expect { described_class.update_project }.to_not raise_error
+      # Try via changing branch because there might be local changes on master
+      described_class.on_branch(branch) do
+        expect { described_class.update_project }.to_not raise_error
+      end
     end
   end
 end
