@@ -7,6 +7,8 @@ require 'launchy'
 require_relative '../commands/vcs'
 require_relative 'fs'
 require_relative 'rbenv'
+require_relative 'gem'
+require_relative '../time_difference'
 
 module Autowow
   module Features
@@ -17,6 +19,32 @@ module Autowow
       include StringDecorator
 
       using RefinedTimeDifference
+
+      def self.hi!
+        logger.error("In a git repository. Try 1 level higher.") && return if is_git?
+        hi do
+          logger.info('Removing unused branches...')
+          clear_branches
+          logger.info('Adding upstream...')
+          add_upstream
+          logger.info('Removing unused gems...')
+          Gem.gem_clean
+        end
+      end
+
+      def self.hi
+        logger.error("In a git repository. Try 1 level higher.") && return if is_git?
+        latest_project_info = get_latest_repo_info
+        logger.info("\nHang on, updating your local projects and remote forks...\n\n")
+        git_projects.each do |project|
+          Dir.chdir(project) do
+            logger.info("\nGetting #{project} in shape...")
+            yield if block_given?
+            update_project
+          end
+        end
+        greet(latest_project_info)
+      end
 
       def self.open
         url = origin_push_url(quiet.run(remotes).out)

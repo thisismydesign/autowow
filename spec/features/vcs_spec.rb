@@ -249,5 +249,17 @@ RSpec.describe Autowow::Features::Vcs do
         expect {  described_class.add_upstream }.to_not raise_error
       end
     end
+
+    describe '.hi' do
+      it 'does not fail' do
+        expect {  described_class.hi }.to_not raise_error
+      end
+    end
+
+    describe '.hi!' do
+      it 'does not fail' do
+        expect {  described_class.hi! }.to_not raise_error
+      end
+    end
   end
 end
