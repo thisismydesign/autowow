@@ -12,6 +12,61 @@ module Autowow
 
       using RefinedTimeDifference
 
+      def self.add_upstream
+        logger.error("Not a git repository.") and return unless is_git?
+        logger.warn("Already has upstream.") and return if has_upstream?
+        remote_list = pretty_with_output.run(remotes).out.strip
+
+        url = URI.parse(origin_push_url(remote_list))
+        host = "api.#{url.host}"
+        path = "/repos#{url.path}"
+        request = Net::HTTP.new(host, url.port)
+        request.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        request.use_ssl = url.scheme == 'https'
+        logger.info("Fetching repo info from #{host}#{path} ...\n\n")
+        response = request.get(path)
+
+        if response.kind_of?(Net::HTTPRedirection)
+          logger.error('Repository moved / renamed. Update remote or implement redirect handling. :)')
+        elsif response.kind_of?(Net::HTTPNotFound)
+          logger.error('Repository not found. Maybe it is private.')
+        elsif response.kind_of?(Net::HTTPSuccess)
+          parsed_response = JSON.parse(response.body)
+          logger.warn('Not a fork.') and return unless parsed_response['fork']
+          parent_url = parsed_response.dig('parent', 'html_url')
+          pretty.run(add_remote('upstream', parent_url)) unless parent_url.to_s.empty?
+          pretty_with_output.run(remotes)
+        else
+          logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}")
+        end
+      end
+
+      def self.origin_push_url(remotes)
+        # Order is important: first try to match "url" in "#{url}.git" as non-dot_git matchers would include ".git" in the match
+        origin_push_url_ssl_dot_git(remotes) or
+            origin_push_url_ssl(remotes)or
+            origin_push_url_https_dot_git(remotes) or
+            origin_push_url_https(remotes)
+      end
+
+      def self.origin_push_url_https(remotes)
+        remotes[%r{(?<=origin(\s))http(s?)://[a-zA-Z\-_./]*(?=(\s)\(push\))}]
+      end
+
+      def self.origin_push_url_https_dot_git(remotes)
+        remotes[%r{(?<=origin(\s))http(s?)://[a-zA-Z\-_./]*(?=(\.)git(\s)\(push\))}]
+      end
+
+      def self.origin_push_url_ssl_dot_git(remotes)
+        url = remotes[%r{(?<=origin(\s)git@)[a-zA-Z\-_./:]*(?=(\.)git(\s)\(push\))}]
+        "https://#{url.gsub(':', '/')}" if url
+      end
+
+      def self.origin_push_url_ssl(remotes)
+        url = remotes[%r{(?<=origin(\s)git@)[a-zA-Z\-_./:]*(?=(\s)\(push\))}]
+        "https://#{url.gsub(':', '/')}" if url
+      end
+
       def self.clear_branches
         pretty_with_output.run(branch)
 

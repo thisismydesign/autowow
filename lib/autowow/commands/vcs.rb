@@ -71,6 +71,10 @@ module Autowow
         ['git', 'branch']
       end
 
+      def add_remote(name, url)
+        ['git', 'remote', 'add', name, url]
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end

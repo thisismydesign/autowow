@@ -194,5 +194,60 @@ RSpec.describe Autowow::Features::Vcs do
         expect(Autowow::Executor.quiet.run(['git', 'branch']).out).to_not include(branch)
       end
     end
+
+    describe ".origin_push_url" do
+      let(:expected) { 'https://github.com/thisismydesign/autowow' }
+
+      it 'matches http format' do
+        remote = 'origin	https://github.com/thisismydesign/autowow (push)'
+        expect(described_class.origin_push_url(remote)).to eq(expected)
+      end
+
+      it 'matches http .git format' do
+        remote = 'origin	https://github.com/thisismydesign/autowow.git (push)'
+        expect(described_class.origin_push_url(remote)).to eq(expected)
+      end
+
+      it 'matches ssh format' do
+        remote = 'origin	git@github.com:thisismydesign/autowow (push)'
+        expect(described_class.origin_push_url(remote)).to eq(expected)
+      end
+
+      it 'matches ssh .git format' do
+        remote = 'origin	git@github.com:thisismydesign/autowow.git (push)'
+        expect(described_class.origin_push_url(remote)).to eq(expected)
+      end
+
+      it 'matches dashes' do
+        remote = 'origin	git@github.com:thisismydesign/auto-wow.git (push)'
+        expect(described_class.origin_push_url(remote)).to eq('https://github.com/thisismydesign/auto-wow')
+      end
+
+      it 'matches underscores' do
+        remote = 'origin	git@github.com:thisismydesign/auto_wow.git (push)'
+        expect(described_class.origin_push_url(remote)).to eq('https://github.com/thisismydesign/auto_wow')
+      end
+
+      it 'matches origin' do
+        remote = 'upstream	git@github.com:thisismydesign/autowow.git (push)'
+        expect(described_class.origin_push_url(remote)).to_not be
+      end
+
+      it 'matches push' do
+        remote = 'origin	git@github.com:thisismydesign/autowow.git (pull)'
+        expect(described_class.origin_push_url(remote)).to_not be
+      end
+
+      it 'matches single example' do
+        remote = "origin	git@github.com:thisismydesign/autowow.git (pull)\norigin	git@github.com:thisismydesign/autowow.git (push)"
+        expect(described_class.origin_push_url(remote)).to eq(expected)
+      end
+    end
+
+    describe '.add_upstream' do
+      it 'does not fail' do
+        expect {  described_class.add_upstream }.to_not raise_error
+      end
+    end
   end
 end
