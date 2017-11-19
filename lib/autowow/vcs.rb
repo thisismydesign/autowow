@@ -1,8 +1,4 @@
-require 'uri'
-require 'net/https'
-require 'net/http'
-require 'json'
-require 'launchy'
+
 
 require_relative 'features/fs'
 require_relative 'time_difference'
@@ -50,9 +46,7 @@ module Autowow
       end
     end
 
-    def self.open
-      Launchy.open(origin_push_url(remotes.out))
-    end
+
 
     def self.stash_pop
       Command.run(['git', 'stash', 'pop'])

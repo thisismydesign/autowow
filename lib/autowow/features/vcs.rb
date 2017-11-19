@@ -1,3 +1,9 @@
+require 'uri'
+require 'net/https'
+require 'net/http'
+require 'json'
+require 'launchy'
+
 require_relative '../commands/vcs'
 require_relative 'fs'
 require_relative 'rbenv'
@@ -12,10 +18,16 @@ module Autowow
 
       using RefinedTimeDifference
 
+      def self.open
+        url = origin_push_url(quiet.run(remotes).out)
+        logger.info("Opening #{url}")
+        Launchy.open(url)
+      end
+
       def self.add_upstream
         logger.error("Not a git repository.") and return unless is_git?
         logger.warn("Already has upstream.") and return if has_upstream?
-        remote_list = pretty_with_output.run(remotes).out.strip
+        remote_list = pretty_with_output.run(remotes).out
 
         url = URI.parse(origin_push_url(remote_list))
         host = "api.#{url.host}"
@@ -23,7 +35,7 @@ module Autowow
         request = Net::HTTP.new(host, url.port)
         request.verify_mode = OpenSSL::SSL::VERIFY_NONE
         request.use_ssl = url.scheme == 'https'
-        logger.info("Fetching repo info from #{host}#{path} ...\n\n")
+        logger.info("Fetching repo info from #{host}#{path}\n\n")
         response = request.get(path)
 
         if response.kind_of?(Net::HTTPRedirection)
