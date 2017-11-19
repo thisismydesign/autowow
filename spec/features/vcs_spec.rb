@@ -157,4 +157,42 @@ RSpec.describe Autowow::Features::Vcs do
       end
     end
   end
+
+  describe '.clear_branches' do
+    let(:branch) { 'new_branch' }
+
+    context 'unused local branch' do
+      before do
+        Autowow::Executor.quiet.run(['git', 'branch', branch]) rescue nil
+      end
+
+      after do
+        Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
+      end
+
+      it 'removes branch' do
+        expect(Autowow::Executor.quiet.run(['git', 'branch']).out).to include(branch)
+        described_class.clear_branches
+        expect(Autowow::Executor.quiet.run(['git', 'branch']).out).to_not include(branch)
+      end
+    end
+
+    context 'pushed branch' do
+      before do
+        Autowow::Executor.quiet.run(['git', 'branch', branch]) rescue nil
+        Autowow::Executor.quiet.run(described_class.set_upstream(branch)) rescue nil
+      end
+
+      after do
+        Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
+        Autowow::Executor.quiet.run(['git', 'push', '-d', 'origin', branch]) rescue nil
+      end
+
+      it 'removes branch' do
+        expect(Autowow::Executor.quiet.run(['git', 'branch']).out).to include(branch)
+        described_class.clear_branches
+        expect(Autowow::Executor.quiet.run(['git', 'branch']).out).to_not include(branch)
+      end
+    end
+  end
 end

@@ -12,6 +12,16 @@ module Autowow
 
       using RefinedTimeDifference
 
+      def self.clear_branches
+        pretty_with_output.run(branch)
+
+        (branches - ['master', working_branch]).each do |branch|
+          pretty.run(branch_force_delete(branch)) if branch_pushed(branch)
+        end
+
+        pretty_with_output.run(branch)
+      end
+
       def update_projects
         Fs.in_place_or_subdirs(is_git?) do
           update_project

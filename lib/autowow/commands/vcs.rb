@@ -67,6 +67,10 @@ module Autowow
         ['git', 'merge', compare]
       end
 
+      def branch
+        ['git', 'branch']
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end

@@ -20,17 +20,7 @@ module Autowow
 
 
 
-    def self.clear_branches
-      logger.info(branch.out)
-      working_branch = current_branch
-      master_branch = 'master'
 
-      (branches - [master_branch, working_branch]).each do |branch|
-        branch_force_delete(branch) if branch_pushed(branch)
-      end
-
-      logger.info(branch.out)
-    end
 
     def self.add_upstream
       start_status = status_dry
@@ -90,12 +80,6 @@ module Autowow
 
     def self.open
       Launchy.open(origin_push_url(remotes.out))
-    end
-
-
-
-    def self.branch
-      Command.run(['git', 'branch'])
     end
 
     def self.stash_pop
