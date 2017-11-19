@@ -21,14 +21,13 @@ Gem::Specification.new do |spec|
   spec.executables   << 'aw'
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "easy_logging", ">= 0.3.0"
-  spec.add_dependency "thor"
-  spec.add_dependency "colorize"
-  # Fixed version because we refine it :(
-  spec.add_dependency "time_difference", "= 0.5.0"
-  spec.add_dependency "launchy"
-  spec.add_dependency "tty-command"
-  spec.add_dependency "reflection_utils", ">= 0.3.0"
+  spec.add_dependency "easy_logging", ">= 0.3.0"        # Include logger easily, without redundancy
+  spec.add_dependency "thor"                            # CLI
+  spec.add_dependency "colorize"                        # Colorize output made by own logger
+  spec.add_dependency "time_difference", "= 0.5.0"      # Calculate project age. Fixed version because we refine it :(
+  spec.add_dependency "launchy"                         # Open project in browser
+  spec.add_dependency "tty-command"                     # Execute system commands nicely
+  spec.add_dependency "reflection_utils", ">= 0.3.0"    # Invoke module methods without including the module
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "rake", "~> 10.0"
