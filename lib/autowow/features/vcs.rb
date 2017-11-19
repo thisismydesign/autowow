@@ -109,12 +109,16 @@ module Autowow
 
       def self.clear_branches
         pretty_with_output.run(branch)
+        branch_removed = false
 
         (branches - ['master', working_branch]).each do |branch|
-          pretty.run(branch_force_delete(branch)) if branch_pushed(branch)
+          if branch_pushed(branch)
+            pretty.run(branch_force_delete(branch))
+            branch_removed = true
+          end
         end
 
-        pretty_with_output.run(branch)
+        pretty_with_output.run(branch) if branch_removed
       end
 
       def update_projects
