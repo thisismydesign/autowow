@@ -7,6 +7,7 @@ require_relative 'vcs'
 module Autowow
   module Features
     module Rbenv
+      include EasyLogging
       include Commands::Rbenv
       include Executor
       include StringDecorator
