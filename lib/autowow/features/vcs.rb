@@ -128,8 +128,8 @@ module Autowow
       end
 
       def update_project
-        return unless is_git?
         logger.info("Updating #{File.expand_path('.')} ...")
+        logger.error("Not a git repository.") and return unless is_git?
         status = quiet.run(git_status).out
         if uncommitted_changes?(status) and working_branch.eql?('master')
           logger.warn("Skipped: uncommitted changes on master.") and return
@@ -254,7 +254,8 @@ module Autowow
       end
 
       def is_git?
-        Fs.git_folder_present && quiet.run!(git_status).success?
+        status = quiet.run!(git_status)
+        Fs.git_folder_present && status.success? && !status.out.include?('Initial commit')
       end
 
       def git_projects
