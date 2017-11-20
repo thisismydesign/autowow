@@ -19,8 +19,8 @@ module Autowow
       def used_versions
         rubies = []
         Fs.in_place_or_subdirs(Vcs.is_git?) do
-          result = quiet.run(version).out
-          rubies.concat(result.clean_lines)
+          result = quiet.run!(version)
+          rubies.concat(result.out.clean_lines) if result.success?
         end
         rubies.uniq
       end
