@@ -3,12 +3,6 @@ require "spec_helper"
 RSpec.describe Autowow::Features::Vcs do
   let(:file_name) { 'delete_me' }
 
-  before(:all) do
-    # TravisCI fix
-    p described_class.working_branch
-    described_class.on_branch('master')
-  end
-
   describe '.branch_pushed' do
     it 'returns boolean' do
       expect(described_class.branch_pushed('master')).to be_in([true, false])
