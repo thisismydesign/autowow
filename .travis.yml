@@ -3,5 +3,7 @@ language: ruby
 rvm:
   - 2.4.1
 before_install:
-  - git fetch --unshallow --tags
+  - git branch
+  - git fetch --unshallow
+  - git branch
   - gem install bundler -v 1.15.3
