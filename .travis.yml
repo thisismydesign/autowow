@@ -3,10 +3,7 @@ language: ruby
 rvm:
   - 2.4.1
 before_install:
-  - git branch
-  - git fetch --unshallow
-  - git fetch --all
-  - git fetch --all --prune
-  - git branch
-  - git checkout -b master origin/master
+  - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+  - cd $TRAVIS_REPO_SLUG
+  - git checkout -qf $TRAVIS_COMMIT
   - gem install bundler -v 1.15.3
