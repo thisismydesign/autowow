@@ -1,8 +1,8 @@
 require "spec_helper"
 
 RSpec.describe Autowow::Features::Vcs do
+  start_branch = described_class.working_branch
   let(:file_name) { 'delete_me' }
-  let!(:start_branch) { described_class.working_branch }
   let(:branch) { 'new_branch' }
 
   describe '.branch_pushed' do
@@ -255,6 +255,12 @@ RSpec.describe Autowow::Features::Vcs do
       it 'does not fail' do
         expect {  described_class.hi! }.to_not raise_error
       end
+    end
+  end
+
+  context 'test suite' do
+    it 'does not change working branch' do
+      expect(described_class.working_branch).to eq(start_branch)
     end
   end
 end
