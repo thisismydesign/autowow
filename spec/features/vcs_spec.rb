@@ -80,6 +80,7 @@ RSpec.describe Autowow::Features::Vcs do
 
     after do
       Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
+      Autowow::Executor.quiet.run(described_class.checkout(start_branch))
     end
 
     it 'returns to master and removes working branch' do
