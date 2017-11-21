@@ -5,7 +5,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   describe '.branch_pushed' do
     it 'returns boolean' do
-      expect(described_class.branch_pushed('master')).to be_in([true, false])
+      expect(described_class.branch_pushed(described_class.working_branch)).to be_in([true, false])
     end
   end
 
