@@ -4,7 +4,8 @@ rvm:
   - 2.4.1
 before_install:
   - git branch
-  - git fetch --all --unshallow --tags
+  - git fetch --unshallow
+  - git fetch --all
   - git branch
   - git branch master origin/master
   - gem install bundler -v 1.15.3
