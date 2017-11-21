@@ -6,6 +6,7 @@ before_install:
   - git branch
   - git fetch --unshallow
   - git fetch --all
+  - git fetch --all --prune
   - git branch
-  - git branch master origin/master
+  - git checkout -b master origin/master
   - gem install bundler -v 1.15.3
