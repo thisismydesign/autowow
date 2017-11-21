@@ -115,7 +115,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   describe '.working_branch' do
     it 'returns current branch' do
-      expect(described_class.working_branch).to eq('master')
+      expect(described_class.working_branch).to eq(start_branch)
     end
   end
 
