@@ -14,7 +14,7 @@ RSpec.describe Autowow::Features::Vcs do
       branches = described_class.branches
       expect(branches).to be_kind_of(Array)
       expect(branches.size).to be >= 1
-      expect(branches).to include('master')
+      expect(branches).to include(described_class.working_branch)
     end
   end
 
