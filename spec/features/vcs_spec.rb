@@ -2,10 +2,12 @@ require "spec_helper"
 
 RSpec.describe Autowow::Features::Vcs do
   let(:file_name) { 'delete_me' }
+  let!(:start_branch) { described_class.working_branch }
+  let(:branch) { 'new_branch' }
 
   describe '.branch_pushed' do
     it 'returns boolean' do
-      expect(described_class.branch_pushed(described_class.working_branch)).to be_in([true, false])
+      expect(described_class.branch_pushed(start_branch)).to be_in([true, false])
     end
   end
 
@@ -14,7 +16,7 @@ RSpec.describe Autowow::Features::Vcs do
       branches = described_class.branches
       expect(branches).to be_kind_of(Array)
       expect(branches.size).to be >= 1
-      expect(branches).to include(described_class.working_branch)
+      expect(branches).to include(start_branch)
     end
   end
 
@@ -72,20 +74,18 @@ RSpec.describe Autowow::Features::Vcs do
   end
 
   describe '.branch_merged' do
-    let(:working_branch) { 'new_branch' }
-
     before do
-      Autowow::Executor.quiet.run(['git', 'checkout', '-b', working_branch]) rescue nil
+      Autowow::Executor.quiet.run(['git', 'checkout', '-b', branch]) rescue nil
     end
 
     after do
-      Autowow::Executor.quiet.run(['git', 'branch', '-D', working_branch]) rescue nil
+      Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
     end
 
     it 'returns to master and removes working branch' do
       described_class.branch_merged
       expect(described_class.working_branch).to eq('master')
-      expect(described_class.branches.include?(working_branch)).to be_falsey
+      expect(described_class.branches.include?(branch)).to be_falsey
     end
 
     context 'when there are changes' do
@@ -119,7 +119,6 @@ RSpec.describe Autowow::Features::Vcs do
   end
 
   describe '.on_branch' do
-    let(:branch) { 'new_branch' }
 
     after do
       Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
@@ -143,8 +142,6 @@ RSpec.describe Autowow::Features::Vcs do
   end
 
   describe '.update_project' do
-    let(:branch) { 'new_branch' }
-
     after do
       Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
     end
@@ -159,8 +156,6 @@ RSpec.describe Autowow::Features::Vcs do
   end
 
   describe '.clear_branches' do
-    let(:branch) { 'new_branch' }
-
     context 'unused local branch' do
       before do
         Autowow::Executor.quiet.run(['git', 'branch', branch]) rescue nil
