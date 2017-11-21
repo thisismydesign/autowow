@@ -1,7 +1,8 @@
 require "spec_helper"
 
 RSpec.describe Autowow::Features::Vcs do
-  start_branch = described_class.working_branch
+  # start_branch = described_class.working_branch
+  start_branch = 'travis_test'
   let(:file_name) { 'delete_me' }
   let(:branch) { 'new_branch' }
 
