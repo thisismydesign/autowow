@@ -3,11 +3,7 @@ require "spec_helper"
 RSpec.describe Autowow::Features::Vcs do
   let(:file_name) { 'delete_me' }
   let(:branch) { 'new_branch' }
-
-  before :all do
-    p 'test'
-    start_branch = 'travis_test'
-  end
+  let(:start_branch) { 'travis_test' }
 
   describe '.branch_pushed' do
     it 'returns boolean' do
