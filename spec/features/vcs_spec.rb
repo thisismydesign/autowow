@@ -1,12 +1,12 @@
 require "spec_helper"
 
 RSpec.describe Autowow::Features::Vcs do
-  start_branch = 'travis_test'
   let(:file_name) { 'delete_me' }
   let(:branch) { 'new_branch' }
 
   before :all do
-    start_branch = described_class.working_branch
+    p 'test'
+    start_branch = 'travis_test'
   end
 
   describe '.branch_pushed' do
