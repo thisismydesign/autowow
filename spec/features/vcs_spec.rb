@@ -7,7 +7,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   before :all do
     p 'stuff'
-    @start_branch
+    @start_branch = described_class.working_branch
   end
 
   describe '.branch_pushed' do
