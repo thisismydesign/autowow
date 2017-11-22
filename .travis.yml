@@ -2,7 +2,8 @@ sudo: false
 language: ruby
 rvm:
   - 2.4.1
-install:
+before_install:
+  - gem install bundler -v 1.15.3
   - git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
   - git fetch --unshallow --tags
   - git checkout $TRAVIS_BRANCH
