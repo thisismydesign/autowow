@@ -5,6 +5,7 @@ rvm:
 before_install:
   - git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
   - git fetch --unshallow --tags
+  - echo $TRAVIS_BRANCH
   - build_head=$(git rev-parse HEAD)
   - git checkout master
   - git symbolic-ref --short HEAD
