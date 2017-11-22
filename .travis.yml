@@ -5,5 +5,8 @@ rvm:
 before_install:
   - git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
   - git fetch --unshallow --tags
-  - gem install bundler -v 1.15.3
+  - build_head=$(git rev-parse HEAD)
+  - git checkout master
+  - git symbolic-ref --short HEAD
+  - git checkout ${build_head}
   - git symbolic-ref --short HEAD
