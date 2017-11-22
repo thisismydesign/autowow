@@ -27,7 +27,9 @@ module Autowow
 
       def ruby_aliases
         ret = {}
-        quiet.run(aliases).out.clean_lines.each do |line|
+        result = quiet.run!(aliases)
+        return ret unless result.success?
+        result.out.clean_lines.each do |line|
           ret[line.split(' => ')[0]] = line.split(' => ')[1]
         end
         ret
