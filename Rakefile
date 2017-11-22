@@ -56,4 +56,4 @@ def require_gem(gemspec)
   require_relative "lib/#{gemspec.name.gsub('-', '/')}"
 end
 
-task :default => [:spec]
+task :default => [:require, :spec]
