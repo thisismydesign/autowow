@@ -9,5 +9,5 @@ before_install:
   - build_head=$(git rev-parse HEAD)
   - git checkout master
   - git symbolic-ref --short HEAD
-  - git checkout ${build_head}
+  - git checkout $TRAVIS_BRANCH
   - git symbolic-ref --short HEAD
