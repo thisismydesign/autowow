@@ -3,10 +3,8 @@ require "spec_helper"
 RSpec.describe Autowow::Features::Vcs do
   let(:file_name) { 'delete_me' }
   let(:branch) { 'new_branch' }
-  let(:start_branch) { described_class.working_branch }
 
   before :all do
-    p 'stuff'
     @start_branch = described_class.working_branch
   end
 
