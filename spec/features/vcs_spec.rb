@@ -3,11 +3,16 @@ require "spec_helper"
 RSpec.describe Autowow::Features::Vcs do
   let(:file_name) { 'delete_me' }
   let(:branch) { 'new_branch' }
-  let(:start_branch) { 'travis_test' }
+  let(:start_branch) { described_class.working_branch }
+
+  before :all do
+    p 'stuff'
+    @start_branch
+  end
 
   describe '.branch_pushed' do
     it 'returns boolean' do
-      expect(described_class.branch_pushed(start_branch)).to be_in([true, false])
+      expect(described_class.branch_pushed(@start_branch)).to be_in([true, false])
     end
   end
 
@@ -16,7 +21,7 @@ RSpec.describe Autowow::Features::Vcs do
       branches = described_class.branches
       expect(branches).to be_kind_of(Array)
       expect(branches.size).to be >= 1
-      expect(branches).to include(start_branch)
+      expect(branches).to include(@start_branch)
     end
   end
 
@@ -80,7 +85,7 @@ RSpec.describe Autowow::Features::Vcs do
 
     after do
       Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
-      Autowow::Executor.quiet.run(described_class.checkout(start_branch))
+      Autowow::Executor.quiet.run(described_class.checkout(@start_branch))
     end
 
     it 'returns to master and removes working branch' do
@@ -115,7 +120,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   describe '.working_branch' do
     it 'returns current branch' do
-      expect(described_class.working_branch).to eq(start_branch)
+      expect(described_class.working_branch).to eq(@start_branch)
     end
   end
 
@@ -126,19 +131,17 @@ RSpec.describe Autowow::Features::Vcs do
     end
 
     it 'switches to branch, executes block and switches back to start branch' do
-      start_branch = described_class.working_branch
       described_class.on_branch(branch) do
         expect(described_class.working_branch).to eq(branch)
       end
-      expect(described_class.working_branch).to eq(start_branch)
+      expect(described_class.working_branch).to eq(@start_branch)
     end
 
     it 'switches back to start branch if error occurs in block' do
-      start_branch = described_class.working_branch
       described_class.on_branch(branch) do
         raise 'error'
       end rescue nil
-      expect(described_class.working_branch).to eq(start_branch)
+      expect(described_class.working_branch).to eq(@start_branch)
     end
   end
 
@@ -260,7 +263,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   context 'test suite' do
     it 'does not change working branch' do
-      expect(described_class.working_branch).to eq(start_branch)
+      expect(described_class.working_branch).to eq(@start_branch)
     end
   end
 end
