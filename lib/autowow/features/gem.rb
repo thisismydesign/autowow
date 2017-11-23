@@ -28,6 +28,14 @@ module Autowow
         pretty_with_output.run(clean)
       end
 
+      def rubocop_parallel_autocorrect
+        result = pretty_with_output.run!(rubocop_parallel)
+        if result.failed?
+          filtered = result.out.each_line.select { |line| line.match(%r{(.*):([0-9]*):([0-9]*):}) }.map{ |line| line.split(':')[0] }.uniq
+          result = pretty_with_output.run(rubocop_autocorrect(filtered.join(' '))) if filtered.any?
+        end
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end

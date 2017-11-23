@@ -22,6 +22,7 @@ module Autowow
     map %w[gc] => :gem_clean
     map %w[rv] => :ruby_versions
     map %w[gr] => :greet
+    map %w[rpa] => :rubocop_parallel_autocorrect
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -76,6 +77,11 @@ module Autowow
     desc "greet", "shows report of repos"
     def greet
       Autowow::Features::Vcs.greet
+    end
+
+    desc "rubocop_parallel_autocorrect", "runs rubocop in parallel mode, autocorrects offenses on single thread"
+    def rubocop_parallel_autocorrect
+      Autowow::Features::Gem.rubocop_parallel_autocorrect
     end
   end
 end

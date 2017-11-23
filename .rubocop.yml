@@ -1,0 +1,117 @@
+AllCops:
+  DisabledByDefault: true
+  DisplayCopNames: true
+  Exclude:
+    - doc/**/*
+    - vendor/**/*
+    - spec/fixtures/**/*
+  TargetRubyVersion: 2.3
+Layout/CaseIndentation:
+  Enabled: true
+  IndentOneStep: false
+Layout/EmptyLineBetweenDefs:
+  Enabled: true
+  AllowAdjacentOneLineDefs: true
+Layout/EmptyLines:
+  Enabled: true
+Layout/EmptyLinesAroundBeginBody:
+  Enabled: true
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: true
+  EnforcedStyle: no_empty_lines
+Layout/EmptyLinesAroundClassBody:
+  Enabled: true
+Layout/EmptyLinesAroundMethodBody:
+  Enabled: true
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: true
+Layout/ExtraSpacing:
+  Exclude:
+    - Gemfile
+Layout/FirstParameterIndentation:
+  Enabled: true
+Layout/IndentationConsistency:
+  Enabled: true
+Layout/IndentationWidth:
+  Enabled: true
+  Exclude:
+    - spec/**/*
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented_relative_to_receiver
+  IndentationWidth: 2
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+Layout/SpaceAfterColon:
+  Enabled: true
+Layout/SpaceAfterComma:
+  Enabled: true
+Layout/SpaceAroundEqualsInParameterDefault:
+  Enabled: true
+Layout/SpaceAroundKeyword:
+  Enabled: true
+Layout/SpaceAroundOperators:
+  Enabled: true
+Layout/SpaceBeforeBlockBraces:
+  Enabled: true
+Layout/SpaceBeforeFirstArg:
+  Enabled: true
+Layout/SpaceInsideBlockBraces:
+  Enabled: true
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: true
+Layout/SpaceInsideParens:
+  Enabled: true
+Layout/Tab:
+  Enabled: true
+Layout/TrailingBlankLines:
+  Enabled: true
+Layout/TrailingWhitespace:
+  Enabled: true
+Lint/EndAlignment:
+  Enabled: true
+  EnforcedStyleAlignWith: variable
+Lint/RequireParentheses:
+  Enabled: true
+Metrics/AbcSize:
+  Max: 62
+Metrics/ClassLength:
+  CountComments: false
+  Max: 1000
+Metrics/LineLength:
+  Exclude:
+    - spec/**/*
+  Max: 318
+Metrics/MethodLength:
+  Max: 70
+Metrics/ModuleLength:
+  CountComments: false
+  Max: 1000
+Rails:
+  Enabled: true
+Style/AndOr:
+  EnforcedStyle: conditionals
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+Style/BracesAroundHashParameters:
+  Enabled: true
+  EnforcedStyle: context_dependent
+Style/ConditionalAssignment:
+  EnforcedStyle: assign_to_condition
+Style/HashSyntax:
+  Enabled: true
+Style/MethodDefParentheses:
+  Enabled: true
+Style/RedundantReturn:
+  AllowMultipleReturnValues: true
+  Enabled: true
+Style/RegexpLiteral:
+  EnforcedStyle: percent_r
+Style/Semicolon:
+  AllowAsExpressionSeparator: true
+  Enabled: true
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
+Style/TrivialAccessors:
+  Enabled: true
+  ExactNameMatch: true
