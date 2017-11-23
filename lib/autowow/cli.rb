@@ -83,5 +83,10 @@ module Autowow
     def rubocop_parallel_autocorrect
       Autowow::Features::Gem.rubocop_parallel_autocorrect
     end
+
+    desc "exec", "runs command"
+    def exec(cmd)
+      Autowow::Executor.pretty_with_output.run(cmd)
+    end
   end
 end
