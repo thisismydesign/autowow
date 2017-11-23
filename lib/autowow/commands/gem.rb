@@ -14,7 +14,11 @@ module Autowow
       end
 
       def rubocop_autocorrect(files)
-        "rubocop --auto-correct #{files}"
+        if files.kind_of?(Array)
+          ['rubocop', '--auto-correct'] + files
+        else
+          ['rubocop', '--auto-correct'] + files.split(' ')
+        end
       end
 
       include ReflectionUtils::CreateModuleFunctions
