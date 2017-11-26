@@ -159,7 +159,7 @@ RSpec.describe Autowow::Features::Vcs do
 
   describe '.clear_branches' do
     before do
-      Autowow::Executor.quiet.run(['git', 'branch', branch, 'master']) rescue nil
+      Autowow::Executor.quiet.run(['git', 'branch', branch, 'origin/master']) rescue nil
     end
 
     context 'unused local branch' do
