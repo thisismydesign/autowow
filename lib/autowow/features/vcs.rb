@@ -136,7 +136,7 @@ module Autowow
         end
 
         on_branch('master') do
-          has_upstream? ? pull_upstream : pretty.run(pull)
+          has_upstream? ? pull_upstream : pretty_with_output.run(pull)
         end
       end
 
@@ -144,9 +144,9 @@ module Autowow
         upstream_remote = 'upstream'
         remote = 'origin'
         branch = 'master'
-        pretty.run(fetch(upstream_remote)).out
-        pretty.run(merge("#{upstream_remote}/#{branch}")).out
-        pretty.run(push(remote, branch))
+        pretty_with_output.run(fetch(upstream_remote)).out
+        pretty_with_output.run(merge("#{upstream_remote}/#{branch}")).out
+        pretty_with_output.run(push(remote, branch))
       end
 
       def has_upstream?
@@ -176,10 +176,10 @@ module Autowow
         logger.error("Nothing to do.") and return if branch.eql?('master')
 
         keep_changes do
-          pretty.run(checkout('master'))
-          pretty.run(pull)
+          pretty_with_output.run(checkout('master'))
+          pretty_with_output.run(pull)
         end
-        pretty.run(branch_force_delete(branch))
+        pretty_with_output.run(branch_force_delete(branch))
 
         pretty_with_output.run(git_status)
       end
