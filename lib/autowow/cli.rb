@@ -87,7 +87,7 @@ module Autowow
     end
 
     desc "exec", "runs command"
-    def exec(cmd)
+    def exec(*cmd)
       Autowow::Executor.pretty_with_output.run(cmd)
     end
   end
