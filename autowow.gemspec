@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "easy_logging", ">= 0.3.0"        # Include logger easily, without redundancy
   spec.add_dependency "thor"                            # CLI
-  spec.add_dependency "colorize"                        # Colorize output made by own logger
+  spec.add_dependency "pastel"                          # Colorize output of own logger
   spec.add_dependency "time_difference", "= 0.5.0"      # Calculate project age. Fixed version because we refine it :(
   spec.add_dependency "launchy"                         # Open project in browser
   spec.add_dependency "tty-command", ">= 0.7.0"         # Execute system commands nicely

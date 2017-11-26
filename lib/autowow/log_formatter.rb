@@ -1,4 +1,4 @@
-require 'colorize'
+require 'pastel'
 
 module Autowow
   class LogFormatter
@@ -9,13 +9,14 @@ module Autowow
     end
 
     def self.color(severity, msg)
+      pastel = Pastel.new
       case severity
       when 'DEBUG'
-        msg.yellow
+        pastel.yellow(msg)
       when 'WARN'
-        msg.light_red
+        pastel.red(msg)
       when 'ERROR'
-        msg.red
+        pastel.bright_red(msg)
       else
         msg
       end
