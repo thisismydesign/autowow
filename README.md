@@ -27,6 +27,7 @@ Commands in general
 * store and restore uncommitted changes
 * output executed commands that cause any change
 * execute in current directory
+* retain original output color
 
 ### VCS
 
