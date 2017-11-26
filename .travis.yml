@@ -4,6 +4,9 @@ rvm:
   - 2.4.1
 before_install:
   - gem install bundler -v 1.15.3
+  # To have access to the whole repo
   - git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
   - git fetch --unshallow --tags
-  - git checkout -b $TRAVIS_BRANCH $TRAVIS_BRANCH || git checkout $TRAVIS_BRANCH
+  # To no longer be in a detached HEAD state
+  # If we're on a tag in order to get rid of the detached HEAD state we create a branch with a matching name, then remove the tag to avoid 'refname is ambiguous' issue. Otherwise (we're on a branch) we just checkout the branch.
+  - (git checkout -b $TRAVIS_BRANCH $TRAVIS_BRANCH && git tag --delete $TRAVIS_BRANCH) || git checkout $TRAVIS_BRANCH
