@@ -93,12 +93,23 @@ Prerequisites: on master
 
 * Removes unused gems
 
+#### Rubocop parallel autocorrect
+
+* Runs `rubocop` in parallel mode, autocorrects offenses on single thread
+* *Experimental feature, in practice it is not faster than running `rubocop -a`!*
+
 ### Ruby
 
 #### Ruby versions
 
 * Shows Ruby versions in use
 * Searches for repositories on paths: `.`, `./*/`
+
+### Misc
+
+#### Execute
+
+* Executes given command
 
 ## Feedback
 
