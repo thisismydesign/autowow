@@ -1,78 +1,84 @@
 module Autowow
   module Commands
     module Vcs
+      def cmd
+        ['git']
+      end
+
+      def default_options
+        ['--no-pager']
+      end
+
       def changes_not_on_remote(branch)
-        ['git', 'log', branch, '--not', '--remotes']
+        cmd + default_options + ['log', branch, '--not', '--remotes']
       end
 
       def branch_list
-        ["git for-each-ref --format='%(refname)' refs/heads/"]
-        # TODO: report error with following command
-        # ['git', 'for-each-ref', "--format='%(refname)'", 'refs/heads/']
+        cmd + default_options + ['for-each-ref', "--format=%(refname)", 'refs/heads/']
       end
 
       def push(branch = nil, remote = nil)
-        ['git', 'push'] + [branch, remote].compact
+        cmd + default_options + ['push'] + [branch, remote].compact
       end
 
       def rebase(branch)
-        ['git', 'rebase', branch]
+        cmd + default_options + ['rebase', branch]
       end
 
       def git_status
-        ['git', 'status']
+        cmd + default_options + ['status']
       end
 
       def stash
-        ['git', 'stash']
+        cmd + default_options + ['stash']
       end
 
       def stash_pop
-        ['git', 'stash', 'pop']
+        cmd + default_options + ['stash', 'pop']
       end
 
       def current_branch
-        ['git', 'symbolic-ref', '--short', 'HEAD']
+        cmd + default_options + ['symbolic-ref', '--short', 'HEAD']
       end
 
       def checkout(existing_branch)
-        ['git', 'checkout', existing_branch]
+        cmd + default_options + ['checkout', existing_branch]
       end
 
       def pull
-        ['git', 'pull']
+        cmd + default_options + ['pull']
       end
 
       def branch_force_delete(branch)
-        ['git', 'branch', '-D', branch]
+        cmd + default_options + ['branch', '-D', branch]
       end
 
       def create(branch)
-        ['git', 'checkout', '-b', branch]
+        cmd + default_options + ['checkout', '-b', branch]
       end
 
       def set_upstream(remote, branch)
-        ['git', 'push', '--set-upstream', remote, branch]
+        cmd + default_options + ['push', '--set-upstream', remote, branch]
       end
 
       def remotes
-        ['git', 'remote', '-v']
+        cmd + default_options + ['remote', '-v']
       end
 
       def fetch(remote)
-        ['git', 'fetch', remote]
+        cmd + default_options + ['fetch', remote]
       end
 
       def merge(compare)
-        ['git', 'merge', compare]
+        cmd + default_options + ['merge', compare]
       end
 
       def branch
-        ['git', 'branch']
+        cmd + default_options + ['branch']
       end
 
       def add_remote(name, url)
-        ['git', 'remote', 'add', name, url]
+        cmd + default_options + ['remote', 'add', name, url]
       end
 
       include ReflectionUtils::CreateModuleFunctions

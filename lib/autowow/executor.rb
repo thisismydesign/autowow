@@ -33,15 +33,15 @@ module Autowow
     end
 
     def pretty
-      @pretty ||= RunWrapper.new(TTY::Command.new(printer: Pretty))
+      @pretty ||= RunWrapper.new(TTY::Command.new(pty: true, printer: Pretty))
     end
 
     def pretty_with_output
-      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(printer: PrettyWithOutput))
+      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(pty: true, printer: PrettyWithOutput))
     end
 
     def quiet
-      @quiet ||= RunWrapper.new(TTY::Command.new(printer: :null))
+      @quiet ||= RunWrapper.new(TTY::Command.new(pty: true, printer: :null))
     end
 
     include ReflectionUtils::CreateModuleFunctions
