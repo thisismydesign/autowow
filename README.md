@@ -97,7 +97,6 @@ Prerequisites: on master
 #### Rubocop parallel autocorrect
 
 * Runs `rubocop` in parallel mode, autocorrects offenses on single thread
-* *Experimental feature, in practice it is not faster than running `rubocop -a`!*
 
 ### Ruby
 

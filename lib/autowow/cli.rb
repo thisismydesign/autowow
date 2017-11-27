@@ -13,8 +13,6 @@ require_relative 'commands/gem'
 
 module Autowow
   class CLI < Thor
-    include EasyLogging
-
     map %w[bm] => :branch_merged
     map %w[grls] => :gem_release
     map %w[up] => :update_projects
@@ -82,7 +80,6 @@ module Autowow
 
     desc "rubocop_parallel_autocorrect", "runs rubocop in parallel mode, autocorrects offenses on single thread"
     def rubocop_parallel_autocorrect
-      logger.warn('Experimental feature, in practice it is not faster than running `rubocop -a`!')
       Autowow::Features::Gem.rubocop_parallel_autocorrect
     end
 
