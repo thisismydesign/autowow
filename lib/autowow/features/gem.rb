@@ -1,3 +1,5 @@
+require 'pastel'
+
 require_relative '../commands/gem'
 require_relative 'vcs'
 
@@ -29,9 +31,13 @@ module Autowow
       end
 
       def rubocop_parallel_autocorrect
+        pastel = Pastel.new
         result = pretty_with_output.run!(rubocop_parallel)
         if result.failed?
-          filtered = result.out.each_line.select { |line| line.match(%r{(.*):([0-9]*):([0-9]*):}) }.map{ |line| line.split(':')[0] }.uniq
+          filtered = result.out.each_line.select { |line| line.match(%r{(.*):([0-9]*):([0-9]*):}) }
+                       .map{ |line| line.split(':')[0] }
+                       .uniq
+                       .map{ |line| pastel.strip(line) }
           pretty_with_output.run(rubocop_autocorrect(filtered)) if filtered.any?
         end
       end
