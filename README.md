@@ -2,6 +2,8 @@
 
 #### Set of commands to AUTOmate Way Of Working
 
+*You are viewing the README of version [v0.8.1](https://github.com/thisismydesign/autowow/releases/tag/v0.8.1). You can find other releases [here](https://github.com/thisismydesign/autowow/releases).*
+
 | Branch | Status |
 | ------ | ------ |
 | Release | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=release)](https://travis-ci.org/thisismydesign/autowow)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/autowow/badge.svg?branch=release)](https://coveralls.io/github/thisismydesign/autowow?branch=release)   [![Gem Version](https://badge.fury.io/rb/autowow.svg)](https://badge.fury.io/rb/autowow)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/autowow?type=total)](https://rubygems.org/gems/autowow) |
