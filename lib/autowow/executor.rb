@@ -5,6 +5,7 @@ module Autowow
     class Pretty < TTY::Command::Printers::Pretty
       def print_command_out_data(cmd, *args); end
       def print_command_err_data(cmd, *args); end
+
       def print_command_exit(cmd, status, runtime, *args)
         super
         write('')

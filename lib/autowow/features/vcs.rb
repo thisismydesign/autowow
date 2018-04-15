@@ -84,9 +84,9 @@ module Autowow
       def self.origin_push_url(remotes)
         # Order is important: first try to match "url" in "#{url}.git" as non-dot_git matchers would include ".git" in the match
         origin_push_url_ssl_dot_git(remotes) or
-            origin_push_url_ssl(remotes)or
-            origin_push_url_https_dot_git(remotes) or
-            origin_push_url_https(remotes)
+          origin_push_url_ssl(remotes) or
+          origin_push_url_https_dot_git(remotes) or
+          origin_push_url_https(remotes)
       end
 
       def self.origin_push_url_https(remotes)
@@ -131,7 +131,7 @@ module Autowow
         logger.info("Updating #{File.expand_path('.')} ...")
         logger.error("Not a git repository.") and return unless is_git?
         status = quiet.run(git_status).out
-        if uncommitted_changes?(status) and working_branch.eql?('master')
+        if uncommitted_changes?(status) && working_branch.eql?('master')
           logger.warn("Skipped: uncommitted changes on master.") and return
         end
 
@@ -213,7 +213,7 @@ module Autowow
       def check_projects_older_than(quantity, unit)
         old_projects = Fs.older_than(git_projects, quantity, unit)
         deprecated_projects = old_projects.reject do |project|
-          Dir.chdir(project) { branches.reject{ |branch| branch_pushed(branch) }.any? }
+          Dir.chdir(project) { branches.reject { |branch| branch_pushed(branch) }.any? }
         end
 
         logger.info("The following projects have not been touched for more than #{quantity} #{unit} and all changes have been pushed, maybe consider removing them?") unless deprecated_projects.empty?

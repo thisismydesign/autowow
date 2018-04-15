@@ -35,9 +35,9 @@ module Autowow
         result = pretty_with_output.run!(rubocop_parallel)
         if result.failed?
           filtered = result.out.each_line.select { |line| line.match(%r{(.*):([0-9]*):([0-9]*):}) }
-                       .map{ |line| line.split(':')[0] }
+                       .map { |line| line.split(':')[0] }
                        .uniq
-                       .map{ |line| pastel.strip(line) }
+                       .map { |line| pastel.strip(line) }
           pretty_with_output.run(rubocop_autocorrect(filtered)) if filtered.any?
         end
       end

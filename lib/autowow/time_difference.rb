@@ -8,7 +8,7 @@ module RefinedTimeDifference
       diff_parts = []
       in_general.each_with_index do |array, index|
         part, quantity = array
-        next if quantity <= 0 or limit_index < index
+        next if (quantity <= 0) || (limit_index < index)
         part = part.to_s.humanize
 
         if quantity <= 1

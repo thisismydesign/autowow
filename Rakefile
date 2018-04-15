@@ -25,7 +25,7 @@ end
 
 def check_source_files_required(dir, gemspec)
   require_gem(gemspec)
-  ruby_files = Dir.glob("#{dir}/**/*.rb").reject{ |f| f.include?('/spec/') }
+  ruby_files = Dir.glob("#{dir}/**/*.rb").reject { |f| f.include?('/spec/') }
   required_ruby_files = $LOADED_FEATURES.select { |f| f.include?(dir) }
   (ruby_files - required_ruby_files).each do |file|
     @logger.warn("Source file not required when loading gem: #{file.sub("#{dir}/", '')}")
@@ -56,4 +56,4 @@ def require_gem(gemspec)
   require_relative "lib/#{gemspec.name.gsub('-', '/')}"
 end
 
-task :default => [:require, :spec]
+task default: [:require, :spec]

@@ -24,7 +24,6 @@ RSpec.describe Autowow::Features::Vcs do
   end
 
   describe '.keep_changes' do
-
     context 'when there are changes' do
       before do
         File.open(file_name, "w+") { |file| file.write(file_name) }
@@ -123,7 +122,6 @@ RSpec.describe Autowow::Features::Vcs do
   end
 
   describe '.on_branch' do
-
     after do
       Autowow::Executor.quiet.run(['git', 'branch', '-D', branch]) rescue nil
     end
