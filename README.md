@@ -2,7 +2,7 @@
 
 #### Set of commands to AUTOmate Way Of Working
 
-*You are viewing the README of version [v0.8.1](https://github.com/thisismydesign/autowow/releases/tag/v0.8.1). You can find other releases [here](https://github.com/thisismydesign/autowow/releases).*
+*You are viewing the README of the development version. You can find the README of the latest v0.8.1 release [here](https://github.com/thisismydesign/autowow/releases/tag/v0.8.1).*
 
 | Branch | Status |
 | ------ | ------ |
