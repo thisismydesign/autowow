@@ -20,12 +20,18 @@ module Autowow
     end
 
     class RunWrapper
-      def initialize(tty_command)
+      def initialize(tty_command, fail_silently: false)
         @tty_command = tty_command
+        @fail_silently = fail_silently
       end
 
       def run(array)
-        @tty_command.run(*array)
+        begin
+          @tty_command.run(*array)
+        rescue TTY::Command::ExitError => e
+          raise e unless @fail_silently
+          exit 1
+        end
       end
 
       def run!(array)
@@ -38,7 +44,7 @@ module Autowow
     end
 
     def pretty_with_output
-      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(pty: true, printer: PrettyWithOutput))
+      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(pty: true, printer: PrettyWithOutput), fail_silently: true)
     end
 
     def quiet

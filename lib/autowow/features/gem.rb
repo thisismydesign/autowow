@@ -38,7 +38,7 @@ module Autowow
                        .map { |line| line.split(":")[0] }
                        .uniq
                        .map { |line| pastel.strip(line) }
-          pretty_with_output.run!(rubocop_autocorrect(filtered)) if filtered.any?
+          pretty_with_output.run(rubocop_autocorrect(filtered)) if filtered.any?
         end
       end
 
