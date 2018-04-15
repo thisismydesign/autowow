@@ -38,12 +38,16 @@ Currently only Git and the GitHub API are supported.
 
 #### Branch merged
 
+`aw bm` / `autowow branch_merged`
+
 * Switches to master and pulls your merged changes
 * Removes local working branch
 
 Prerequisites: not on master
 
 #### Update projects
+
+`aw up` / `autowow update_projects`
 
 * Updates local repositories
 * Updates remote forks
@@ -53,16 +57,22 @@ Prerequisites: no uncommitted changes on master
 
 #### Clear branches
 
+`aw cb` / `autowow clear_branches`
+
 * Removes branches without not pushed changes 
 * Keeps current and master branches
 
 #### Add upstream
+
+`aw au` / `autowow add_upstream`
 
 * Adds parent repository as remote 'upstream'
 
 Prerequisites: doesn't have remote called 'upstream'
 
 #### Hi
+
+`aw hi` / `autowow hi`
 
 Day starter routine
 
@@ -74,6 +84,8 @@ Prerequisites: in a directory that contains git repos, not in the repo itself
 
 #### Hi!
 
+`aw hi!` / `autowow hi!`
+
 Day starter routine for a new start
 
 * Runs 'Add upstream' and 'Clear branches' for all projects
@@ -81,11 +93,15 @@ Day starter routine for a new start
 
 #### Open
 
+`aw open` / `autowow open`
+
 * Opens project in browser
 
 ### Gem
 
 #### Gem release
+
+`aw grls` / `autowow gem_release`
 
 * Rebases `release` branch to master
 * Releases gem via `rake release`
@@ -94,11 +110,13 @@ Prerequisites: on master
 
 #### Gem clean
 
+`aw gc` / `autowow gem_clean`
+
 * Removes unused gems
 
 #### Rubocop parallel autocorrect
 
-`aw rpa` / `aw rubocop_parallel_autocorrect`
+`aw rpa` / `autowow rubocop_parallel_autocorrect`
 
 * Runs `rubocop` in parallel mode, autocorrects offenses on single thread
 
@@ -112,12 +130,16 @@ Prerequisites: on master
 
 #### Ruby versions
 
+`aw rv` / `autowow ruby_versions`
+
 * Shows Ruby versions in use
 * Searches for repositories on paths: `.`, `./*/`
 
 ### Misc
 
 #### Execute
+
+`aw e` / `autowow execute`
 
 * Executes given command
 
