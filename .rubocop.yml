@@ -5,6 +5,8 @@ AllCops:
     - doc/**/*
     - vendor/**/*
     - spec/fixtures/**/*
+    - "*.gemspec"
+    - Gemfile*
   TargetRubyVersion: 2.3
 Layout/CaseIndentation:
   Enabled: true
