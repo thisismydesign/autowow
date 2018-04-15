@@ -22,6 +22,7 @@ module Autowow
     map %w[rv] => :ruby_versions
     map %w[gr] => :greet
     map %w[rpa] => :rubocop_parallel_autocorrect
+    map %w[be] => :bundle_exec
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -86,6 +87,11 @@ module Autowow
     desc "exec", "runs command"
     def exec(*cmd)
       Autowow::Executor.pretty_with_output.run(cmd)
+    end
+
+    desc "bundle_exec", "runs command with `bundle exec` prefixed"
+    def bundle_exec(*cmd)
+      Autowow::Features::Gem.bundle_exec(cmd)
     end
   end
 end

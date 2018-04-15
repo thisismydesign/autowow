@@ -42,6 +42,10 @@ module Autowow
         end
       end
 
+      def bundle_exec(cmd)
+        Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end

@@ -102,6 +102,12 @@ Prerequisites: on master
 
 * Runs `rubocop` in parallel mode, autocorrects offenses on single thread
 
+#### Bundle exec
+
+`aw be <cmd>` / `autowow bundle_exec <cmd>`
+
+* Runs `cmd` with `bundle exec` prefixed
+
 ### Ruby
 
 #### Ruby versions
