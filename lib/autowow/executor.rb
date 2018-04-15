@@ -1,4 +1,4 @@
-require 'tty-command'
+require "tty-command"
 
 module Autowow
   module Executor
@@ -8,14 +8,14 @@ module Autowow
 
       def print_command_exit(cmd, status, runtime, *args)
         super
-        write('')
+        write("")
       end
     end
 
     class PrettyWithOutput < TTY::Command::Printers::Pretty
       def print_command_exit(cmd, status, runtime, *args)
         super
-        write('')
+        write("")
       end
     end
 

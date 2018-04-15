@@ -1,4 +1,4 @@
-require_relative '../commands/os'
+require_relative "../commands/os"
 
 module Autowow
   module Features

@@ -1,14 +1,14 @@
-require 'uri'
-require 'net/https'
-require 'net/http'
-require 'json'
-require 'launchy'
+require "uri"
+require "net/https"
+require "net/http"
+require "json"
+require "launchy"
 
-require_relative '../commands/vcs'
-require_relative 'fs'
-require_relative 'rbenv'
-require_relative 'gem'
-require_relative '../time_difference'
+require_relative "../commands/vcs"
+require_relative "fs"
+require_relative "rbenv"
+require_relative "gem"
+require_relative "../time_difference"
 
 module Autowow
   module Features
@@ -23,11 +23,11 @@ module Autowow
       def self.hi!
         logger.error("In a git repository. Try 1 level higher.") && return if is_git?
         hi do
-          logger.info('Removing unused branches...')
+          logger.info("Removing unused branches...")
           clear_branches
-          logger.info('Adding upstream...')
+          logger.info("Adding upstream...")
           add_upstream
-          logger.info('Removing unused gems...')
+          logger.info("Removing unused gems...")
           Gem.gem_clean
         end
       end
@@ -62,19 +62,19 @@ module Autowow
         path = "/repos#{url.path}"
         request = Net::HTTP.new(host, url.port)
         request.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        request.use_ssl = url.scheme == 'https'
+        request.use_ssl = url.scheme == "https"
         logger.info("Fetching repo info from #{host}#{path}\n\n")
         response = request.get(path)
 
         if response.kind_of?(Net::HTTPRedirection)
-          logger.error('Repository moved / renamed. Update remote or implement redirect handling. :)')
+          logger.error("Repository moved / renamed. Update remote or implement redirect handling. :)")
         elsif response.kind_of?(Net::HTTPNotFound)
-          logger.error('Repository not found. Maybe it is private.')
+          logger.error("Repository not found. Maybe it is private.")
         elsif response.kind_of?(Net::HTTPSuccess)
           parsed_response = JSON.parse(response.body)
-          logger.warn('Not a fork.') and return unless parsed_response['fork']
-          parent_url = parsed_response.dig('parent', 'html_url')
-          pretty.run(add_remote('upstream', parent_url)) unless parent_url.to_s.empty?
+          logger.warn("Not a fork.") and return unless parsed_response["fork"]
+          parent_url = parsed_response.dig("parent", "html_url")
+          pretty.run(add_remote("upstream", parent_url)) unless parent_url.to_s.empty?
           pretty_with_output.run(remotes)
         else
           logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}")
@@ -111,7 +111,7 @@ module Autowow
         pretty_with_output.run(branch)
         branch_removed = false
 
-        (branches - ['master', working_branch]).each do |branch|
+        (branches - ["master", working_branch]).each do |branch|
           if branch_pushed(branch)
             pretty.run(branch_force_delete(branch))
             branch_removed = true
@@ -131,26 +131,26 @@ module Autowow
         logger.info("Updating #{File.expand_path('.')} ...")
         logger.error("Not a git repository.") and return unless is_git?
         status = quiet.run(git_status).out
-        if uncommitted_changes?(status) && working_branch.eql?('master')
+        if uncommitted_changes?(status) && working_branch.eql?("master")
           logger.warn("Skipped: uncommitted changes on master.") and return
         end
 
-        on_branch('master') do
+        on_branch("master") do
           has_upstream? ? pull_upstream : pretty_with_output.run(pull)
         end
       end
 
       def pull_upstream
-        upstream_remote = 'upstream'
-        remote = 'origin'
-        branch = 'master'
+        upstream_remote = "upstream"
+        remote = "origin"
+        branch = "master"
         pretty_with_output.run(fetch(upstream_remote)).out
         pretty_with_output.run(merge("#{upstream_remote}/#{branch}")).out
         pretty_with_output.run(push(remote, branch))
       end
 
       def has_upstream?
-        quiet.run(remotes).out.include?('upstream')
+        quiet.run(remotes).out.include?("upstream")
       end
 
       def on_branch(branch)
@@ -173,10 +173,10 @@ module Autowow
       def branch_merged
         pretty_with_output.run(git_status)
         branch = working_branch
-        logger.error("Nothing to do.") and return if branch.eql?('master')
+        logger.error("Nothing to do.") and return if branch.eql?("master")
 
         keep_changes do
-          pretty_with_output.run(checkout('master'))
+          pretty_with_output.run(checkout("master"))
           pretty_with_output.run(pull)
         end
         pretty_with_output.run(branch_force_delete(branch))
@@ -195,7 +195,7 @@ module Autowow
       def greet(latest_project_info = nil)
         logger.info("\nGood morning!\n\n")
         if is_git?
-          logger.error('Inside repo, cannot show report about all repos.')
+          logger.error("Inside repo, cannot show report about all repos.")
         else
           latest_project_info ||= get_latest_repo_info
           logger.info(latest_project_info)
@@ -226,7 +226,7 @@ module Autowow
       def get_latest_repo_info
         latest = latest_repo
         time_diff = TimeDifference.between(File.mtime(latest), Time.now).humanize_higher_than(:days).downcase
-        time_diff_text = time_diff.empty? ? 'recently' : "#{time_diff} ago"
+        time_diff_text = time_diff.empty? ? "recently" : "#{time_diff} ago"
         "It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n"
       end
 
@@ -239,7 +239,7 @@ module Autowow
       end
 
       def uncommitted_changes?(status)
-        !(status.include?('nothing to commit, working tree clean') or status.include?('nothing added to commit but untracked files present'))
+        !(status.include?("nothing to commit, working tree clean") or status.include?("nothing added to commit but untracked files present"))
       end
 
       def keep_changes
@@ -255,7 +255,7 @@ module Autowow
 
       def is_git?
         status = quiet.run!(git_status)
-        Fs.git_folder_present && status.success? && !status.out.include?('Initial commit')
+        Fs.git_folder_present && status.success? && !status.out.include?("Initial commit")
       end
 
       def git_projects

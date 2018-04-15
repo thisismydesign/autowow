@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'autowow'
+require "autowow"
 
 Autowow::CLI.start

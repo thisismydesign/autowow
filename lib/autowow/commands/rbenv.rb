@@ -2,15 +2,15 @@ module Autowow
   module Commands
     module Rbenv
       def version
-        ['rbenv', 'local']
+        ["rbenv", "local"]
       end
 
       def aliases
-        ['rbenv', 'alias']
+        ["rbenv", "alias"]
       end
 
       def installed_versions
-        ['rbenv', 'versions', '--bare', '--skip-aliases']
+        ["rbenv", "versions", "--bare", "--skip-aliases"]
       end
 
       include ReflectionUtils::CreateModuleFunctions

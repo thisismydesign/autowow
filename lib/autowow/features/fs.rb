@@ -1,4 +1,4 @@
-require_relative '../time_difference'
+require_relative "../time_difference"
 
 module Autowow
   module Features
@@ -6,7 +6,7 @@ module Autowow
       using RefinedTimeDifference
 
       def ls_dirs
-        Dir.glob(File.expand_path('./*/')).select { |f| File.directory? f }
+        Dir.glob(File.expand_path("./*/")).select { |f| File.directory? f }
       end
 
       def latest(files)
@@ -40,7 +40,7 @@ module Autowow
       end
 
       def git_folder_present
-        File.exist?('.git')
+        File.exist?(".git")
       end
 
       include ReflectionUtils::CreateModuleFunctions

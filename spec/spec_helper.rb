@@ -1,7 +1,7 @@
 require "bundler/setup"
 
-require 'simplecov'
-SimpleCov.add_filter ['spec']
+require "simplecov"
+SimpleCov.add_filter ["spec"]
 require "coveralls"
 Coveralls.wear!
 

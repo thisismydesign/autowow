@@ -1,7 +1,7 @@
-require 'pastel'
+require "pastel"
 
-require_relative '../commands/gem'
-require_relative 'vcs'
+require_relative "../commands/gem"
+require_relative "vcs"
 
 module Autowow
   module Features
@@ -14,10 +14,10 @@ module Autowow
       def gem_release
         pretty_with_output.run(git_status)
         start_branch = Vcs.working_branch
-        logger.error("Not on master.") and return unless start_branch.eql?('master')
+        logger.error("Not on master.") and return unless start_branch.eql?("master")
         pretty.run(push)
 
-        Vcs.on_branch('release') do
+        Vcs.on_branch("release") do
           pretty.run(pull)
           pretty.run(rebase(start_branch))
           pretty_with_output.run(release)
@@ -35,7 +35,7 @@ module Autowow
         result = pretty_with_output.run!(rubocop_parallel)
         if result.failed?
           filtered = result.out.each_line.select { |line| line.match(%r{(.*):([0-9]*):([0-9]*):}) }
-                       .map { |line| line.split(':')[0] }
+                       .map { |line| line.split(":")[0] }
                        .uniq
                        .map { |line| pastel.strip(line) }
           pretty_with_output.run(rubocop_autocorrect(filtered)) if filtered.any?

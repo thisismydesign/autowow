@@ -1,8 +1,8 @@
-require_relative '../commands/rbenv'
-require_relative '../commands/vcs'
+require_relative "../commands/rbenv"
+require_relative "../commands/vcs"
 
-require_relative 'fs'
-require_relative 'vcs'
+require_relative "fs"
+require_relative "vcs"
 
 module Autowow
   module Features
@@ -30,7 +30,7 @@ module Autowow
         result = quiet.run!(aliases)
         return ret unless result.success?
         result.out.clean_lines.each do |line|
-          ret[line.split(' => ')[0]] = line.split(' => ')[1]
+          ret[line.split(" => ")[0]] = line.split(" => ")[1]
         end
         ret
       end

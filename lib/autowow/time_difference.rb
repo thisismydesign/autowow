@@ -1,4 +1,4 @@
-require 'time_difference'
+require "time_difference"
 
 module RefinedTimeDifference
   refine(TimeDifference) do
@@ -18,11 +18,11 @@ module RefinedTimeDifference
         diff_parts << "#{quantity} #{part}"
       end
 
-      last_part = (diff_parts.pop or '')
+      last_part = (diff_parts.pop or "")
       if diff_parts.empty?
         return last_part
       else
-        return [diff_parts.join(', '), last_part].join(' and ')
+        return [diff_parts.join(", "), last_part].join(" and ")
       end
     end
   end

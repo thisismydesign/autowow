@@ -25,7 +25,7 @@ end
 
 def check_source_files_required(dir, gemspec)
   require_gem(gemspec)
-  ruby_files = Dir.glob("#{dir}/**/*.rb").reject { |f| f.include?('/spec/') }
+  ruby_files = Dir.glob("#{dir}/**/*.rb").reject { |f| f.include?("/spec/") }
   required_ruby_files = $LOADED_FEATURES.select { |f| f.include?(dir) }
   (ruby_files - required_ruby_files).each do |file|
     @logger.warn("Source file not required when loading gem: #{file.sub("#{dir}/", '')}")
@@ -33,8 +33,8 @@ def check_source_files_required(dir, gemspec)
 end
 
 def check_source_files_included(dir, gemspec)
-  ruby_files_relative = Dir.glob("#{dir}/**/*.rb").reject { |f| f.include?('/spec/') }.map { |f| f.sub("#{dir}/", '') }
-  (ruby_files_relative - gemspec.files.select { |f| f.end_with?('.rb') }).each do |file|
+  ruby_files_relative = Dir.glob("#{dir}/**/*.rb").reject { |f| f.include?("/spec/") }.map { |f| f.sub("#{dir}/", "") }
+  (ruby_files_relative - gemspec.files.select { |f| f.end_with?(".rb") }).each do |file|
     @logger.warn("File ignored when building gem because it's not added to git: #{file}")
   end
 end
