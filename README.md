@@ -96,6 +96,8 @@ Prerequisites: on master
 
 #### Rubocop parallel autocorrect
 
+`aw rpa` / `aw rubocop_parallel_autocorrect`
+
 * Runs `rubocop` in parallel mode, autocorrects offenses on single thread
 
 ### Ruby
