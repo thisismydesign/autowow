@@ -24,9 +24,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "easy_logging", ">= 0.3.0"        # Include logger easily, without redundancy
   spec.add_dependency "thor"                            # CLI
   spec.add_dependency "pastel"                          # Colorize output of own logger
-  spec.add_dependency "time_difference", "= 0.5.0"      # Calculate project age. Fixed version because we refine it :(
+  spec.add_dependency "time_difference", "= 0.5.0"      # Calculate project age. Fixed version because of refinements :(
   spec.add_dependency "launchy"                         # Open project in browser
-  spec.add_dependency "tty-command", ">= 0.7.0"         # Execute system commands nicely
+  spec.add_dependency "tty-command", "<= 0.8.0"         # Execute system commands nicely, upper limit because `Autowow::Executor` hijacks Printer classes (new releases should be tested)
   spec.add_dependency "reflection_utils", ">= 0.3.0"    # Invoke module methods without including the module
   spec.add_dependency "rubocop"                         # Style check
   spec.add_dependency "rubocop-rspec"                   # Style check

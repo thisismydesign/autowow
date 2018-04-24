@@ -8,14 +8,24 @@ module Autowow
 
       def print_command_exit(cmd, status, runtime, *args)
         super
-        write("")
+        tty_version = Gem::Version.new(TTY::Command::VERSION)
+        if tty_version < Gem::Version.new("0.8.0")
+          write("")
+        else
+          write(TTY::Command::Cmd.new("dummy"), "")
+        end
       end
     end
 
     class PrettyWithOutput < TTY::Command::Printers::Pretty
       def print_command_exit(cmd, status, runtime, *args)
         super
-        write("")
+        tty_version = Gem::Version.new(TTY::Command::VERSION)
+        if tty_version < Gem::Version.new("0.8.0")
+          write("")
+        else
+          write(TTY::Command::Cmd.new("dummy"), "")
+        end
       end
     end
 
@@ -40,15 +50,26 @@ module Autowow
     end
 
     def pretty
-      @pretty ||= RunWrapper.new(TTY::Command.new(pty: true, printer: Pretty))
+      @pretty ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: Pretty)))
     end
 
     def pretty_with_output
-      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(pty: true, printer: PrettyWithOutput), fail_silently: true)
+      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: PrettyWithOutput)), fail_silently: true)
     end
 
     def quiet
-      @quiet ||= RunWrapper.new(TTY::Command.new(pty: true, printer: :null))
+      @quiet ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: :null)))
+    end
+
+    def tty_params
+      tty_version = Gem::Version.new(TTY::Command::VERSION)
+      if tty_version < Gem::Version.new("0.7.0")
+        {}
+      elsif tty_version < Gem::Version.new("0.8.0")
+        { pty: true }
+      else
+        { pty: true, verbose: false }
+      end
     end
 
     include ReflectionUtils::CreateModuleFunctions
