@@ -29,6 +29,36 @@ module Autowow
       end
     end
 
+    class BufferingPretty < TTY::Command::Printers::Pretty
+      def initialize(*)
+        super
+        @out = ""
+      end
+
+      def print_command_out_data(cmd, *args)
+        @out << args.join(" ")
+      end
+
+      def print_command_err_data(cmd, *args)
+        @out << args.join(" ")
+      end
+
+      def print_command_exit(cmd, status, runtime, *args)
+        cmd.options[:uuid] = true
+        @out.each_line.map(&:chomp).each do |line|
+          write(cmd, line)
+        end
+        super
+      end
+
+      def write(cmd, message, data = nil)
+        out = []
+        out << "[#{decorate(cmd.uuid, :green)}] " unless cmd.uuid.nil?
+        out << "#{message}\n"
+        output << out.join
+      end
+    end
+
     class RunWrapper
       def initialize(tty_command, fail_silently: false)
         @tty_command = tty_command
