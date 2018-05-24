@@ -34,10 +34,7 @@ module Autowow
       end
 
       def print_command_exit(cmd, status, runtime, *args)
-        cmd.options[:uuid] = true
-        @out.each_line.map(&:chomp).each do |line|
-          write(cmd, line)
-        end
+        @out.each_line.map(&:chomp).each { |line| write(cmd, line) }
         super
       end
 
@@ -74,7 +71,7 @@ module Autowow
     end
 
     def pretty_with_output
-      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: PrettyWithOutput)), fail_silently: true)
+      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: BufferingPretty)), fail_silently: true)
     end
 
     def quiet
