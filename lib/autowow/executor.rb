@@ -8,24 +8,14 @@ module Autowow
 
       def print_command_exit(cmd, status, runtime, *args)
         super
-        tty_version = Gem::Version.new(TTY::Command::VERSION)
-        if tty_version < Gem::Version.new("0.8.0")
-          write("")
-        else
-          write(TTY::Command::Cmd.new("dummy"), "")
-        end
+        write(TTY::Command::Cmd.new("dummy"), "")
       end
     end
 
     class PrettyWithOutput < TTY::Command::Printers::Pretty
       def print_command_exit(cmd, status, runtime, *args)
         super
-        tty_version = Gem::Version.new(TTY::Command::VERSION)
-        if tty_version < Gem::Version.new("0.8.0")
-          write("")
-        else
-          write(TTY::Command::Cmd.new("dummy"), "")
-        end
+        write(TTY::Command::Cmd.new("dummy"), "")
       end
     end
 
