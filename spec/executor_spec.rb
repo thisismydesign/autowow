@@ -9,9 +9,9 @@ RSpec.describe Autowow::Executor do
     end
 end
 
-describe "pretty.run" do
-    it "raises on command error" do
-      expect { described_class.pretty.run(["exit", "1"]) }.to raise_error(TTY::Command::ExitError)
+  describe "pretty.run" do
+      it "raises on command error" do
+        expect { described_class.pretty.run(["exit", "1"]) }.to raise_error(TTY::Command::ExitError)
+      end
     end
-  end
 end
