@@ -27,11 +27,11 @@ module Autowow
 
       def print_command_out_data(cmd, *args)
         @out << args.join(" ")
+        return unless multiple_lines?(@out)
+        finished_lines(@out).each { |line| write(cmd, line) }
+        @out = unfinished_line(@out)
       end
-
-      def print_command_err_data(cmd, *args)
-        @out << args.join(" ")
-      end
+      alias_method :print_command_err_data, :print_command_out_data
 
       def print_command_exit(cmd, status, runtime, *args)
         @out.each_line.map(&:chomp).each { |line| write(cmd, line) }
@@ -43,6 +43,18 @@ module Autowow
         out << "[#{decorate(cmd.uuid, :green)}] " unless cmd.uuid.nil?
         out << "#{message}\n"
         output << out.join
+      end
+
+      def finished_lines(string)
+        string.each_line.to_a[0..-2].map(&:chomp)
+      end
+
+      def unfinished_line(string)
+        string.each_line.to_a[-1]
+      end
+
+      def multiple_lines?(string)
+        string.each_line.count > 1
       end
     end
 
