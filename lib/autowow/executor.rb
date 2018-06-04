@@ -79,14 +79,7 @@ module Autowow
     end
 
     def tty_params
-      tty_version = Gem::Version.new(TTY::Command::VERSION)
-      if tty_version < Gem::Version.new("0.7.0")
-        {}
-      elsif tty_version < Gem::Version.new("0.8.0")
-        { pty: true }
-      else
-        { pty: true, verbose: false }
-      end
+      { pty: true, verbose: false }
     end
 
     include ReflectionUtils::CreateModuleFunctions
