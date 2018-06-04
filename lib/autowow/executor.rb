@@ -36,11 +36,12 @@ module Autowow
       def print_command_exit(cmd, status, runtime, *args)
         @out.each_line.map(&:chomp).each { |line| write(cmd, line) }
         super
+        write(TTY::Command::Cmd.new("dummy"), "", false)
       end
 
-      def write(cmd, message, data = nil)
+      def write(cmd, message, uuid_needed = true)
         out = []
-        out << "[#{decorate(cmd.uuid, :green)}] " unless cmd.uuid.nil?
+        out << "[#{decorate(cmd.uuid, :green)}] " if uuid_needed && !cmd.uuid.nil?
         out << "#{message}\n"
         output << out.join
       end
