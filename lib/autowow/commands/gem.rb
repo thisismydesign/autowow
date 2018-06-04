@@ -2,7 +2,7 @@ module Autowow
   module Commands
     module Gem
       def release
-        ["rake", "release"]
+        be + ["rake", "release"]
       end
 
       def clean
@@ -10,15 +10,20 @@ module Autowow
       end
 
       def rubocop_parallel
-        ["rubocop", "--parallel"]
+        be + ["rubocop", "--parallel"]
       end
 
       def rubocop_autocorrect(files)
+        cmd = be + ["rubocop", "--auto-correct"]
         if files.kind_of?(Array)
-          ["rubocop", "--auto-correct"] + files
+          cmd + files
         else
-          ["rubocop", "--auto-correct"] + files.split(" ")
+          cmd + files.split(" ")
         end
+      end
+
+      def be
+        ["bundle", "exec"]
       end
 
       include ReflectionUtils::CreateModuleFunctions
