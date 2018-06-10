@@ -112,6 +112,7 @@ Day starter routine for a new start
 * Commits and pushed changes to `master`
 * Rebases `release` branch to master
 * Releases gem via `rake release`
+* Changes version information to development in README if present
 
 Prerequisites: on master
 

@@ -19,7 +19,7 @@ module Autowow
 
         if version
           pretty_with_output.run(bump(version))
-          update_readme_version_information(version)
+          bump_readme_version_information(version)
           pretty.run(add(["README.md", "*version.rb"]))
           pretty.run(commit("Bumps version to v#{version}"))
         end
@@ -30,6 +30,11 @@ module Autowow
           pretty.run(pull)
           pretty.run(rebase(start_branch))
           pretty_with_output.run(release)
+        end
+
+        if version && change_readme_version_information_to_development(version)
+          pretty.run(add(["README.md"]))
+          pretty.run(commit("Changes README to development version"))
         end
 
         pretty_with_output.run(git_status)
@@ -55,28 +60,52 @@ module Autowow
         Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
       end
 
-      def update_readme_version_information(version)
+      def bump_readme_version_information(version)
         readme = File.new("README.md")
-        if File.file?(readme)
-          text = File.read(readme)
-          matches = text.match(/<!--- Version informartion -->(.+)<!--- Version informartion end -->/m)
-          return if matches.length == 0
-          version_information = matches[0]
-      
-          new_version_information = if version_information.include?("development version")
-            releases_link = version_information.match(/\[.+\]\(.+\)/)[0].split("(")[1].split("/tag")[0]
-            <<-HEREDOC
-      <!--- Version informartion -->
-      *You are viewing the README of version [v#{version}](#{releases_link}/tag/v#{version}). You can find other releases [here](#{releases_link}).*
-      <!--- Version informartion end -->
-            HEREDOC
-          else
-            version_information.gsub(/[0-9]\.[0-9]\.[0-9]/, version)
-          end
-      
-          text.gsub!(version_information, new_version_information)
-          File.write(readme, text)
+        return unless File.file?(readme) && contains_version_information(File.read(readme))
+
+        version_information = get_version_information(File.read(readme))
+    
+        new_version_information = if version_information.include?("development version")
+          releases_link = version_information.match(/\[.+\]\(.+\)/)[0].split("(")[1].split("/tag")[0]
+          <<-HEREDOC
+<!--- Version informartion -->
+*You are viewing the README of version [v#{version}](#{releases_link}/tag/v#{version}). You can find other releases [here](#{releases_link}).*
+<!--- Version informartion end -->
+          HEREDOC
+        else
+          version_information.gsub(/[0-9]\.[0-9]\.[0-9]/, version)
         end
+    
+        text.gsub!(version_information, new_version_information)
+        File.write(readme, text)
+      end
+
+      def change_readme_version_information_to_development(version)
+        readme = File.new("README.md")
+        return false unless File.file?(readme) && contains_version_information(File.read(readme))
+        version_information = get_version_information(File.read(readme))
+        return false if version_information.include?("development version")
+
+        releases_link = version_information.match(/\[.+\]\(.+\)/)[0].split("(")[1].split("/tag")[0]
+
+        new_version_information = <<-HEREDOC
+<!--- Version informartion -->
+*You are viewing the README of the development version. You can find the README of the latest release (v#{version}) [here](#{releases_link}/tag/v#{version}).*
+<!--- Version informartion end -->
+        HEREDOC
+
+        text.gsub!(version_information, new_version_information)
+        File.write(readme, text)
+        true
+      end
+
+      def contains_version_information?(text)
+        text.match(/<!--- Version informartion -->(.+)<!--- Version informartion end -->/m).length > 0
+      end
+
+      def get_version_information(text)
+        text.match(/<!--- Version informartion -->(.+)<!--- Version informartion end -->/m)[0]
       end
 
       include ReflectionUtils::CreateModuleFunctions
