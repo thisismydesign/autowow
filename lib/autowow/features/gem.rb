@@ -35,6 +35,7 @@ module Autowow
         if version && change_readme_version_information_to_development(version)
           pretty.run(add(["README.md"]))
           pretty.run(commit("Changes README to development version"))
+          pretty.run(push)
         end
 
         pretty_with_output.run(git_status)
