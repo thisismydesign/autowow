@@ -76,12 +76,13 @@ module Autowow
           <<-HEREDOC
 <!--- Version informartion -->
 *You are viewing the README of version [v#{version}](#{releases_link}/tag/v#{version}). You can find other releases [here](#{releases_link}).*
-<!--- Version informartion end -->HEREDOC
+<!--- Version informartion end -->
+          HEREDOC
         else
           version_information.gsub(/[0-9]\.[0-9]\.[0-9]/, version)
         end
     
-        text.gsub!(version_information, new_version_information)
+        text.gsub!(version_information, new_version_information.chomp)
         File.write(readme, text)
       end
 
@@ -98,9 +99,10 @@ module Autowow
         new_version_information = <<-HEREDOC
 <!--- Version informartion -->
 *You are viewing the README of the development version. You can find the README of the latest release (v#{version}) [here](#{releases_link}/tag/v#{version}).*
-<!--- Version informartion end -->HEREDOC
+<!--- Version informartion end -->
+        HEREDOC
 
-        text.gsub!(version_information, new_version_information)
+        text.gsub!(version_information, new_version_information.chomp)
         File.write(readme, text)
         true
       end
