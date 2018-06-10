@@ -19,8 +19,7 @@ module Autowow
         version = nil
 
         if version_bump
-          version = pretty_with_output.run(bump(version_bump)).out.clean_lines
-            .select { |line| line.match(/Bumping/) }.split(" ").last
+          version = pretty_with_output.run(bump(version_bump)).out.clean_lines.select { |line| line.match(/Bumping/) }.first.split(" ").last
           bump_readme_version_information(version)
           pretty.run(add(["README.md", "*version.rb"]))
           pretty.run(commit("Bumps version to v#{version}"))
