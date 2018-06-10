@@ -11,14 +11,15 @@ module Autowow
       include Commands::Vcs
       include Executor
 
-      def gem_release(version = nil)
+      def gem_release(version_bump = nil)
         pretty_with_output.run(git_status)
         start_branch = Vcs.working_branch
         logger.error("Not on master.") and return unless start_branch.eql?("master")
         pretty.run(pull)
+        version = nil
 
-        if version
-          pretty_with_output.run(bump(version))
+        if version_bump
+          version = pretty_with_output.run(bump(version_bump)).out.clean_lines[1].split(" ").last
           bump_readme_version_information(version)
           pretty.run(add(["README.md", "*version.rb"]))
           pretty.run(commit("Bumps version to v#{version}"))

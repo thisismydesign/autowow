@@ -30,8 +30,8 @@ module Autowow
     end
 
     desc "gem_release", "release gem and return to master"
-    def gem_release(version = nil)
-      Autowow::Features::Gem.gem_release(version)
+    def gem_release(version_bump = nil)
+      Autowow::Features::Gem.gem_release(version_bump)
     end
 
     desc "update_projects", "updates idle projects"

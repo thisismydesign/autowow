@@ -109,7 +109,7 @@ Day starter routine for a new start
 `aw grls` / `autowow gem_release`
 
 * Pulls chnages on `master`
-* If version parameter is provided
+* If [version parameter](https://github.com/svenfuchs/gem-release#options-1) is provided
   * Bumps version in version.rb
   * Bumps version information in README if present
 * Commits and pushed changes to `master`
