@@ -14,7 +14,9 @@ module Autowow
       end
 
       def bump(version = nil)
-        (["gem", "bump", "--no-commit"] + [version]).reject(&:nil?)
+        command = ["gem", "bump", "--no-commit"]
+        return command unless version
+        command + ["--version", version]
       end
 
       def rubocop_autocorrect(files)
