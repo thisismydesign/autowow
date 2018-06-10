@@ -9,6 +9,10 @@ module Autowow
         ["--no-pager"]
       end
 
+      def commit (msg)
+        cmd + ["commit", "-m", msg]
+      end
+
       def changes_not_on_remote(branch)
         cmd + terminal_options + ["log", branch, "--not", "--remotes"]
       end
@@ -79,6 +83,10 @@ module Autowow
 
       def add_remote(name, url)
         cmd + ["remote", "add", name, url]
+      end
+
+      def add(patterns)
+        cmd + ["add"] + patterns
       end
 
       include ReflectionUtils::CreateModuleFunctions

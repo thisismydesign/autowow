@@ -13,6 +13,10 @@ module Autowow
         be + ["rubocop", "--parallel"]
       end
 
+      def bump(version = nil)
+        (["gem", "bump", "--no-commit"] + [version]).reject(&:nil?)
+      end
+
       def rubocop_autocorrect(files)
         cmd = be + ["rubocop", "--auto-correct"]
         if files.kind_of?(Array)
