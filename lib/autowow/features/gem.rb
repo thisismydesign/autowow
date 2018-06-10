@@ -19,7 +19,8 @@ module Autowow
         version = nil
 
         if version_bump
-          version = pretty_with_output.run(bump(version_bump)).out.clean_lines[1].split(" ").last
+          version = pretty_with_output.run(bump(version_bump)).out.clean_lines
+            .select { |line| line.match(/Bumping/) }.split(" ").last
           bump_readme_version_information(version)
           pretty.run(add(["README.md", "*version.rb"]))
           pretty.run(commit("Bumps version to v#{version}"))
@@ -75,8 +76,7 @@ module Autowow
           <<-HEREDOC
 <!--- Version informartion -->
 *You are viewing the README of version [v#{version}](#{releases_link}/tag/v#{version}). You can find other releases [here](#{releases_link}).*
-<!--- Version informartion end -->
-          HEREDOC
+<!--- Version informartion end -->HEREDOC
         else
           version_information.gsub(/[0-9]\.[0-9]\.[0-9]/, version)
         end
@@ -98,8 +98,7 @@ module Autowow
         new_version_information = <<-HEREDOC
 <!--- Version informartion -->
 *You are viewing the README of the development version. You can find the README of the latest release (v#{version}) [here](#{releases_link}/tag/v#{version}).*
-<!--- Version informartion end -->
-        HEREDOC
+<!--- Version informartion end -->HEREDOC
 
         text.gsub!(version_information, new_version_information)
         File.write(readme, text)
