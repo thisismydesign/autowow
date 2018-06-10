@@ -105,6 +105,11 @@ Day starter routine for a new start
 
 `aw grls` / `autowow gem_release`
 
+* Pulls chnages on `master`
+* If version parameter is provided
+  * Bumps version in version.rb
+  * Bumps version information in README if present
+* Commits and pushed changes to `master`
 * Rebases `release` branch to master
 * Releases gem via `rake release`
 
