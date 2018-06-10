@@ -3,8 +3,9 @@
 #### Set of commands to [auto]mate [w]ay [o]f [w]orking
 
 <!--- Version informartion -->
-*You are viewing the README of version [vfriend.](https://github.com/thisismydesign/autowow/releases/tag/vfriend.). You can find other releases [here](https://github.com/thisismydesign/autowow/releases).*
+*You are viewing the README of the development version. You can find the README of the latest release (vfriend.) [here](https://github.com/thisismydesign/autowow/releases/tag/vfriend.).*
 <!--- Version informartion end -->
+
 
 
 
