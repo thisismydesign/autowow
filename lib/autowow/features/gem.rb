@@ -62,7 +62,7 @@ module Autowow
 
       def bump_readme_version_information(version)
         readme = File.new("README.md")
-        return unless File.file?(readme) && contains_version_information(File.read(readme))
+        return unless File.file?(readme) && contains_version_information?(File.read(readme))
 
         version_information = get_version_information(File.read(readme))
     
@@ -83,7 +83,7 @@ module Autowow
 
       def change_readme_version_information_to_development(version)
         readme = File.new("README.md")
-        return false unless File.file?(readme) && contains_version_information(File.read(readme))
+        return false unless File.file?(readme) && contains_version_information?(File.read(readme))
         version_information = get_version_information(File.read(readme))
         return false if version_information.include?("development version")
 
