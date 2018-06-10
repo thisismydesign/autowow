@@ -62,9 +62,11 @@ module Autowow
 
       def bump_readme_version_information(version)
         readme = File.new("README.md")
-        return unless File.file?(readme) && contains_version_information?(File.read(readme))
+        return unless File.file?(readme)
+        text = File.read(readme)
+        return unless contains_version_information?(text)
 
-        version_information = get_version_information(File.read(readme))
+        version_information = get_version_information(text)
     
         new_version_information = if version_information.include?("development version")
           releases_link = version_information.match(/\[.+\]\(.+\)/)[0].split("(")[1].split("/tag")[0]
@@ -83,8 +85,10 @@ module Autowow
 
       def change_readme_version_information_to_development(version)
         readme = File.new("README.md")
-        return false unless File.file?(readme) && contains_version_information?(File.read(readme))
-        version_information = get_version_information(File.read(readme))
+        return false unless File.file?(readme)
+        text = File.read(readme)
+        return false unless contains_version_information?(text)
+        version_information = get_version_information(text)
         return false if version_information.include?("development version")
 
         releases_link = version_information.match(/\[.+\]\(.+\)/)[0].split("(")[1].split("/tag")[0]
