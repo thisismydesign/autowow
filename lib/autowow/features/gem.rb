@@ -59,7 +59,7 @@ module Autowow
       end
 
       def bundle_exec(cmd)
-        pretty_with_output.run(["bundle", "exec"] + cmd)
+        Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
       end
 
       def db_migrate
