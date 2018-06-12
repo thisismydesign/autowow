@@ -59,7 +59,19 @@ module Autowow
       end
 
       def bundle_exec(cmd)
-        Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
+        pretty_with_output.run(["bundle", "exec"] + cmd)
+      end
+
+      def db_migrate
+        pretty_with_output.run(rake_db_migrate)
+      end
+
+      def db_schema
+        pretty_with_output.run(rake_db_schema)
+      end
+
+      def db_structure
+        pretty_with_output.run(rake_db_structure)
       end
 
       def bump_readme_version_information(version)

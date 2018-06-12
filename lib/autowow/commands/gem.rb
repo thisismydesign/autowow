@@ -32,6 +32,22 @@ module Autowow
         ["bundle", "exec"]
       end
 
+      def rake
+        be + ["rake"]
+      end
+
+      def rake_db_migrate
+        ["DISABLE_DATABASE_ENVIRONMENT_CHECK=1"] + rake + ["db:drop", "db:create", "db:migrate"]
+      end
+
+      def rake_db_schema
+        ["DISABLE_DATABASE_ENVIRONMENT_CHECK=1"] + rake + ["db:drop", "db:create", "db:schema:load"]
+      end
+
+      def rake_db_structure
+        ["DISABLE_DATABASE_ENVIRONMENT_CHECK=1"] + rake + ["db:drop", "db:create", "db:structure:load"]
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end

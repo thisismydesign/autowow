@@ -23,6 +23,9 @@ module Autowow
     map %w[gr] => :greet
     map %w[rpa] => :rubocop_parallel_autocorrect
     map %w[be] => :bundle_exec
+    map %w[dbm] => :db_migrate
+    map %w[dbsch] => :db_schema
+    map %w[dbstr] => :db_structure
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -92,6 +95,21 @@ module Autowow
     desc "bundle_exec", "runs command with `bundle exec` prefixed"
     def bundle_exec(*cmd)
       Autowow::Features::Gem.bundle_exec(cmd)
+    end
+
+    desc "db_migrate", "sets up DB via migration"
+    def db_migrate
+      Autowow::Features::Gem.db_migrate
+    end
+
+    desc "db_schema", "sets up DB via loading schema"
+    def db_schema
+      Autowow::Features::Gem.db_schema
+    end
+
+    desc "db_structure", "sets up DB via loading structure"
+    def db_structure
+      Autowow::Features::Gem.db_structure
     end
   end
 end
