@@ -101,6 +101,13 @@ Day starter routine for a new start
 
 * Opens project in browser
 
+#### Force pull
+
+`aw fp` / `autowow force_pull`
+
+* Runs `git fetch --all`
+* Runs `git reset --hard origin/<current_branch_name>`
+
 ### Gem
 
 #### Gem release

@@ -89,6 +89,10 @@ module Autowow
         cmd + ["add"] + patterns
       end
 
+      def hard_reset(branch)
+        cmd + ["reset", "--hard"] + branch
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end

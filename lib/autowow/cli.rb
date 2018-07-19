@@ -26,6 +26,7 @@ module Autowow
     map %w[dbm] => :db_migrate
     map %w[dbsch] => :db_schema
     map %w[dbstr] => :db_structure
+    map %w[fp] => :force_pull
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -110,6 +111,11 @@ module Autowow
     desc "db_structure", "sets up DB via loading structure"
     def db_structure
       Autowow::Features::Gem.db_structure
+    end
+
+    desc "force_pull", "pulls branch from origin discarding local changes (including commits)"
+    def force_pull
+      Autowow::Features::Vcs.force_pull
     end
   end
 end

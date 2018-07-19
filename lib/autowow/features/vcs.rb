@@ -46,6 +46,16 @@ module Autowow
         greet(latest_project_info)
       end
 
+      def force_pull
+        pretty_with_output.run(git_status)
+        branch = working_branch
+
+        pretty_with_output.run(fetch("--all"))
+        pretty_with_output.run(hard_reset("origin/#{branch}"))
+
+        pretty_with_output.run(git_status)
+      end
+
       def self.open
         url = origin_push_url(quiet.run(remotes).out)
         logger.info("Opening #{url}")
