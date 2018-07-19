@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "reflection_utils", ">= 0.3.0"    # Invoke module methods without including the module
   spec.add_dependency "rubocop"                         # Style check
   spec.add_dependency "rubocop-rspec"                   # Style check
+  spec.add_dependency "bump"                            # Bump gem versions
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "rake", "~> 10.0"
