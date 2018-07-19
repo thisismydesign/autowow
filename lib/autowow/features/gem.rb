@@ -12,6 +12,10 @@ module Autowow
       include Executor
 
       def gem_release(version_bump = nil)
+        if quiet.run("gem push").out.clean_lines.select { |line| line.match(/Enter your RubyGems.org credentials/) }.any?
+          logger.error("Set RubyGems credentials first via `gem push`")
+          return
+        end
         pretty_with_output.run(git_status)
         start_branch = Vcs.working_branch
         logger.error("Not on master.") and return unless start_branch.eql?("master")
