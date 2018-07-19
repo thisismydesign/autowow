@@ -30,7 +30,11 @@ module Autowow
           pretty.run("git commit -m \"Bumps version to v#{version}\"")
         end
 
+        sleep 1
+
         pretty.run(push)
+
+        sleep 1
 
         Vcs.on_branch("release") do
           pretty.run(pull)
@@ -81,8 +85,8 @@ module Autowow
       end
 
       def bump_readme_version_information(version)
-        readme = File.new("README.md")
-        return unless File.file?(readme)
+        readme = "README.md"
+        return unless File.exists?(readme)
         text = File.read(readme)
         return unless contains_version_information?(text)
 
