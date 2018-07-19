@@ -21,7 +21,8 @@ module Autowow
         if version_bump
           version = pretty_with_output.run(bump(version_bump)).out.clean_lines.select { |line| line.match(/Bumping|bump/) }.first.split(" ").last
           bump_readme_version_information(version)
-          pretty.run(add(["README.md", "*version.rb"]))
+          # Full command is needed so that `*` would not be escaped
+          pretty.run("git add README.md *version.rb")
           pretty.run(commit("Bumps version to v#{version}"))
         end
 
