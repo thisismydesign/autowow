@@ -25,9 +25,9 @@ module Autowow
         if version_bump
           version = pretty_with_output.run(bump(version_bump)).out.clean_lines.select { |line| line.match(/Bumping|bump/) }.first.split(" ").last
           bump_readme_version_information(version)
-          # Full command is needed so that `*` would not be escaped
+          # Full command is needed because of faulty escaping otherwise
           pretty.run("git add README.md *version.rb")
-          pretty.run(commit("'Bumps version to v#{version}'"))
+          pretty.run("git commit -m 'Bumps version to v#{version}'")
         end
 
         pretty.run(push)
@@ -40,7 +40,8 @@ module Autowow
 
         if version && change_readme_version_information_to_development(version)
           pretty.run(add(["README.md"]))
-          pretty.run(commit("'Changes README to development version'"))
+          # Full command is needed because of faulty escaping otherwise
+          pretty.run("git commit -m 'Changes README to development version'")
           pretty.run(push)
         end
 
