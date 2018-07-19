@@ -12,7 +12,7 @@ module Autowow
       include Executor
 
       def gem_release(version_bump = nil)
-        if quiet.run("gem push").out.clean_lines.select { |line| line.match(/Enter your RubyGems.org credentials/) }.any?
+        if quiet.run!("gem push").out.clean_lines.select { |line| line.match(/Enter your RubyGems.org credentials/) }.any?
           logger.error("Set RubyGems credentials first via `gem push`")
           return
         end
