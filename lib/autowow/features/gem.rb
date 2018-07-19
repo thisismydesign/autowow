@@ -27,7 +27,7 @@ module Autowow
           bump_readme_version_information(version)
           # Full command is needed so that `*` would not be escaped
           pretty.run("git add README.md *version.rb")
-          pretty.run(commit("Bumps version to v#{version}"))
+          pretty.run(commit("'Bumps version to v#{version}'"))
         end
 
         pretty.run(push)
