@@ -8,6 +8,7 @@ require_relative "features/gem"
 require_relative "features/vcs"
 require_relative "features/os"
 require_relative "features/fs"
+require_relative "features/heroku"
 
 require_relative "commands/gem"
 
@@ -26,6 +27,7 @@ module Autowow
     map %w[dbm] => :db_migrate
     map %w[dbsch] => :db_schema
     map %w[dbstr] => :db_structure
+    map %w[fp] => :force_pull
     map %w[fp] => :force_pull
 
     desc "branch_merged", "clean working branch and return to master"
@@ -98,17 +100,17 @@ module Autowow
       Autowow::Features::Gem.bundle_exec(cmd)
     end
 
-    desc "db_migrate", "sets up DB via migration"
+    desc "db_migrate", "drops and sets up DB via migration"
     def db_migrate
       Autowow::Features::Gem.db_migrate
     end
 
-    desc "db_schema", "sets up DB via loading schema"
+    desc "db_schema", "drops and sets up DB via loading schema"
     def db_schema
       Autowow::Features::Gem.db_schema
     end
 
-    desc "db_structure", "sets up DB via loading structure"
+    desc "db_structure", "drops and sets up DB via loading structure"
     def db_structure
       Autowow::Features::Gem.db_structure
     end
@@ -116,6 +118,11 @@ module Autowow
     desc "force_pull", "pulls branch from origin discarding local changes (including commits)"
     def force_pull
       Autowow::Features::Vcs.force_pull
+    end
+
+    desc "heroku_db_migrate", "drops and sets up DB via migration"
+    def heroku_db_migrate
+      Autowow::Features::Heroku.db_migrate
     end
   end
 end
