@@ -93,6 +93,11 @@ module Autowow
         cmd + ["reset", "--hard", branch]
       end
 
+      # Doesn't work on Windows
+      def current_branch_remote
+        cmd + ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"]
+      end
+
       include ReflectionUtils::CreateModuleFunctions
     end
   end
