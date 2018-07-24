@@ -33,7 +33,8 @@ module Autowow
         pretty.run(push)
 
         Vcs.on_branch("release") do
-          pretty.run(pull)
+          result = pretty.run!(pull)
+          pretty_with_output.run(set_upstream("origin", "release")) unless result.success?
           pretty.run(rebase(start_branch))
           pretty_with_output.run(release)
         end
