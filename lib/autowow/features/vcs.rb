@@ -46,7 +46,7 @@ module Autowow
         greet(latest_project_info)
       end
 
-      def force_pull
+      def self.force_pull
         pretty_with_output.run(git_status)
         branch = working_branch
 
