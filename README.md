@@ -3,7 +3,7 @@
 #### Set of commands to [auto]mate [w]ay [o]f [w]orking
 
 <!--- Version informartion -->
-*You are viewing the README of the development version. You can find the README of the latest release (v0.14.1) [here](https://github.com/thisismydesign/autowow/releases/tag/v0.14.1).*
+*You are viewing the README of version [v0.14.2[0m](https://github.com/thisismydesign/autowow/releases/tag/v0.14.2[0m). You can find other releases [here](https://github.com/thisismydesign/autowow/releases).*
 <!--- Version informartion end -->
 
 | Branch | Status |
