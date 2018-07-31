@@ -249,7 +249,7 @@ module Autowow
       end
 
       def uncommitted_changes?(status)
-        !(status.include?("nothing to commit, working tree clean") or status.include?("nothing added to commit but untracked files present"))
+        !(status.include?("nothing to commit, working tree clean") or status.include?("nothing added to commit but untracked files present") or status.include?("nothing to commit, working directory clean"))
       end
 
       def keep_changes
