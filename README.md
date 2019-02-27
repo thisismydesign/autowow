@@ -152,6 +152,24 @@ Prerequisites: on master
 * Shows Ruby versions in use
 * Searches for repositories on paths: `.`, `./*/`
 
+### Heroku
+
+#### DB migrate
+
+`aw hdbm` / `autowow heroku_db_migrate`
+
+* Runs `rake db:migrate` on heroku
+
+Prerequisites: `HEROKU_APP` env var is set
+
+#### PG DB reset
+
+`aw hpgdbr` / `autowow heroku_pg_db_reset`
+
+* Resets Postgre DB on heroku
+
+Prerequisites: `HEROKU_APP` env var is set
+
 ### Misc
 
 #### Execute

@@ -6,7 +6,7 @@ module Autowow
       end
 
       def info
-        cmd + ["info"]
+        cmd + ["info", "--json"]
       end
 
       def pb_reset(app_name)

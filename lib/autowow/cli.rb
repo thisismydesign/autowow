@@ -28,7 +28,8 @@ module Autowow
     map %w[dbsch] => :db_schema
     map %w[dbstr] => :db_structure
     map %w[fp] => :force_pull
-    map %w[fp] => :force_pull
+    map %w[hdbm] => :heroku_db_migrate
+    map %w[hpgdbr] => :heroku_pg_db_reset
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -120,9 +121,14 @@ module Autowow
       Autowow::Features::Vcs.force_pull
     end
 
-    desc "heroku_db_migrate", "drops and sets up DB via migration"
+    desc "heroku_db_migrate", "migrates Heroku DB"
     def heroku_db_migrate
       Autowow::Features::Heroku.db_migrate
+    end
+
+    desc "heroku_pg_db_reset", "resets Heroku DB"
+    def heroku_pg_db_reset
+      Autowow::Features::Heroku.pg_db_reset
     end
   end
 end
