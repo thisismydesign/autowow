@@ -20,6 +20,31 @@ module Autowow
 
       using RefinedTimeDifference
 
+      def release(version)
+        Vcs.on_branch("master") do
+          pretty.run!(pull)
+        end
+
+        release_branch_exists = false
+        Vcs.on_branch("release") do
+          result = quiet.run!(pull)
+          release_branch_exists = result.success?
+        end
+        quiet.run!(Vcs.branch_force_delete("release")) unless release_branch_exists
+
+        create_release_branch(version) unless release_branch_exists
+      end
+
+      def create_release_branch(version)
+        first_commit_hash = quiet.run!(Vcs.first_commit("master").join(" ")).out.strip
+        pretty_with_output.run!(Vcs.checkout(first_commit_hash))
+        pretty_with_output.run!(Vcs.create("release"))
+        pretty_with_output.run!(Vcs.merge("master", ["--squash"]))
+        pretty_with_output.run!(Vcs.add(["*"]).join(" "))
+        pretty_with_output.run!(Vcs.commit(version, ["--amend"]))
+        pretty_with_output.run!(Vcs.set_upstream("origin", "release"))      
+      end
+
       def self.hi!
         logger.error("In a git repository. Try 1 level higher.") && return if is_git?
         hi do

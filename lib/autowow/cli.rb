@@ -29,6 +29,7 @@ module Autowow
     map %w[dbstr] => :db_structure
     map %w[fp] => :force_pull
     map %w[fp] => :force_pull
+    map %w[rls] => :release
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -123,6 +124,11 @@ module Autowow
     desc "heroku_db_migrate", "drops and sets up DB via migration"
     def heroku_db_migrate
       Autowow::Features::Heroku.db_migrate
+    end
+
+    desc "release", "creates release branch"
+    def release(version)
+      Autowow::Features::Vcs.release(version)
     end
   end
 end
