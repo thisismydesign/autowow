@@ -12,6 +12,14 @@ module Autowow
       include Executor
       include StringDecorator
 
+      def exists?
+        begin
+          quiet.run!(rbenv).success?
+        rescue SystemCallError
+          false
+        end
+      end
+
       def ruby_versions
         logger.info(used_versions)
       end
