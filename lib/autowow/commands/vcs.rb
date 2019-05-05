@@ -14,7 +14,7 @@ module Autowow
       end
 
       def changes_not_on_remote(branch)
-        cmd + terminal_options + ["log", branch, "--not", "--remotes"]
+        cmd + terminal_options + ["log", "--not", "--remotes", branch]
       end
 
       def branch_list
