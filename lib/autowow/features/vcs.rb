@@ -45,6 +45,10 @@ module Autowow
         pretty_with_output.run!(Vcs.set_upstream("origin", "release"))      
       end
 
+      def is_tracked?(branch)
+        !quiet.run!(Vcs.upstream_tracking(branch).join(" ")).out.strip.empty?
+      end
+
       def self.hi!
         logger.error("In a git repository. Try 1 level higher.") && return if is_git?
         hi do
@@ -224,7 +228,7 @@ module Autowow
       end
 
       def branch_pushed(branch)
-        quiet.run(changes_not_on_remote(branch)).out.empty?
+        is_tracked?(branch) && quiet.run(changes_not_on_remote(branch)).out.strip.empty?
       end
 
       def greet(latest_project_info = nil)
