@@ -283,7 +283,7 @@ module Autowow
       end
 
       def branches
-        quiet.run(branch_list.join(" ")).out.clean_lines.map { |line| line[%r{(?<=refs/heads/)(.*)}] }
+        quiet.run(branch_list.join(" ")).out.clean_lines
       end
 
       def uncommitted_changes?(status)
