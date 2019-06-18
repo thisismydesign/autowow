@@ -24,7 +24,7 @@ module Autowow
         version = nil
 
         if version_bump
-          version = pretty_with_output.run(bump(version_bump)).out.clean_lines.select { |line| line.match(/Bumping|bump/) }.first.split(" ").last
+          version = pretty_with_output.run(bump(version_bump)).out.clean_lines.select { |line| line.match(/Bumping|bump/) }.first.split("to ").last
           bump_readme_version_information(version)
           # Full command is needed because of faulty escaping otherwise
           pretty.run("git add README.md *version.rb")

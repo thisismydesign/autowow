@@ -18,7 +18,7 @@ module Autowow
       end
 
       def bump(version = nil)
-        command = ["gem", "bump", "--no-commit"]
+        command = ["gem", "bump", "--no-commit", "--no-color"]
         return command unless version
         command + ["--version", version]
       end
