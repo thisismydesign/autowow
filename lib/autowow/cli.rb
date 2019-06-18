@@ -29,6 +29,7 @@ module Autowow
     map %w[dbstr] => :db_structure
     map %w[fp] => :force_pull
     map %w[rc] => :ruby_check
+    map %w[gis] => :gem_install_source
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -128,6 +129,11 @@ module Autowow
     desc "ruby_check", "rpa && be rspec && git status"
     def ruby_check
       Autowow::Features::Gem.ruby_check
+    end
+
+    desc "gem_install_source", "gem build *.gemspec && gem install *.gem"
+    def gem_install_source
+      Autowow::Features::Gem.gem_install_source
     end
   end
 end

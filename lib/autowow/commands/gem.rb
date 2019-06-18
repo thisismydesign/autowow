@@ -32,6 +32,10 @@ module Autowow
         end
       end
 
+      def build(pattern)
+        ["gem", "build"] + pattern
+      end
+
       def be
         ["bundle", "exec"]
       end

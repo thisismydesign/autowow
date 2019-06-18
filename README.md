@@ -120,6 +120,11 @@ Day starter routine for a new start
   - `autowow ruby_check`
   - [doc](doc/rc.md)
 
+- Gem install source
+  - `aw gis`
+  - `autowow gem_install_local`
+  - [doc](doc/gis.md)
+
 #### Gem clean
 
 `aw gc` / `autowow gem_clean`

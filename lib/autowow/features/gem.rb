@@ -80,6 +80,11 @@ module Autowow
         pretty_with_output.run(git_status)
       end
 
+      def gem_install_source
+        pretty_with_output.run("gem build *.gemspec")
+        pretty_with_output.run("gem install *.gem")
+      end
+
       def db_migrate
         pretty_with_output.run(rake_db_migrate)
       end
