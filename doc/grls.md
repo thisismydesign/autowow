@@ -1,8 +1,13 @@
 # Gem release
 
-`aw grls` / `autowow gem_release`
+- `aw grls`
+- `autowow gem_release`
+
+----
 
 Prerequisites: on master
+
+----
 
 * `bundle install`
 * `git pull`
@@ -21,6 +26,8 @@ Prerequisites: on master
   * `git add README.md`
   * `git commit -m "Changes README to development version"`
   * `git push`
+
+----
 
 ```
 $ aw grls minor

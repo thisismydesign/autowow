@@ -115,6 +115,11 @@ Day starter routine for a new start
   - `autowow gem_release`
   - [doc](doc/grls.md)
 
+- Ruby check
+  - `aw rc`
+  - `autowow ruby_check`
+  - [doc](doc/rc.md)
+
 #### Gem clean
 
 `aw gc` / `autowow gem_clean`
@@ -126,12 +131,6 @@ Day starter routine for a new start
 `aw rpa` / `autowow rubocop_parallel_autocorrect`
 
 * Runs `rubocop` in parallel mode, autocorrects offenses on single thread
-
-#### Ruby check
-
-`aw rc` / `autowow ruby_check`
-
-* Runs `aw rpa && bundle exec rspec && git status`
 
 #### Bundle exec
 
