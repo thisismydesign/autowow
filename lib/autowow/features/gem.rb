@@ -73,6 +73,12 @@ module Autowow
         Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
       end
 
+      def ruby_check
+        rubocop_parallel_autocorrect
+        bundle_exec(["rspec"])
+        pretty_with_output.run(git_status)
+      end
+
       def db_migrate
         pretty_with_output.run(rake_db_migrate)
       end

@@ -137,6 +137,12 @@ Prerequisites: on master
 
 * Runs `rubocop` in parallel mode, autocorrects offenses on single thread
 
+#### Ruby check
+
+`aw rc` / `autowow ruby_check`
+
+* Runs `aw rpa && bundle exec rspec && git status`
+
 #### Bundle exec
 
 `aw be <cmd>` / `autowow bundle_exec <cmd>`

@@ -28,7 +28,7 @@ module Autowow
     map %w[dbsch] => :db_schema
     map %w[dbstr] => :db_structure
     map %w[fp] => :force_pull
-    map %w[fp] => :force_pull
+    map %w[rc] => :ruby_check
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -123,6 +123,11 @@ module Autowow
     desc "heroku_db_migrate", "drops and sets up DB via migration"
     def heroku_db_migrate
       Autowow::Features::Heroku.db_migrate
+    end
+
+    desc "ruby_check", "rpa && be rspec && git status"
+    def ruby_check
+      Autowow::Features::Gem.ruby_check
     end
   end
 end
