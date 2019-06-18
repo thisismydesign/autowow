@@ -46,6 +46,10 @@ module Autowow
         greet(latest_project_info)
       end
 
+      def is_tracked?(branch)
+        !quiet.run!(Vcs.upstream_tracking(branch).join(" ")).out.strip.empty?
+      end
+
       def self.force_pull
         pretty_with_output.run(git_status)
         branch = working_branch
@@ -199,7 +203,7 @@ module Autowow
       end
 
       def branch_pushed(branch)
-        quiet.run(changes_not_on_remote(branch)).out.empty?
+        is_tracked?(branch) && quiet.run(changes_not_on_remote(branch)).out.strip.empty?
       end
 
       def greet(latest_project_info = nil)

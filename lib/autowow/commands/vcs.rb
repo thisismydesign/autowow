@@ -93,9 +93,16 @@ module Autowow
         cmd + ["reset", "--hard", branch]
       end
 
-      # Doesn't work on Windows
-      def current_branch_remote
-        cmd + ["rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{u}"]
+      def upstream_tracking(branch)
+        cmd + ["for-each-ref", "--format=%(upstream:short)", "refs/heads/#{branch}"]
+      end
+
+      def current_ref
+        cmd + ["symbolic-ref", "--quiet", "HEAD"]
+      end
+
+      def show_ref(branch)
+        cmd + ["show-ref", branch]
       end
 
       include ReflectionUtils::CreateModuleFunctions
