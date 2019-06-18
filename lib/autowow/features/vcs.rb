@@ -215,6 +215,9 @@ module Autowow
           logger.info(latest_project_info)
           check_projects_older_than(1, :months)
         end
+
+        return unless Rbenv.exists?
+
         obsolete_rubies = Rbenv.obsolete_versions
         if obsolete_rubies.any?
           logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?")

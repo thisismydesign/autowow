@@ -1,6 +1,10 @@
 module Autowow
   module Commands
     module Rbenv
+      def rbenv
+        ["rbenv"]
+      end
+
       def version
         ["rbenv", "local"]
       end
