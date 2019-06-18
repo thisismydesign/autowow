@@ -18,7 +18,7 @@ module Autowow
       end
 
       def branch_list
-        cmd + ["for-each-ref", "--format=%(refname)", "refs/heads/"]
+        cmd + ["for-each-ref", "--format=%(refname:short)", "refs/heads/"]
       end
 
       def push(branch = nil, remote = nil)

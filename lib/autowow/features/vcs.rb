@@ -203,7 +203,11 @@ module Autowow
       end
 
       def branch_pushed(branch)
-        is_tracked?(branch) && quiet.run(changes_not_on_remote(branch)).out.strip.empty?
+        is_tracked?(branch) && commits_pushed?(branch)
+      end
+
+      def commits_pushed?(branch)
+        quiet.run(changes_not_on_remote(branch)).out.strip.empty?
       end
 
       def greet(latest_project_info = nil)
@@ -230,7 +234,7 @@ module Autowow
       def check_projects_older_than(quantity, unit)
         old_projects = Fs.older_than(git_projects, quantity, unit)
         deprecated_projects = old_projects.reject do |project|
-          Dir.chdir(project) { branches.reject { |branch| branch_pushed(branch) }.any? }
+          Dir.chdir(project) { any_branch_not_pushed? || uncommitted_changes?(quiet.run(git_status).out) }
         end
 
         logger.info("The following projects have not been touched for more than #{quantity} #{unit} and all changes have been pushed, maybe consider removing them?") unless deprecated_projects.empty?
@@ -238,6 +242,10 @@ module Autowow
           time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
           logger.info("  #{File.basename(project)} (#{time_diff})")
         end
+      end
+
+      def any_branch_not_pushed?
+        branches.reject { |branch| branch_pushed(branch) }.any?
       end
 
       def get_latest_repo_info
@@ -252,7 +260,7 @@ module Autowow
       end
 
       def branches
-        quiet.run(branch_list).out.clean_lines.map { |line| line[%r{(?<=refs/heads/)(.*)}] }
+        quiet.run(branch_list.join(" ")).out.clean_lines
       end
 
       def uncommitted_changes?(status)
