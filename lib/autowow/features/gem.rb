@@ -17,6 +17,7 @@ module Autowow
           return
         end
         pretty_with_output.run(git_status)
+        pretty_with_output.run(bundle_install)
         start_branch = Vcs.working_branch
         logger.error("Not on master.") and return unless start_branch.eql?("master")
         pretty.run(pull)

@@ -9,6 +9,10 @@ module Autowow
         ["gem", "clean"]
       end
 
+      def bundle_install
+        ["bundle", "install"]
+      end
+
       def rubocop_parallel
         be + ["rubocop", "--parallel"]
       end
