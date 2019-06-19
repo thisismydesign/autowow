@@ -17,13 +17,14 @@ module Autowow
           return
         end
         pretty_with_output.run(git_status)
+        pretty_with_output.run(bundle_install)
         start_branch = Vcs.working_branch
         logger.error("Not on master.") and return unless start_branch.eql?("master")
         pretty.run(pull)
         version = nil
 
         if version_bump
-          version = pretty_with_output.run(bump(version_bump)).out.clean_lines.select { |line| line.match(/Bumping|bump/) }.first.split(" ").last
+          version = pretty_with_output.run(bump(version_bump)).out.clean_lines.select { |line| line.match(/Bumping|bump/) }.first.split("to ").last
           bump_readme_version_information(version)
           # Full command is needed because of faulty escaping otherwise
           pretty.run("git add README.md *version.rb")
@@ -71,6 +72,17 @@ module Autowow
 
       def bundle_exec(cmd)
         Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
+      end
+
+      def ruby_check
+        rubocop_parallel_autocorrect
+        bundle_exec(["rspec"])
+        pretty_with_output.run(git_status)
+      end
+
+      def gem_install_source
+        pretty_with_output.run("gem build *.gemspec")
+        pretty_with_output.run("gem install *.gem")
       end
 
       def db_migrate

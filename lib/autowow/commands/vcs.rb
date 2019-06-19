@@ -18,7 +18,7 @@ module Autowow
       end
 
       def branch_list
-        cmd + ["for-each-ref", "--format=%(refname:short)", "refs/heads/"]
+        cmd + ["for-each-ref", "--format='%(refname:short)'", "refs/heads/"]
       end
 
       def push(branch = nil, remote = nil)
@@ -98,7 +98,7 @@ module Autowow
       end
 
       def upstream_tracking(branch)
-        cmd + ["for-each-ref", "--format=%(upstream:short)", "refs/heads/#{branch}"]
+        cmd + ["for-each-ref", "--format=%'(upstream:short)'", "refs/heads/#{branch}"]
       end
 
       def current_ref

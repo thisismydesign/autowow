@@ -28,7 +28,8 @@ module Autowow
     map %w[dbsch] => :db_schema
     map %w[dbstr] => :db_structure
     map %w[fp] => :force_pull
-    map %w[fp] => :force_pull
+    map %w[rc] => :ruby_check
+    map %w[gis] => :gem_install_source
     map %w[rls] => :release
 
     desc "branch_merged", "clean working branch and return to master"
@@ -124,6 +125,16 @@ module Autowow
     desc "heroku_db_migrate", "drops and sets up DB via migration"
     def heroku_db_migrate
       Autowow::Features::Heroku.db_migrate
+    end
+
+    desc "ruby_check", "rpa && be rspec && git status"
+    def ruby_check
+      Autowow::Features::Gem.ruby_check
+    end
+
+    desc "gem_install_source", "gem build *.gemspec && gem install *.gem"
+    def gem_install_source
+      Autowow::Features::Gem.gem_install_source
     end
 
     desc "release", "creates release branch"

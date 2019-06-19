@@ -9,12 +9,16 @@ module Autowow
         ["gem", "clean"]
       end
 
+      def bundle_install
+        ["bundle", "install"]
+      end
+
       def rubocop_parallel
         be + ["rubocop", "--parallel"]
       end
 
       def bump(version = nil)
-        command = ["gem", "bump", "--no-commit"]
+        command = ["gem", "bump", "--no-commit", "--no-color"]
         return command unless version
         command + ["--version", version]
       end
@@ -26,6 +30,10 @@ module Autowow
         else
           cmd + files.split(" ")
         end
+      end
+
+      def build(pattern)
+        ["gem", "build"] + pattern
       end
 
       def be

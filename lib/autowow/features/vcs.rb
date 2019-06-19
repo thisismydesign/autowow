@@ -75,6 +75,10 @@ module Autowow
         greet(latest_project_info)
       end
 
+      def is_tracked?(branch)
+        !quiet.run!(Vcs.upstream_tracking(branch).join(" ")).out.strip.empty?
+      end
+
       def self.force_pull
         pretty_with_output.run(git_status)
         branch = working_branch
@@ -245,13 +249,13 @@ module Autowow
           check_projects_older_than(1, :months)
         end
 
-        if Rbenv.exists?
-          obsolete_rubies = Rbenv.obsolete_versions
-          if obsolete_rubies.any?
-            logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?")
-            obsolete_rubies.each do |ruby_verion|
-              logger.info("  #{ruby_verion}")
-            end
+        return unless Rbenv.exists?
+
+        obsolete_rubies = Rbenv.obsolete_versions
+        if obsolete_rubies.any?
+          logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?")
+          obsolete_rubies.each do |ruby_verion|
+            logger.info("  #{ruby_verion}")
           end
         end
       end
@@ -259,9 +263,7 @@ module Autowow
       def check_projects_older_than(quantity, unit)
         old_projects = Fs.older_than(git_projects, quantity, unit)
         deprecated_projects = old_projects.reject do |project|
-          Dir.chdir(project) do
-            branches.reject { |branch| branch_pushed(branch) }.any? || uncommitted_changes?(quiet.run(git_status).out)
-          end
+          Dir.chdir(project) { any_branch_not_pushed? || uncommitted_changes?(quiet.run(git_status).out) }
         end
 
         logger.info("The following projects have not been touched for more than #{quantity} #{unit} and all changes have been pushed, maybe consider removing them?") unless deprecated_projects.empty?
@@ -269,6 +271,10 @@ module Autowow
           time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
           logger.info("  #{File.basename(project)} (#{time_diff})")
         end
+      end
+
+      def any_branch_not_pushed?
+        branches.reject { |branch| branch_pushed(branch) }.any?
       end
 
       def get_latest_repo_info

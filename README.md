@@ -3,7 +3,7 @@
 #### Set of commands to [auto]mate [w]ay [o]f [w]orking
 
 <!--- Version informartion -->
-*You are viewing the README of the development version. You can find the README of the latest release (v0.14.2) [here](https://github.com/thisismydesign/autowow/releases/tag/v0.14.2).*
+*You are viewing the README of the development version. You can find the README of the latest release (v0.16.1) [here](https://github.com/thisismydesign/autowow/releases/tag/v0.16.1).*
 <!--- Version informartion end -->
 
 | Branch | Status |
@@ -110,20 +110,20 @@ Day starter routine for a new start
 
 ### Gem
 
-#### Gem release
+- Gem release
+  - `aw grls`
+  - `autowow gem_release`
+  - [doc](doc/grls.md)
 
-`aw grls` / `autowow gem_release`
+- Ruby check
+  - `aw rc`
+  - `autowow ruby_check`
+  - [doc](doc/rc.md)
 
-* Pulls chnages on `master`
-* If [version parameter](https://github.com/svenfuchs/gem-release#options-1) is provided
-  * Bumps version in version.rb
-  * Bumps version information in README if present
-* Commits and pushed changes to `master`
-* Rebases `release` branch to master
-* Releases gem via `rake release`
-* Changes version information to development in README if present
-
-Prerequisites: on master
+- Gem install source
+  - `aw gis`
+  - `autowow gem_install_local`
+  - [doc](doc/gis.md)
 
 #### Gem clean
 
