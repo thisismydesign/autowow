@@ -2,6 +2,12 @@
 
 #### Set of commands to [auto]mate [w]ay [o]f [w]orking
 
+Status and support
+
+- &#x2714; stable
+- &#x2714; supported
+- &#x2714; ongoing development
+
 <!--- Version informartion -->
 *You are viewing the README of the development version. You can find the README of the latest release (v0.16.1) [here](https://github.com/thisismydesign/autowow/releases/tag/v0.16.1).*
 <!--- Version informartion end -->
@@ -160,28 +166,15 @@ Day starter routine for a new start
 
 * Executes given command
 
-## Feedback
+## Contribution and feedback
 
-Any feedback is much appreciated.
+This project is built around known use-cases. If you have one that isn't covered don't hesitate to open an issue and start a discussion.
 
-I can only tailor this project to fit use-cases I know about - which are usually my own ones. If you find that this might be the right direction to solve your problem too but you find that it's suboptimal or lacks features don't hesitate to contact me.
-
-Please let me know if you make use of this project so that I can prioritize further efforts.
+Bug reports and pull requests are welcome on GitHub at https://github.com/thisismydesign/autowow. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## Conventions
 
-This gem is developed using the following conventions:
-- [Bundler's guide for developing a gem](http://bundler.io/v1.14/guides/creating_gem.html)
-- [Better Specs](http://www.betterspecs.org/)
-- [Semantic versioning](http://semver.org/)
-- [RubyGems' guide on gem naming](http://guides.rubygems.org/name-your-gem/)
-- [RFC memo about key words used to Indicate Requirement Levels](https://tools.ietf.org/html/rfc2119)
-- [Bundler improvements](https://github.com/thisismydesign/bundler-improvements)
-- [Minimal dependencies](http://www.mikeperham.com/2016/02/09/kill-your-dependencies/)
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/thisismydesign/autowow.
+This project follows [C-Hive guides](https://github.com/c-hive/guides) for code style, way of working and other development concerns.
 
 ## License
 
