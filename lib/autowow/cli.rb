@@ -24,7 +24,7 @@ module Autowow
     map %w[gr] => :greet
     map %w[rpa] => :rubocop_parallel_autocorrect
     map %w[be] => :bundle_exec
-    map %w[dbm] => :db_migrate
+    map %w[dbmr] => :db_migrate_reset
     map %w[dbsch] => :db_schema
     map %w[dbstr] => :db_structure
     map %w[fp] => :force_pull
@@ -101,9 +101,9 @@ module Autowow
       Autowow::Features::Gem.bundle_exec(cmd)
     end
 
-    desc "db_migrate", "drops and sets up DB via migration"
-    def db_migrate
-      Autowow::Features::Gem.db_migrate
+    desc "db_migrate_reset", "drops and sets up DB via migration"
+    def db_migrate_reset
+      Autowow::Features::Gem.db_migrate_reset
     end
 
     desc "db_schema", "drops and sets up DB via loading schema"

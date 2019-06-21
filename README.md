@@ -131,6 +131,11 @@ Day starter routine for a new start
   - `autowow gem_install_local`
   - [doc](doc/gis.md)
 
+- DB migrate reset
+  - `aw dbmr`
+  - `autowow db_migrate_reset`
+  - [doc](doc/dbmr.md)
+
 #### Gem clean
 
 `aw gc` / `autowow gem_clean`

@@ -85,8 +85,8 @@ module Autowow
         pretty_with_output.run("gem install *.gem")
       end
 
-      def db_migrate
-        pretty_with_output.run(rake_db_migrate)
+      def db_migrate_reset
+        pretty_with_output.run(rake_db_migrate_reset)
       end
 
       def db_schema
