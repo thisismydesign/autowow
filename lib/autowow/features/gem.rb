@@ -77,6 +77,8 @@ module Autowow
       def ruby_check
         rubocop_parallel_autocorrect
         bundle_exec(["rspec"])
+        db_migrate_reset
+        pretty_with_output.run(rake + ["db:seed"])
         pretty_with_output.run(git_status)
       end
 
