@@ -9,7 +9,7 @@ Status and support
 - &#x2714; ongoing development
 
 <!--- Version informartion -->
-*You are viewing the README of the development version. You can find the README of the latest release (v0.16.1) [here](https://github.com/thisismydesign/autowow/releases/tag/v0.16.1).*
+*You are viewing the README of version [v0.17.0](https://github.com/thisismydesign/autowow/releases/tag/v0.17.0). You can find other releases [here](https://github.com/thisismydesign/autowow/releases).*
 <!--- Version informartion end -->
 
 | Branch | Status |
