@@ -1,7 +1,7 @@
 # Gem install source
 
 * `aw gis`
-* `aw gem_install_source`
+* `autowow gem_install_source`
 
 ----
 
