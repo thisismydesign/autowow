@@ -78,7 +78,7 @@ module Autowow
       end
 
       def branch
-        cmd + ["branch"]
+        cmd + terminal_options + ["branch"]
       end
 
       def add_remote(name, url)
