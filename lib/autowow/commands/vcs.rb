@@ -9,8 +9,8 @@ module Autowow
         ["--no-pager"]
       end
 
-      def commit (msg)
-        cmd + ["commit", "-m", msg]
+      def commit(msg, options = [])
+        cmd + ["commit", "-m", msg] + options
       end
 
       def changes_not_on_remote(branch)
@@ -45,6 +45,10 @@ module Autowow
         cmd + ["symbolic-ref", "--short", "HEAD"]
       end
 
+      def first_commit(branch = "HEAD")
+        cmd + ["rev-list", "--max-parents=0", branch]
+      end
+
       def checkout(existing_branch)
         cmd + ["checkout", existing_branch]
       end
@@ -73,8 +77,8 @@ module Autowow
         cmd + ["fetch", remote]
       end
 
-      def merge(compare)
-        cmd + ["merge", compare]
+      def merge(compare, options = [])
+        cmd + ["merge"] + options + [compare]
       end
 
       def branch
