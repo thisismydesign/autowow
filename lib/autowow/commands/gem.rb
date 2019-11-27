@@ -44,6 +44,10 @@ module Autowow
         be + ["rake"]
       end
 
+      def rake_db_migrate
+        rake + ["db:migrate"]
+      end
+
       def rake_db_migrate_reset
         ["DISABLE_DATABASE_ENVIRONMENT_CHECK=1"] + rake + ["db:migrate:reset"]
       end

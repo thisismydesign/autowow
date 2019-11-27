@@ -136,6 +136,11 @@ Day starter routine for a new start
   - `autowow db_migrate_reset`
   - [doc](doc/dbmr.md)
 
+- Rails update project
+  - `aw rup`
+  - `autowow db_migrate_reset`
+  - [doc](doc/dbmr.md)
+
 #### Gem clean
 
 `aw gc` / `autowow gem_clean`
