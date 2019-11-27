@@ -1,6 +1,27 @@
 require "spec_helper"
 
 RSpec.describe Autowow::Features::Vcs do
+
+  let(:test_project) { './spec/test_project' }
+
+  around(:example) do |example|
+    Dir.chdir(test_project) do
+      Autowow::Executor.quiet.run!(['git', 'init'])
+      example.run
+      Autowow::Executor.quiet.run!(['rm', '-rf', '.git'])
+    end
+  end
+
+  describe ".branches" do
+    it "returns array" do
+      Autowow::Executor.pretty_with_output.run!(['pwd'])
+      # branches = described_class.branches
+      # expect(branches).to be_kind_of(Array)
+      # expect(branches.size).to be >= 1
+      # expect(branches).to include(@start_branch)
+    end
+  end
+
   skip do
     let(:file_name) { "delete_me" }
     let(:branch) { "new_branch" }
