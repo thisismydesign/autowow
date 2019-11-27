@@ -151,6 +151,7 @@ module Autowow
 
         on_branch("master") do
           has_upstream? ? pull_upstream : pretty_with_output.run(pull)
+          yield if block_given?
         end
       end
 

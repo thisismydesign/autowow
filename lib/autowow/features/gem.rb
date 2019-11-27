@@ -1,7 +1,8 @@
 require "pastel"
 
 require_relative "../commands/gem"
-require_relative "vcs"
+require_relative "../commands/vcs"
+require_relative "./vcs"
 
 module Autowow
   module Features
@@ -9,6 +10,7 @@ module Autowow
       include EasyLogging
       include Commands::Gem
       include Commands::Vcs
+      # include Features::Vcs
       include Executor
 
       def gem_release(version_bump = nil)
@@ -85,6 +87,15 @@ module Autowow
       def gem_install_source
         pretty_with_output.run("gem build *.gemspec")
         pretty_with_output.run("gem install *.gem")
+      end
+
+      def rails_update_project
+        pretty_with_output.run(git_status)
+        Vcs.update_project do
+          pretty_with_output.run(Gem.bundle_install)
+          pretty_with_output.run(Gem.rake_db_migrate)
+        end
+        pretty_with_output.run(git_status)
       end
 
       def db_migrate_reset

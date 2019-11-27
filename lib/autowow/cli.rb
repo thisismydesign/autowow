@@ -30,6 +30,7 @@ module Autowow
     map %w[fp] => :force_pull
     map %w[rc] => :ruby_check
     map %w[gis] => :gem_install_source
+    map %w[rup] => :rails_update_project
 
     desc "branch_merged", "clean working branch and return to master"
     def branch_merged
@@ -134,6 +135,11 @@ module Autowow
     desc "gem_install_source", "gem build *.gemspec && gem install *.gem"
     def gem_install_source
       Autowow::Features::Gem.gem_install_source
+    end
+
+    desc "rails_update_project", "aw up && bundle install && rake db:migrate"
+    def rails_update_project
+      Autowow::Features::Gem.rails_update_project
     end
   end
 end
