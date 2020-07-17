@@ -274,14 +274,19 @@ module Autowow
       end
 
       def local_changes
+        changes = false
         status = quiet.run(git_status).out
         if uncommitted_changes?(status)
           logger.info("There are uncommitted changes.")
-        elsif any_branch_not_pushed?(quiet: false)
-          logger.info("There are unpushed changes.")
-        else
-          logger.info("No unpushed changes.")
+          changes = true
         end
+
+        if any_branch_not_pushed?(quiet: false)
+          logger.info("There are unpushed changes.")
+          changes = true
+        end
+
+        logger.info("No unpushed changes.") unless changes
       end
 
       def uncommitted_changes?(status)
