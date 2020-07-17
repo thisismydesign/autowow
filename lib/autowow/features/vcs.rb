@@ -202,8 +202,18 @@ module Autowow
         quiet.run(current_branch).out.strip
       end
 
-      def branch_pushed(branch)
-        is_tracked?(branch) && commits_pushed?(branch)
+      def branch_pushed(branch, quiet = true)
+        if !is_tracked?(branch)
+          logger.info("Branch `#{branch}` is not tracked.") unless quiet
+          return false
+        end
+
+        if !commits_pushed?(branch)
+          logger.info("Branch `#{branch}` is not pushed.") unless quiet
+          return false
+        end
+
+        return true
       end
 
       def commits_pushed?(branch)
@@ -244,8 +254,8 @@ module Autowow
         end
       end
 
-      def any_branch_not_pushed?
-        branches.reject { |branch| branch_pushed(branch) }.any?
+      def any_branch_not_pushed?(quiet: true)
+        branches.reject { |branch| branch_pushed(branch, quiet) }.any?
       end
 
       def get_latest_repo_info
@@ -265,7 +275,9 @@ module Autowow
 
       def local_changes
         status = quiet.run(git_status).out
-        if uncommitted_changes?(status) || any_branch_not_pushed?
+        if uncommitted_changes?(status)
+          logger.info("There are uncommitted changes.")
+        elsif any_branch_not_pushed?(quiet: false)
           logger.info("There are unpushed changes.")
         else
           logger.info("No unpushed changes.")
