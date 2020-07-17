@@ -263,6 +263,15 @@ module Autowow
         quiet.run(branch_list.join(" ")).out.clean_lines
       end
 
+      def local_changes
+        status = quiet.run(git_status).out
+        if uncommitted_changes?(status) || any_branch_not_pushed?
+          logger.info("There are unpushed changes.")
+        else
+          logger.info("No unpushed changes.")
+        end
+      end
+
       def uncommitted_changes?(status)
         !(status.include?("nothing to commit, working tree clean") or status.include?("nothing added to commit but untracked files present") or status.include?("nothing to commit, working directory clean"))
       end
