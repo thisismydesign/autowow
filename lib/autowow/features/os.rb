@@ -7,7 +7,7 @@ module Autowow
       include Executor
 
       def exists?(cmd)
-        quiet.run!(which(cmd)).success?
+        Executor.quiet.run!(Commands::Os.which(cmd)).success?
       end
 
       include ReflectionUtils::CreateModuleFunctions
