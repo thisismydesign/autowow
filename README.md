@@ -21,6 +21,13 @@ Status and support
 
 Commands are purposefully opinionated. Use it on your own responsibility.
 
+## Development
+
+```
+docker build . -t autowow
+docker run --rm -it --entrypoint sh -v $(pwd):/app autowow
+```
+
 ## Usage
 
 Install from source as `rake install`.
