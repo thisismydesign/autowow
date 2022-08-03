@@ -139,12 +139,6 @@ Day starter routine for a new start
   - `autowow db_migrate_reset`
   - [doc](doc/dbmr.md)
 
-#### Gem clean
-
-`aw gc` / `autowow gem_clean`
-
-* Removes unused gems
-
 #### Rubocop parallel autocorrect
 
 `aw rpa` / `autowow rubocop_parallel_autocorrect`

@@ -6,7 +6,6 @@ require "launchy"
 
 require_relative "../commands/vcs"
 require_relative "fs"
-require_relative "rbenv"
 require_relative "gem"
 require_relative "../time_difference"
 
@@ -27,8 +26,6 @@ module Autowow
           clear_branches
           logger.info("Adding upstream...")
           add_upstream
-          logger.info("Removing unused gems...")
-          Gem.gem_clean
         end
       end
 
@@ -218,16 +215,6 @@ module Autowow
           latest_project_info ||= get_latest_repo_info
           logger.info(latest_project_info)
           check_projects_older_than(1, :months)
-        end
-
-        return unless Rbenv.exists?
-
-        obsolete_rubies = Rbenv.obsolete_versions
-        if obsolete_rubies.any?
-          logger.info("\nThe following Ruby versions are not used by any projects, maybe consider removing them?")
-          obsolete_rubies.each do |ruby_verion|
-            logger.info("  #{ruby_verion}")
-          end
         end
       end
 
