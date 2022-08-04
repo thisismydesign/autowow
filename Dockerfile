@@ -7,3 +7,4 @@ WORKDIR /app
 COPY . /app
 
 RUN bundle install
+RUN rake install
