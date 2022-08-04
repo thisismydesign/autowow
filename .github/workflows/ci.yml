@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 5
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Build image
         uses: docker/build-push-action@v3
@@ -18,5 +18,5 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha
 
-    - name: Run specs
-      run: docker run --rm -it --entrypoint rspec -v $(pwd):/app autowow
+      - name: Run specs
+        run: docker run --rm -it --entrypoint rspec -v $(pwd):/app autowow
