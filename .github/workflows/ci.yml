@@ -22,8 +22,33 @@ jobs:
         ruby-version: ${{ env.ruby_version }}
         bundler-cache: true
 
+    - name: Install dependencies
+      run: bundle install
+
     - name: Run specs
       run: bundle exec rspec
+
+  install:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ env.ruby_version }}
+        bundler-cache: true
+
+    - name: Install dependencies
+      run: bundle install
+
+    - name: Install
+      run: bundle exec rake install
 
   build:
     runs-on: ubuntu-latest

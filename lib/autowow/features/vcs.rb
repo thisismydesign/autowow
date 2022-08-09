@@ -122,7 +122,7 @@ module Autowow
         pretty_with_output.run(branch)
         branch_removed = false
 
-        (branches - ["master", working_branch]).each do |branch|
+        (branches - [default_branch, working_branch]).each do |branch|
           if branch_pushed(branch)
             pretty.run(branch_force_delete(branch))
             branch_removed = true
@@ -142,11 +142,11 @@ module Autowow
         logger.info("Updating #{File.expand_path('.')} ...")
         logger.error("Not a git repository.") and return unless is_git?
         status = quiet.run(git_status).out
-        if uncommitted_changes?(status) && working_branch.eql?("master")
-          logger.warn("Skipped: uncommitted changes on master.") and return
+        if uncommitted_changes?(status) && working_branch.eql?(default_branch)
+          logger.warn("Skipped: uncommitted changes on default branch.") and return
         end
 
-        on_branch("master") do
+        on_branch(default_branch) do
           has_upstream? ? pull_upstream : pretty_with_output.run(pull)
         end
       end
@@ -154,7 +154,7 @@ module Autowow
       def pull_upstream
         upstream_remote = "upstream"
         remote = "origin"
-        branch = "master"
+        branch = default_branch
         pretty_with_output.run(fetch(upstream_remote)).out
         pretty_with_output.run(merge("#{upstream_remote}/#{branch}")).out
         pretty_with_output.run(push(remote, branch))
@@ -184,10 +184,11 @@ module Autowow
       def branch_merged
         pretty_with_output.run(git_status)
         branch = working_branch
-        logger.error("Nothing to do.") and return if branch.eql?("master")
+        tagret_branch = default_branch
+        logger.error("Nothing to do.") and return if branch.eql?(tagret_branch)
 
         keep_changes do
-          pretty_with_output.run(checkout("master"))
+          pretty_with_output.run(checkout(tagret_branch))
           pretty_with_output.run(pull)
         end
         pretty_with_output.run(branch_force_delete(branch))
@@ -197,6 +198,10 @@ module Autowow
 
       def working_branch
         quiet.run(current_branch).out.strip
+      end
+
+      def default_branch
+        quiet.run(Commands::Vcs.symbolic_origin_head).out.strip.split('/').last
       end
 
       def branch_pushed(branch, quiet = true)

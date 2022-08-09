@@ -30,12 +30,12 @@ module Autowow
     map %w[gis] => :gem_install_source
     map %w[lc] => :local_changes
 
-    desc "branch_merged", "clean working branch and return to master"
+    desc "branch_merged", "clean working branch and return to default branch"
     def branch_merged
       Autowow::Features::Vcs.branch_merged
     end
 
-    desc "gem_release", "release gem and return to master"
+    desc "gem_release", "release gem and return to default branch"
     def gem_release(version_bump = nil)
       Autowow::Features::Gem.gem_release(version_bump)
     end

@@ -1,14 +1,11 @@
 require "bundler/gem_tasks"
-require "rspec/core/rake_task"
 require "logger"
 @logger = Logger.new(STDOUT)
-
-RSpec::Core::RakeTask.new(:spec)
 
 desc "Check if source can be required and is correctly required"
 task :require do
   dir = File.dirname(__FILE__)
-  gemspec = load_gemspec(dir)
+  gemspec = load_gemspec
 
   # Order is important, assert_can_be_required should be run first
   assert_can_be_required(dir, gemspec)
@@ -16,10 +13,10 @@ task :require do
   check_source_files_included(dir, gemspec)
 end
 
-def load_gemspec(dir)
+def load_gemspec
   require "bundler/setup"
   Gem::Specification.find do |spec|
-    spec.full_gem_path.include?(File.dirname(__FILE__))
+    spec.name == 'autowow'
   end
 end
 
@@ -55,5 +52,3 @@ end
 def require_gem(gemspec)
   require_relative "lib/#{gemspec.name.gsub('-', '/')}"
 end
-
-task default: [:require, :spec]
