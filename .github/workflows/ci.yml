@@ -44,6 +44,25 @@ jobs:
     - name: Install
       run: rake install
 
+  require:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ env.ruby_version }}
+        bundler-cache: true
+
+    - name: Check if source can be required and is correctly required
+      run: rake require
+
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 5
