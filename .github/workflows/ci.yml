@@ -42,7 +42,7 @@ jobs:
         bundler-cache: true
 
     - name: Install
-      run: rake install
+      run: bundle exec rake install
 
   require:
     strategy:
@@ -61,7 +61,7 @@ jobs:
         bundler-cache: true
 
     - name: Check if source can be required and is correctly required
-      run: rake require
+      run: bundle exec rake require
 
   build:
     runs-on: ubuntu-latest
