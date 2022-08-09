@@ -1,9 +1,6 @@
 require "bundler/gem_tasks"
-require "rspec/core/rake_task"
 require "logger"
 @logger = Logger.new(STDOUT)
-
-RSpec::Core::RakeTask.new(:spec)
 
 desc "Check if source can be required and is correctly required"
 task :require do
