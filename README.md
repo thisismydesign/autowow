@@ -9,23 +9,26 @@ Status and support
 - &#x2714; ongoing development
 
 <!--- Version informartion -->
-*You are viewing the README of the development version. You can find the README of the latest release (v0.17.1) [here](https://github.com/thisismydesign/autowow/releases/tag/v0.17.1).*
+*You are viewing the README of the development version. You can find releases [here](https://github.com/thisismydesign/autowow/tags).*
 <!--- Version informartion end -->
 
 | Branch | Status |
 | ------ | ------ |
-| Release | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=release)](https://travis-ci.org/thisismydesign/autowow)   [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/autowow/badge.svg?branch=release)](https://coveralls.io/github/thisismydesign/autowow?branch=release)   [![Gem Version](https://badge.fury.io/rb/autowow.svg)](https://badge.fury.io/rb/autowow)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/autowow?type=total)](https://rubygems.org/gems/autowow) |
-| Development | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=master)](https://travis-ci.org/thisismydesign/autowow) [![Coverage Status](https://coveralls.io/repos/github/thisismydesign/autowow/badge.svg?branch=master)](https://coveralls.io/github/thisismydesign/autowow?branch=master)   [![Bountysource](https://api.bountysource.com/badge/issue?issue_id=52798961)](https://www.bountysource.com/issues/52798961-all-changes-have-been-pushed-doesn-t-take-uncommitted-changes-into-account?utm_source=52798961&utm_medium=shield&utm_campaign=ISSUE_BADGE) |
-
-## Disclaimer
-
-Commands are purposefully opinionated. Use it on your own responsibility.
+| Release | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=release)](https://travis-ci.org/thisismydesign/autowow)   [![Gem Version](https://badge.fury.io/rb/autowow.svg)](https://badge.fury.io/rb/autowow)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/autowow?type=total)](https://rubygems.org/gems/autowow) |
+| Development | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=master)](https://travis-ci.org/thisismydesign/autowow) [![Bountysource](https://api.bountysource.com/badge/issue?issue_id=52798961)](https://www.bountysource.com/issues/52798961-all-changes-have-been-pushed-doesn-t-take-uncommitted-changes-into-account?utm_source=52798961&utm_medium=shield&utm_campaign=ISSUE_BADGE) |
 
 ## Usage
 
 Install from source as `rake install`.
 
 Run `autowow` or `aw` to see available commands.
+
+## Development
+
+```
+docker build . -t autowow
+docker run --rm -it --entrypoint sh -v $(pwd):/app autowow
+```
 
 ## Commands
 
@@ -135,12 +138,6 @@ Day starter routine for a new start
   - `aw dbmr`
   - `autowow db_migrate_reset`
   - [doc](doc/dbmr.md)
-
-#### Gem clean
-
-`aw gc` / `autowow gem_clean`
-
-* Removes unused gems
 
 #### Rubocop parallel autocorrect
 

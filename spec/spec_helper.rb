@@ -2,8 +2,6 @@ require "bundler/setup"
 
 require "simplecov"
 SimpleCov.add_filter ["spec"]
-require "coveralls"
-Coveralls.wear!
 
 require "autowow"
 

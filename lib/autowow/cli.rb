@@ -3,7 +3,6 @@ require "thor"
 require_relative "executor"
 require_relative "decorators/string_decorator"
 
-require_relative "features/rbenv"
 require_relative "features/gem"
 require_relative "features/vcs"
 require_relative "features/os"
@@ -19,7 +18,6 @@ module Autowow
     map %w[up] => :update_projects
     map %w[cb] => :clear_branches
     map %w[au] => :add_upstream
-    map %w[gc] => :gem_clean
     map %w[rv] => :ruby_versions
     map %w[gr] => :greet
     map %w[rpa] => :rubocop_parallel_autocorrect
@@ -70,16 +68,6 @@ module Autowow
     desc "open", "opens project URL in browser"
     def open
       Autowow::Features::Vcs.open
-    end
-
-    desc "gem_clean", "cleans unused gems"
-    def gem_clean
-      Autowow::Features::Gem.gem_clean
-    end
-
-    desc "ruby_versions", "shows ruby versions in use"
-    def ruby_versions
-      Autowow::Features::Rbenv.ruby_versions
     end
 
     desc "greet", "shows report of repos"

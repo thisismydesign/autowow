@@ -54,10 +54,6 @@ module Autowow
         !quiet.run!("gem push --silent").err.clean_lines.blank?
       end
 
-      def gem_clean
-        pretty_with_output.run(clean)
-      end
-
       def rubocop_parallel_autocorrect
         pastel = Pastel.new
         result = pretty_with_output.run!(rubocop_parallel)
