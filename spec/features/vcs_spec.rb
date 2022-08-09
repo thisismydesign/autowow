@@ -24,6 +24,12 @@ RSpec.describe Autowow::Features::Vcs do
     end
   end
 
+  describe ".default_branch" do
+    it "returns default branch" do
+      expect(described_class.working_branch).to eq('master')
+    end
+  end
+
   describe ".branch_pushed" do
     it "returns boolean" do
       branch = described_class.working_branch

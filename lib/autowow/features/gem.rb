@@ -19,7 +19,7 @@ module Autowow
         pretty_with_output.run(git_status)
         pretty_with_output.run(bundle_install)
         start_branch = Vcs.working_branch
-        logger.error("Not on master.") and return unless start_branch.eql?("master")
+        logger.error("Not on default branch.") and return unless start_branch.eql?(Features::Vcs.default_branch)
         pretty.run(pull)
         version = nil
 
