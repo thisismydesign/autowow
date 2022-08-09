@@ -45,6 +45,10 @@ module Autowow
         cmd + ["symbolic-ref", "--short", "HEAD"]
       end
 
+      def symbolic_origin_head
+        cmd + ["symbolic-ref", "--short", "refs/remotes/origin/HEAD"]
+      end
+
       def checkout(existing_branch)
         cmd + ["checkout", existing_branch]
       end

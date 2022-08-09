@@ -184,10 +184,11 @@ module Autowow
       def branch_merged
         pretty_with_output.run(git_status)
         branch = working_branch
-        logger.error("Nothing to do.") and return if branch.eql?("master")
+        tagret_branch = default_branch
+        logger.error("Nothing to do.") and return if branch.eql?(tagret_branch)
 
         keep_changes do
-          pretty_with_output.run(checkout("master"))
+          pretty_with_output.run(checkout(tagret_branch))
           pretty_with_output.run(pull)
         end
         pretty_with_output.run(branch_force_delete(branch))
@@ -197,6 +198,10 @@ module Autowow
 
       def working_branch
         quiet.run(current_branch).out.strip
+      end
+
+      def default_branch
+        quiet.run(Commands::Vcs.symbolic_origin_head).out.strip.split('/').last
       end
 
       def branch_pushed(branch, quiet = true)
