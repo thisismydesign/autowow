@@ -1,4 +1,7 @@
-Warning[:deprecated] = false
+# Disable warnings on console from dependencies: https://bloggie.io/@kinopyo/how-to-fix-ruby-2-7-warning-using-the-last-argument-as-keyword-parameters-is-deprecated
+if RUBY_VERSION >= "2.7"
+  Warning[:deprecated] = false
+end
 
 require "easy_logging"
 require "reflection_utils"
