@@ -15,8 +15,12 @@ module Autowow
 
       def older_than(files, quantity, unit)
         files.select do |dir|
-          TimeDifference.between(File.mtime(dir), Time.now).public_send("in_#{unit}") > quantity
+          age(dir, unit) > quantity
         end
+      end
+
+      def age(file)
+        TimeDifference.between(File.mtime(file), Time.now)
       end
 
       def for_dirs(dirs)

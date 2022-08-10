@@ -6,7 +6,6 @@ require "launchy"
 
 require_relative "../commands/vcs"
 require_relative "fs"
-require_relative "gem"
 require_relative "../time_difference"
 
 module Autowow
@@ -18,30 +17,6 @@ module Autowow
       include StringDecorator
 
       using RefinedTimeDifference
-
-      def self.hi!
-        logger.error("In a git repository. Try 1 level higher.") && return if is_git?
-        hi do
-          logger.info("Removing unused branches...")
-          clear_branches
-          logger.info("Adding upstream...")
-          add_upstream
-        end
-      end
-
-      def self.hi
-        logger.error("In a git repository. Try 1 level higher.") && return if is_git?
-        latest_project_info = get_latest_repo_info
-        logger.info("\nHang on, updating your local projects and remote forks...\n\n")
-        git_projects.each do |project|
-          Dir.chdir(project) do
-            logger.info("\nGetting #{project} in shape...")
-            yield if block_given?
-            update_project
-          end
-        end
-        greet(latest_project_info)
-      end
 
       def is_tracked?(branch)
         !quiet.run!(Vcs.upstream_tracking(branch).join(" ")).out.strip.empty?
@@ -222,39 +197,19 @@ module Autowow
         quiet.run(changes_not_on_remote(branch)).out.strip.empty?
       end
 
-      def greet(latest_project_info = nil)
-        logger.info("\nGood morning!\n\n")
-        if is_git?
-          logger.error("Inside repo, cannot show report about all repos.")
-        else
-          latest_project_info ||= get_latest_repo_info
-          logger.info(latest_project_info)
-          check_projects_older_than(1, :months)
+      def projects
+        git_projects.each do |git_project|
+          age = Features::Fs.age(git_project).humanize_higher_than(:days).downcase
+          logger.info("#{File.basename(git_project)} | last modified #{age.empty? ? 'recently': age + ' ago'} | local changes? #{local_changes?(git_project)}")
         end
       end
 
-      def check_projects_older_than(quantity, unit)
-        old_projects = Fs.older_than(git_projects, quantity, unit)
-        deprecated_projects = old_projects.reject do |project|
-          Dir.chdir(project) { any_branch_not_pushed? || uncommitted_changes?(quiet.run(git_status).out) }
-        end
-
-        logger.info("The following projects have not been touched for more than #{quantity} #{unit} and all changes have been pushed, maybe consider removing them?") unless deprecated_projects.empty?
-        deprecated_projects.each do |project|
-          time_diff = TimeDifference.between(File.mtime(project), Time.now).humanize_higher_than(:weeks).downcase
-          logger.info("  #{File.basename(project)} (#{time_diff})")
-        end
+      def local_changes?(git_project)
+        Dir.chdir(git_project) { any_branch_not_pushed? || uncommitted_changes?(quiet.run(git_status).out) }
       end
 
       def any_branch_not_pushed?(quiet: true)
         branches.reject { |branch| branch_pushed(branch, quiet) }.any?
-      end
-
-      def get_latest_repo_info
-        latest = latest_repo
-        time_diff = TimeDifference.between(File.mtime(latest), Time.now).humanize_higher_than(:days).downcase
-        time_diff_text = time_diff.empty? ? "recently" : "#{time_diff} ago"
-        "It looks like you were working on #{File.basename(latest)} #{time_diff_text}.\n\n"
       end
 
       def latest_repo
