@@ -124,18 +124,6 @@ Day starter routine for a new start
   - `autowow gem_release`
   - [doc](doc/grls.md)
 
-#### Rubocop parallel autocorrect
-
-`aw rpa` / `autowow rubocop_parallel_autocorrect`
-
-* Runs `rubocop` in parallel mode, autocorrects offenses on single thread
-
-#### Bundle exec
-
-`aw be <cmd>` / `autowow bundle_exec <cmd>`
-
-* Runs `cmd` with `bundle exec` prefixed
-
 ### Ruby
 
 #### Ruby versions

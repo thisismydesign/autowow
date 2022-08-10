@@ -13,23 +13,10 @@ module Autowow
         ["bundle", "install"]
       end
 
-      def rubocop_parallel
-        be + ["rubocop", "--parallel"]
-      end
-
       def bump(version = nil)
         command = ["gem", "bump", "--no-commit", "--no-color"]
         return command unless version
         command + ["--version", version]
-      end
-
-      def rubocop_autocorrect(files)
-        cmd = be + ["rubocop", "--auto-correct"]
-        if files.kind_of?(Array)
-          cmd + files
-        else
-          cmd + files.split(" ")
-        end
       end
 
       def build(pattern)

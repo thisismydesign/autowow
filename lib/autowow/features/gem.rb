@@ -54,22 +54,6 @@ module Autowow
         !quiet.run!("gem push --silent").err.clean_lines.blank?
       end
 
-      def rubocop_parallel_autocorrect
-        pastel = Pastel.new
-        result = pretty_with_output.run!(rubocop_parallel)
-        if result.failed?
-          filtered = result.out.each_line.select { |line| line.match(%r{(.*):([0-9]*):([0-9]*):}) }
-                       .map { |line| line.split(":")[0] }
-                       .uniq
-                       .map { |line| pastel.strip(line) }
-          pretty_with_output.run(rubocop_autocorrect(filtered)) if filtered.any?
-        end
-      end
-
-      def bundle_exec(cmd)
-        Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
-      end
-
       def bump_readme_version_information(version)
         readme = "README.md"
         return unless File.exists?(readme)

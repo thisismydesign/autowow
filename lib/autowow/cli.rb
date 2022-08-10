@@ -19,7 +19,6 @@ module Autowow
     map %w[au] => :add_upstream
     map %w[rv] => :ruby_versions
     map %w[gr] => :greet
-    map %w[rpa] => :rubocop_parallel_autocorrect
     map %w[be] => :bundle_exec
     map %w[fp] => :force_pull
     map %w[rc] => :ruby_check
@@ -76,20 +75,10 @@ module Autowow
       Autowow::Features::Vcs.greet
     end
 
-    desc "rubocop_parallel_autocorrect", "runs rubocop in parallel mode, autocorrects offenses on single thread"
-    def rubocop_parallel_autocorrect
-      Autowow::Features::Gem.rubocop_parallel_autocorrect
-    end
-
     # keep
     desc "exec", "runs command"
     def exec(*cmd)
       Autowow::Executor.pretty_with_output.run(cmd)
-    end
-
-    desc "bundle_exec", "runs command with `bundle exec` prefixed"
-    def bundle_exec(*cmd)
-      Autowow::Features::Gem.bundle_exec(cmd)
     end
 
     # keep
