@@ -6,7 +6,6 @@ require "launchy"
 
 require_relative "../commands/vcs"
 require_relative "fs"
-require_relative "gem"
 require_relative "../time_difference"
 
 module Autowow

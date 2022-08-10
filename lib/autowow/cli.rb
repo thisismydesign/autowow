@@ -3,12 +3,8 @@ require "thor"
 require_relative "executor"
 require_relative "decorators/string_decorator"
 
-require_relative "features/gem"
 require_relative "features/vcs"
-require_relative "features/os"
 require_relative "features/fs"
-
-require_relative "commands/gem"
 
 module Autowow
   class CLI < Thor
