@@ -21,14 +21,12 @@ module Autowow
     map %w[gr] => :greet
     map %w[rpa] => :rubocop_parallel_autocorrect
     map %w[be] => :bundle_exec
-    map %w[dbmr] => :db_migrate_reset
-    map %w[dbsch] => :db_schema
-    map %w[dbstr] => :db_structure
     map %w[fp] => :force_pull
     map %w[rc] => :ruby_check
     map %w[gis] => :gem_install_source
     map %w[lc] => :local_changes
 
+    # keep
     desc "branch_merged", "clean working branch and return to default branch"
     def branch_merged
       Autowow::Features::Vcs.branch_merged
@@ -39,16 +37,19 @@ module Autowow
       Autowow::Features::Gem.gem_release(version_bump)
     end
 
+    # keep
     desc "update_projects", "updates idle projects"
     def update_projects
       Autowow::Features::Vcs.update_projects
     end
 
+    # keep
     desc "clear_branches", "removes unused branches"
     def clear_branches
       Autowow::Features::Vcs.clear_branches
     end
 
+    # keep
     desc "add_upstream", "adds upstream branch if available"
     def add_upstream
       Autowow::Features::Vcs.add_upstream
@@ -64,6 +65,7 @@ module Autowow
       Autowow::Features::Vcs.hi!
     end
 
+    # keep
     desc "open", "opens project URL in browser"
     def open
       Autowow::Features::Vcs.open
@@ -79,6 +81,7 @@ module Autowow
       Autowow::Features::Gem.rubocop_parallel_autocorrect
     end
 
+    # keep
     desc "exec", "runs command"
     def exec(*cmd)
       Autowow::Executor.pretty_with_output.run(cmd)
@@ -89,41 +92,13 @@ module Autowow
       Autowow::Features::Gem.bundle_exec(cmd)
     end
 
-    desc "db_migrate_reset", "drops and sets up DB via migration"
-    def db_migrate_reset
-      Autowow::Features::Gem.db_migrate_reset
-    end
-
-    desc "db_schema", "drops and sets up DB via loading schema"
-    def db_schema
-      Autowow::Features::Gem.db_schema
-    end
-
-    desc "db_structure", "drops and sets up DB via loading structure"
-    def db_structure
-      Autowow::Features::Gem.db_structure
-    end
-
+    # keep
     desc "force_pull", "pulls branch from origin discarding local changes (including commits)"
     def force_pull
       Autowow::Features::Vcs.force_pull
     end
 
-    desc "heroku_db_migrate", "drops and sets up DB via migration"
-    def heroku_db_migrate
-      Autowow::Features::Heroku.db_migrate
-    end
-
-    desc "ruby_check", "rpa && be rspec && git status"
-    def ruby_check
-      Autowow::Features::Gem.ruby_check
-    end
-
-    desc "gem_install_source", "gem build *.gemspec && gem install *.gem"
-    def gem_install_source
-      Autowow::Features::Gem.gem_install_source
-    end
-
+    # keep
     desc "local_changes", "Are there any local changes in the repo?"
     def local_changes
       Autowow::Features::Vcs.local_changes

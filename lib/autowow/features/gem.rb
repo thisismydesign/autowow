@@ -70,31 +70,6 @@ module Autowow
         Autowow::Executor.pretty_with_output.run(["bundle", "exec"] + cmd)
       end
 
-      def ruby_check
-        rubocop_parallel_autocorrect
-        bundle_exec(["rspec"])
-        db_migrate_reset
-        pretty_with_output.run(rake + ["db:seed"])
-        pretty_with_output.run(git_status)
-      end
-
-      def gem_install_source
-        pretty_with_output.run("gem build *.gemspec")
-        pretty_with_output.run("gem install *.gem")
-      end
-
-      def db_migrate_reset
-        pretty_with_output.run(rake_db_migrate_reset)
-      end
-
-      def db_schema
-        pretty_with_output.run(rake_db_schema)
-      end
-
-      def db_structure
-        pretty_with_output.run(rake_db_structure)
-      end
-
       def bump_readme_version_information(version)
         readme = "README.md"
         return unless File.exists?(readme)

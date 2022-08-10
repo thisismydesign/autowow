@@ -124,21 +124,6 @@ Day starter routine for a new start
   - `autowow gem_release`
   - [doc](doc/grls.md)
 
-- Ruby check
-  - `aw rc`
-  - `autowow ruby_check`
-  - [doc](doc/rc.md)
-
-- Gem install source
-  - `aw gis`
-  - `autowow gem_install_local`
-  - [doc](doc/gis.md)
-
-- DB migrate reset
-  - `aw dbmr`
-  - `autowow db_migrate_reset`
-  - [doc](doc/dbmr.md)
-
 #### Rubocop parallel autocorrect
 
 `aw rpa` / `autowow rubocop_parallel_autocorrect`
