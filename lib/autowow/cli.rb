@@ -7,7 +7,6 @@ require_relative "features/gem"
 require_relative "features/vcs"
 require_relative "features/os"
 require_relative "features/fs"
-require_relative "features/heroku"
 
 require_relative "commands/gem"
 
