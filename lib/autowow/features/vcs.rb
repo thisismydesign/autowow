@@ -19,30 +19,6 @@ module Autowow
 
       using RefinedTimeDifference
 
-      def self.hi!
-        logger.error("In a git repository. Try 1 level higher.") && return if is_git?
-        hi do
-          logger.info("Removing unused branches...")
-          clear_branches
-          logger.info("Adding upstream...")
-          add_upstream
-        end
-      end
-
-      def self.hi
-        logger.error("In a git repository. Try 1 level higher.") && return if is_git?
-        latest_project_info = get_latest_repo_info
-        logger.info("\nHang on, updating your local projects and remote forks...\n\n")
-        git_projects.each do |project|
-          Dir.chdir(project) do
-            logger.info("\nGetting #{project} in shape...")
-            yield if block_given?
-            update_project
-          end
-        end
-        greet(latest_project_info)
-      end
-
       def is_tracked?(branch)
         !quiet.run!(Vcs.upstream_tracking(branch).join(" ")).out.strip.empty?
       end

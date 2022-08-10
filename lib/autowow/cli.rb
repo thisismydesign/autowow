@@ -17,12 +17,8 @@ module Autowow
     map %w[up] => :update_projects
     map %w[cb] => :clear_branches
     map %w[au] => :add_upstream
-    map %w[rv] => :ruby_versions
-    map %w[gr] => :greet
     map %w[be] => :bundle_exec
     map %w[fp] => :force_pull
-    map %w[rc] => :ruby_check
-    map %w[gis] => :gem_install_source
     map %w[lc] => :local_changes
     map %w[p] => :projects
 
@@ -53,16 +49,6 @@ module Autowow
     desc "add_upstream", "adds upstream branch if available"
     def add_upstream
       Autowow::Features::Vcs.add_upstream
-    end
-
-    desc "hi", "day starter routine"
-    def hi
-      Autowow::Features::Vcs.hi
-    end
-
-    desc "hi!", "day starter routine for a new start"
-    def hi!
-      Autowow::Features::Vcs.hi!
     end
 
     # keep
