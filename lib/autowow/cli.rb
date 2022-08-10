@@ -24,6 +24,7 @@ module Autowow
     map %w[rc] => :ruby_check
     map %w[gis] => :gem_install_source
     map %w[lc] => :local_changes
+    map %w[p] => :projects
 
     # keep
     desc "branch_merged", "clean working branch and return to default branch"
@@ -70,11 +71,6 @@ module Autowow
       Autowow::Features::Vcs.open
     end
 
-    desc "greet", "shows report of repos"
-    def greet
-      Autowow::Features::Vcs.greet
-    end
-
     # keep
     desc "exec", "runs command"
     def exec(*cmd)
@@ -91,6 +87,11 @@ module Autowow
     desc "local_changes", "Are there any local changes in the repo?"
     def local_changes
       Autowow::Features::Vcs.local_changes
+    end
+
+    desc "projects", "Show projects' name, age, and whether there are local changes"
+    def projects
+      Autowow::Features::Vcs.projects
     end
   end
 end
