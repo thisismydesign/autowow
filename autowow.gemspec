@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.name          = "autowow"
   spec.version       = Autowow::VERSION
   spec.authors       = ["thisismydesign"]
-  spec.email         = ["thisismydesign@users.noreply.github.com"]
+  spec.email         = ["git.thisismydesign@gmail.com"]
 
-  spec.summary       = %q{Set of commands to AUTOmate Way Of Working}
+  spec.summary       = %q{Set of commands to [auto]mate [w]ay [o]f [w]orking}
   spec.homepage      = "https://github.com/thisismydesign/autowow"
   spec.license       = "MIT"
 
