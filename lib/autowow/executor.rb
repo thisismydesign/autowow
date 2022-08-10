@@ -79,22 +79,20 @@ module Autowow
       end
     end
 
-    def pretty
+    def self.pretty
       @pretty ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: Pretty)))
     end
 
-    def pretty_with_output
+    def self.pretty_with_output
       @pretty_with_output ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: BufferingPretty)), fail_silently: true)
     end
 
-    def quiet
+    def self.quiet
       @quiet ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: :null)))
     end
 
-    def tty_params
+    def self.tty_params
       { pty: true, verbose: false }
     end
-
-    include ReflectionUtils::CreateModuleFunctions
   end
 end
