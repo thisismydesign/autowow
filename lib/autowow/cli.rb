@@ -12,59 +12,46 @@ require_relative "commands/gem"
 
 module Autowow
   class CLI < Thor
-    # keep
     desc "branch_merged", "clean working branch and return to default branch"
     def branch_merged
       Autowow::Features::Vcs.branch_merged
     end
     map %w[bm] => :branch_merged
 
-    desc "gem_release", "release gem and return to default branch"
-    def gem_release(version_bump = nil)
-      Autowow::Features::Gem.gem_release(version_bump)
-    end
-
-    # keep
     desc "update_projects", "updates idle projects"
     def update_projects
       Autowow::Features::Vcs.update_projects
     end
     map %w[up] => :update_projects
 
-    # keep
     desc "clear_branches", "removes unused branches"
     def clear_branches
       Autowow::Features::Vcs.clear_branches
     end
     map %w[cb] => :clear_branches
 
-    # keep
     desc "add_upstream", "adds upstream branch if available"
     def add_upstream
       Autowow::Features::Vcs.add_upstream
     end
     map %w[au] => :add_upstream
 
-    # keep
     desc "open", "opens project URL in browser"
     def open
       Autowow::Features::Vcs.open
     end
 
-    # keep
     desc "exec", "runs command"
     def exec(*cmd)
       Autowow::Executor.pretty_with_output.run(cmd)
     end
 
-    # keep
     desc "force_pull", "pulls branch from origin discarding local changes (including commits)"
     def force_pull
       Autowow::Features::Vcs.force_pull
     end
     map %w[fp] => :force_pull
 
-    # keep
     desc "local_changes", "Are there any local changes in the repo?"
     def local_changes
       Autowow::Features::Vcs.local_changes
