@@ -12,10 +12,7 @@ Status and support
 *You are viewing the README of the development version. You can find releases [here](https://github.com/thisismydesign/autowow/tags).*
 <!--- Version informartion end -->
 
-| Branch | Status |
-| ------ | ------ |
-| Release | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=release)](https://travis-ci.org/thisismydesign/autowow)   [![Gem Version](https://badge.fury.io/rb/autowow.svg)](https://badge.fury.io/rb/autowow)   [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/autowow?type=total)](https://rubygems.org/gems/autowow) |
-| Development | [![Build Status](https://travis-ci.org/thisismydesign/autowow.svg?branch=master)](https://travis-ci.org/thisismydesign/autowow) [![Bountysource](https://api.bountysource.com/badge/issue?issue_id=52798961)](https://www.bountysource.com/issues/52798961-all-changes-have-been-pushed-doesn-t-take-uncommitted-changes-into-account?utm_source=52798961&utm_medium=shield&utm_campaign=ISSUE_BADGE) |
+[![Gem Version](https://badge.fury.io/rb/autowow.svg)](https://badge.fury.io/rb/autowow) [![Total Downloads](http://ruby-gem-downloads-badge.herokuapp.com/autowow?type=total)](https://rubygems.org/gems/autowow)
 
 ## Usage
 
