@@ -105,13 +105,13 @@ module Autowow
         Executor.pretty_with_output.run(Commands::Vcs.branch) if branch_removed
       end
 
-      def update_projects
+      def self.update_projects
         Fs.in_place_or_subdirs(is_git?) do
           update_project
         end
       end
 
-      def update_project
+      def self.update_project
         logger.info("Updating #{File.expand_path('.')} ...")
         logger.error("Not a git repository.") and return unless is_git?
         status = Executor.quiet.run(Commands::Vcs.status).out
@@ -124,7 +124,7 @@ module Autowow
         end
       end
 
-      def pull_upstream
+      def self.pull_upstream
         upstream_remote = "upstream"
         remote = "origin"
         branch = default_branch
@@ -133,11 +133,11 @@ module Autowow
         Executor.pretty_with_output.run(Commands::Vcs.push(remote, branch))
       end
 
-      def has_upstream?
+      def self.has_upstream?
         Executor.quiet.run(Commands::Vcs.remotes).out.include?("upstream")
       end
 
-      def on_branch(branch)
+      def self.on_branch(branch)
         keep_changes do
           start_branch = working_branch
           switch_needed = !start_branch.eql?(branch)
@@ -154,7 +154,7 @@ module Autowow
         end
       end
 
-      def branch_merged
+      def self.branch_merged
         Executor.pretty_with_output.run(Commands::Vcs.status)
         branch = working_branch
         tagret_branch = default_branch
@@ -169,15 +169,15 @@ module Autowow
         Executor.pretty_with_output.run(Commands::Vcs.status)
       end
 
-      def working_branch
+      def self.working_branch
         Executor.quiet.run(Commands::Vcs.current_branch).out.strip
       end
 
-      def default_branch
+      def self.default_branch
         Executor.quiet.run(Commands::Vcs.symbolic_origin_head).out.strip.split('/').last
       end
 
-      def branch_pushed(branch, quiet = true)
+      def self.branch_pushed(branch, quiet = true)
         if !is_tracked?(branch)
           logger.info("Branch `#{branch}` is not tracked.") unless quiet
           return false
@@ -191,34 +191,34 @@ module Autowow
         return true
       end
 
-      def commits_pushed?(branch)
+      def self.commits_pushed?(branch)
         Executor.quiet.run(Commands::Vcs.changes_not_on_remote(branch)).out.strip.empty?
       end
 
-      def projects
+      def self.projects
         git_projects.each do |git_project|
           age = Features::Fs.age(git_project).humanize_higher_than(:days).downcase
           logger.info("#{File.basename(git_project)} | last modified #{age.empty? ? 'recently': age + ' ago'} | local changes? #{local_changes?(git_project)}")
         end
       end
 
-      def local_changes?(git_project)
+      def self.local_changes?(git_project)
         Dir.chdir(git_project) { any_branch_not_pushed? || uncommitted_changes?(Executor.quiet.run(Commands::Vcs.status).out) }
       end
 
-      def any_branch_not_pushed?(quiet: true)
+      def self.any_branch_not_pushed?(quiet: true)
         branches.reject { |branch| branch_pushed(branch, quiet) }.any?
       end
 
-      def latest_repo
+      def self.latest_repo
         Fs.latest(git_projects)
       end
 
-      def branches
+      def self.branches
         Executor.quiet.run(Commands::Vcs.branch_list.join(" ")).out.clean_lines
       end
 
-      def local_changes
+      def self.local_changes
         changes = false
         status = Executor.quiet.run(Commands::Vcs.status).out
         if uncommitted_changes?(status)
@@ -234,11 +234,11 @@ module Autowow
         logger.info("No unpushed changes.") unless changes
       end
 
-      def uncommitted_changes?(status)
+      def self.uncommitted_changes?(status)
         !(status.include?("nothing to commit, working tree clean") or status.include?("nothing added to commit but untracked files present") or status.include?("nothing to commit, working directory clean"))
       end
 
-      def keep_changes
+      def self.keep_changes
         status = Executor.quiet.run(Commands::Vcs.status).out
         pop_stash = uncommitted_changes?(status)
         Executor.quiet.run(Commands::Vcs.stash) if pop_stash
@@ -249,20 +249,18 @@ module Autowow
         end
       end
 
-      def is_git?
+      def self.is_git?
         status = Executor.quiet.run!(Commands::Vcs.status)
         Fs.git_folder_present && status.success? && !status.out.include?("Initial commit")
       end
 
-      def git_projects
+      def self.git_projects
         Fs.ls_dirs.select do |dir|
           Dir.chdir(dir) do
             is_git?
           end
         end
       end
-
-      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end
