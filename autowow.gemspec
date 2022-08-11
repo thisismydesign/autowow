@@ -27,7 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "time_difference", "= 0.5.0"      # Calculate project age. Fixed version because of refinements :(
   spec.add_dependency "launchy"                         # Open project in browser
   spec.add_dependency "tty-command", "~> 0.8"           # Execute system commands nicely
-  spec.add_dependency "reflection_utils", ">= 0.3.0"    # Invoke module methods without including the module
   spec.add_dependency "rubocop"                         # Style check
   spec.add_dependency "rubocop-rspec"                   # Style check
 
