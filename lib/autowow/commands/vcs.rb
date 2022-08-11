@@ -1,115 +1,91 @@
 module Autowow
   module Commands
     module Vcs
-      def cmd
-        ["git"]
-      end
-
-      def terminal_options
-        ["--no-pager"]
-      end
-
-      def commit (msg)
-        cmd + ["commit", "-m", msg]
-      end
-
-      def changes_not_on_remote(branch)
+      def self.changes_not_on_remote(branch)
         cmd + terminal_options + ["log", "--not", "--remotes", branch]
       end
 
-      def branch_list
+      def self.branch_list
         cmd + ["for-each-ref", "--format='%(refname:short)'", "refs/heads/"]
       end
 
-      def push(branch = nil, remote = nil)
+      def self.push(branch = nil, remote = nil)
         cmd + ["push"] + [branch, remote].compact
       end
 
-      def rebase(branch)
-        cmd + ["rebase", branch]
-      end
-
-      def git_status
+      def self.status
         cmd + ["status"]
       end
 
-      def stash
+      def self.stash
         cmd + ["stash"]
       end
 
-      def stash_pop
+      def self.stash_pop
         cmd + ["stash", "pop"]
       end
 
-      def current_branch
+      def self.current_branch
         cmd + ["symbolic-ref", "--short", "HEAD"]
       end
 
-      def symbolic_origin_head
+      def self.symbolic_origin_head
         cmd + ["symbolic-ref", "--short", "refs/remotes/origin/HEAD"]
       end
 
-      def checkout(existing_branch)
+      def self.checkout(existing_branch)
         cmd + ["checkout", existing_branch]
       end
 
-      def pull
+      def self.pull
         cmd + ["pull"]
       end
 
-      def branch_force_delete(branch)
+      def self.branch_force_delete(branch)
         cmd + ["branch", "-D", branch]
       end
 
-      def create(branch)
+      def self.create(branch)
         cmd + ["checkout", "-b", branch]
       end
 
-      def set_upstream(remote, branch)
-        cmd + ["push", "--set-upstream", remote, branch]
-      end
-
-      def remotes
+      def self.remotes
         cmd + ["remote", "-v"]
       end
 
-      def fetch(remote)
+      def self.fetch(remote)
         cmd + ["fetch", remote]
       end
 
-      def merge(compare)
+      def self.merge(compare)
         cmd + ["merge", compare]
       end
 
-      def branch
+      def self.branch
         cmd + terminal_options + ["branch"]
       end
 
-      def add_remote(name, url)
+      def self.add_remote(name, url)
         cmd + ["remote", "add", name, url]
       end
 
-      def add(patterns)
-        cmd + ["add"] + patterns
-      end
-
-      def hard_reset(branch)
+      def self.hard_reset(branch)
         cmd + ["reset", "--hard", branch]
       end
 
-      def upstream_tracking(branch)
+      def self.upstream_tracking(branch)
         cmd + ["for-each-ref", "--format=%'(upstream:short)'", "refs/heads/#{branch}"]
       end
 
-      def current_ref
-        cmd + ["symbolic-ref", "--quiet", "HEAD"]
+      private
+
+      def self.cmd
+        ["git"]
       end
 
-      def show_ref(branch)
-        cmd + ["show-ref", branch]
+      def self.terminal_options
+        ["--no-pager"]
       end
-
-      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end

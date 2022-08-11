@@ -12,28 +12,26 @@ module Autowow
   module Features
     module Vcs
       include EasyLogging
-      include Commands::Vcs
-      include Executor
       include StringDecorator
 
       using RefinedTimeDifference
 
-      def is_tracked?(branch)
-        !quiet.run!(Vcs.upstream_tracking(branch).join(" ")).out.strip.empty?
+      def self.is_tracked?(branch)
+        !Executor.quiet.run!(Commands::Vcs.upstream_tracking(branch).join(" ")).out.strip.empty?
       end
 
       def self.force_pull
-        pretty_with_output.run(git_status)
+        Executor.pretty_with_output.run(Commands::Vcs.status)
         branch = working_branch
 
-        pretty_with_output.run(fetch("--all"))
-        pretty_with_output.run(hard_reset("origin/#{branch}"))
+        Executor.pretty_with_output.run(Commands::Vcs.fetch("--all"))
+        Executor.pretty_with_output.run(Commands::Vcs.("origin/#{branch}"))
 
-        pretty_with_output.run(git_status)
+        Executor.pretty_with_output.run(Commands::Vcs.status)
       end
 
       def self.open
-        url = origin_push_url(quiet.run(remotes).out)
+        url = origin_push_url(Executor.quiet.run(Commands::Vcs.remotes).out)
         logger.info("Opening #{url}")
         Launchy.open(url)
       end
@@ -41,7 +39,7 @@ module Autowow
       def self.add_upstream
         logger.error("Not a git repository.") and return unless is_git?
         logger.warn("Already has upstream.") and return if has_upstream?
-        remote_list = pretty_with_output.run(remotes).out
+        remote_list = Executor.pretty_with_output.run(Commands::Vcs.remotes).out
 
         url = URI.parse(origin_push_url(remote_list))
         host = "api.#{url.host}"
@@ -60,8 +58,8 @@ module Autowow
           parsed_response = JSON.parse(response.body)
           logger.warn("Not a fork.") and return unless parsed_response["fork"]
           parent_url = parsed_response.dig("parent", "html_url")
-          pretty.run(add_remote("upstream", parent_url)) unless parent_url.to_s.empty?
-          pretty_with_output.run(remotes)
+          Executor.pretty.run(Commands::Vcs.add_remote("upstream", parent_url)) unless parent_url.to_s.empty?
+          Executor.pretty_with_output.run(Commands::Vcs.remotes)
         else
           logger.error("Github API (#{url.scheme}://#{host}#{path}) could not be reached: #{response.body}")
         end
@@ -94,92 +92,92 @@ module Autowow
       end
 
       def self.clear_branches
-        pretty_with_output.run(branch)
+        Executor.pretty_with_output.run(Commands::Vcs.branch)
         branch_removed = false
 
         (branches - [default_branch, working_branch]).each do |branch|
           if branch_pushed(branch)
-            pretty.run(branch_force_delete(branch))
+            Executor.pretty.run(Commands::Vcs.branch_force_delete(branch))
             branch_removed = true
           end
         end
 
-        pretty_with_output.run(branch) if branch_removed
+        Executor.pretty_with_output.run(Commands::Vcs.branch) if branch_removed
       end
 
-      def update_projects
+      def self.update_projects
         Fs.in_place_or_subdirs(is_git?) do
           update_project
         end
       end
 
-      def update_project
+      def self.update_project
         logger.info("Updating #{File.expand_path('.')} ...")
         logger.error("Not a git repository.") and return unless is_git?
-        status = quiet.run(git_status).out
+        status = Executor.quiet.run(Commands::Vcs.status).out
         if uncommitted_changes?(status) && working_branch.eql?(default_branch)
           logger.warn("Skipped: uncommitted changes on default branch.") and return
         end
 
         on_branch(default_branch) do
-          has_upstream? ? pull_upstream : pretty_with_output.run(pull)
+          has_upstream? ? pull_upstream : Executor.pretty_with_output.run(Commands::Vcs.pull)
         end
       end
 
-      def pull_upstream
+      def self.pull_upstream
         upstream_remote = "upstream"
         remote = "origin"
         branch = default_branch
-        pretty_with_output.run(fetch(upstream_remote)).out
-        pretty_with_output.run(merge("#{upstream_remote}/#{branch}")).out
-        pretty_with_output.run(push(remote, branch))
+        Executor.pretty_with_output.run(Commands::Vcs.fetch(upstream_remote)).out
+        Executor.pretty_with_output.run(Commands::Vcs.merge("#{upstream_remote}/#{branch}")).out
+        Executor.pretty_with_output.run(Commands::Vcs.push(remote, branch))
       end
 
-      def has_upstream?
-        quiet.run(remotes).out.include?("upstream")
+      def self.has_upstream?
+        Executor.quiet.run(Commands::Vcs.remotes).out.include?("upstream")
       end
 
-      def on_branch(branch)
+      def self.on_branch(branch)
         keep_changes do
           start_branch = working_branch
           switch_needed = !start_branch.eql?(branch)
           if switch_needed
-            result = pretty.run!(checkout(branch))
-            pretty.run(create(branch)) unless result.success?
+            result = Executor.pretty.run!(Commands::Vcs.checkout(branch))
+            Executor.pretty.run(Commands::Vcs.create(branch)) unless result.success?
           end
 
           begin
             yield if block_given?
           ensure
-            pretty.run(checkout(start_branch)) if switch_needed
+            Executor.pretty.run(Commands::Vcs.checkout(start_branch)) if switch_needed
           end
         end
       end
 
-      def branch_merged
-        pretty_with_output.run(git_status)
+      def self.branch_merged
+        Executor.pretty_with_output.run(Commands::Vcs.status)
         branch = working_branch
         tagret_branch = default_branch
         logger.error("Nothing to do.") and return if branch.eql?(tagret_branch)
 
         keep_changes do
-          pretty_with_output.run(checkout(tagret_branch))
-          pretty_with_output.run(pull)
+          Executor.pretty_with_output.run(Commands::Vcs.checkout(tagret_branch))
+          Executor.pretty_with_output.run(Commands::Vcs.pull)
         end
-        pretty_with_output.run(branch_force_delete(branch))
+        Executor.pretty_with_output.run(Commands::Vcs.branch_force_delete(branch))
 
-        pretty_with_output.run(git_status)
+        Executor.pretty_with_output.run(Commands::Vcs.status)
       end
 
-      def working_branch
-        quiet.run(current_branch).out.strip
+      def self.working_branch
+        Executor.quiet.run(Commands::Vcs.current_branch).out.strip
       end
 
-      def default_branch
-        quiet.run(Commands::Vcs.symbolic_origin_head).out.strip.split('/').last
+      def self.default_branch
+        Executor.quiet.run(Commands::Vcs.symbolic_origin_head).out.strip.split('/').last
       end
 
-      def branch_pushed(branch, quiet = true)
+      def self.branch_pushed(branch, quiet = true)
         if !is_tracked?(branch)
           logger.info("Branch `#{branch}` is not tracked.") unless quiet
           return false
@@ -193,36 +191,36 @@ module Autowow
         return true
       end
 
-      def commits_pushed?(branch)
-        quiet.run(changes_not_on_remote(branch)).out.strip.empty?
+      def self.commits_pushed?(branch)
+        Executor.quiet.run(Commands::Vcs.changes_not_on_remote(branch)).out.strip.empty?
       end
 
-      def projects
+      def self.projects
         git_projects.each do |git_project|
           age = Features::Fs.age(git_project).humanize_higher_than(:days).downcase
           logger.info("#{File.basename(git_project)} | last modified #{age.empty? ? 'recently': age + ' ago'} | local changes? #{local_changes?(git_project)}")
         end
       end
 
-      def local_changes?(git_project)
-        Dir.chdir(git_project) { any_branch_not_pushed? || uncommitted_changes?(quiet.run(git_status).out) }
+      def self.local_changes?(git_project)
+        Dir.chdir(git_project) { any_branch_not_pushed? || uncommitted_changes?(Executor.quiet.run(Commands::Vcs.status).out) }
       end
 
-      def any_branch_not_pushed?(quiet: true)
+      def self.any_branch_not_pushed?(quiet: true)
         branches.reject { |branch| branch_pushed(branch, quiet) }.any?
       end
 
-      def latest_repo
+      def self.latest_repo
         Fs.latest(git_projects)
       end
 
-      def branches
-        quiet.run(branch_list.join(" ")).out.clean_lines
+      def self.branches
+        Executor.quiet.run(Commands::Vcs.branch_list.join(" ")).out.clean_lines
       end
 
-      def local_changes
+      def self.local_changes
         changes = false
-        status = quiet.run(git_status).out
+        status = Executor.quiet.run(Commands::Vcs.status).out
         if uncommitted_changes?(status)
           logger.info("There are uncommitted changes.")
           changes = true
@@ -236,35 +234,33 @@ module Autowow
         logger.info("No unpushed changes.") unless changes
       end
 
-      def uncommitted_changes?(status)
+      def self.uncommitted_changes?(status)
         !(status.include?("nothing to commit, working tree clean") or status.include?("nothing added to commit but untracked files present") or status.include?("nothing to commit, working directory clean"))
       end
 
-      def keep_changes
-        status = quiet.run(git_status).out
+      def self.keep_changes
+        status = Executor.quiet.run(Commands::Vcs.status).out
         pop_stash = uncommitted_changes?(status)
-        quiet.run(stash) if pop_stash
+        Executor.quiet.run(Commands::Vcs.stash) if pop_stash
         begin
           yield if block_given?
         ensure
-          quiet.run(stash_pop) if pop_stash
+          Executor.quiet.run(Commands::Vcs.stash_pop) if pop_stash
         end
       end
 
-      def is_git?
-        status = quiet.run!(git_status)
+      def self.is_git?
+        status = Executor.quiet.run!(Commands::Vcs.status)
         Fs.git_folder_present && status.success? && !status.out.include?("Initial commit")
       end
 
-      def git_projects
+      def self.git_projects
         Fs.ls_dirs.select do |dir|
           Dir.chdir(dir) do
             is_git?
           end
         end
       end
-
-      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end

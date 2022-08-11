@@ -5,25 +5,25 @@ module Autowow
     module Fs
       using RefinedTimeDifference
 
-      def ls_dirs
+      def self.ls_dirs
         Dir.glob(File.expand_path("./*/")).select { |f| File.directory? f }
       end
 
-      def latest(files)
+      def self.latest(files)
         files.sort_by { |f| File.mtime(f) }.reverse!.first
       end
 
-      def older_than(files, quantity, unit)
+      def self.older_than(files, quantity, unit)
         files.select do |dir|
           age(dir, unit) > quantity
         end
       end
 
-      def age(file)
+      def self.age(file)
         TimeDifference.between(File.mtime(file), Time.now)
       end
 
-      def for_dirs(dirs)
+      def self.for_dirs(dirs)
         dirs.each do |working_dir|
           # TODO: add handling of directories via extra param to popen3
           # https://stackoverflow.com/a/10148084/2771889
@@ -33,7 +33,7 @@ module Autowow
         end
       end
 
-      def in_place_or_subdirs(in_place)
+      def self.in_place_or_subdirs(in_place)
         if in_place
           yield
         else
@@ -43,11 +43,9 @@ module Autowow
         end
       end
 
-      def git_folder_present
+      def self.git_folder_present
         File.exist?(".git")
       end
-
-      include ReflectionUtils::CreateModuleFunctions
     end
   end
 end

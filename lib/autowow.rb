@@ -4,7 +4,6 @@ if RUBY_VERSION >= "2.7"
 end
 
 require "easy_logging"
-require "reflection_utils"
 
 require_relative "autowow/log_formatter"
 
