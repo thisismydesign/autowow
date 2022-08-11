@@ -19,9 +19,23 @@ Status and support
 
 ## Usage
 
-Install from source as `rake install`.
+`gem install autowow` or install from source via `rake install`.
 
 Run `autowow` or `aw` to see available commands.
+
+```
+Commands:
+  aw add_upstream     # adds upstream branch if available
+  aw branch_merged    # clean working branch and return to default branch
+  aw clear_branches   # removes unused branches
+  aw exec             # runs command
+  aw force_pull       # pulls branch from origin discarding local changes (including commits)
+  aw help [COMMAND]   # Describe available commands or one specific command
+  aw local_changes    # Are there any local changes in the repo?
+  aw open             # opens project URL in browser
+  aw projects         # Show projects' name, age, and whether there are local changes
+  aw update_projects  # updates idle projects
+```
 
 ## Development
 
@@ -29,127 +43,6 @@ Run `autowow` or `aw` to see available commands.
 docker build . -t autowow
 docker run --rm -it --entrypoint sh -v $(pwd):/app autowow
 ```
-
-## Commands
-
-Commands in general
-* start by outputting the status before execution
-* end by outputting the status after execution
-* are safe
-  * only touch files via other commands (e.g. `git`)
-  * do not cause conflicted state
-* hard check for prerequisites
-* store and restore uncommitted changes
-* output executed commands that cause any change
-* execute in current directory
-* retain original output color
-
-### VCS
-
-Commands related to version control systems.
-Currently only Git and the GitHub API are supported.
-
-#### Branch merged
-
-`aw bm` / `autowow branch_merged`
-
-* Switches to master and pulls your merged changes
-* Removes local working branch
-
-Prerequisites: not on master
-
-#### Update projects
-
-`aw up` / `autowow update_projects`
-
-* Updates local repositories
-* Updates remote forks
-* Searches for repositories on paths: `.`, `./*/`
-
-Prerequisites: no uncommitted changes on master
-
-#### Clear branches
-
-`aw cb` / `autowow clear_branches`
-
-* Removes branches without not pushed changes 
-* Keeps current and master branches
-
-#### Add upstream
-
-`aw au` / `autowow add_upstream`
-
-* Adds parent repository as remote 'upstream'
-
-Prerequisites: doesn't have remote called 'upstream'
-
-#### Hi
-
-`aw hi` / `autowow hi`
-
-Day starter routine
-
-* Updates projects (runs 'Update projects')
-* Shows latest and deprecated repos
-* Shows deprecated Ruby versions
-
-Prerequisites: in a directory that contains git repos, not in the repo itself
-
-#### Hi!
-
-`aw hi!` / `autowow hi!`
-
-Day starter routine for a new start
-
-* Runs 'Add upstream' and 'Clear branches' for all projects
-* Runs 'Hi'
-
-#### Open
-
-`aw open` / `autowow open`
-
-* Opens project in browser
-
-#### Force pull
-
-`aw fp` / `autowow force_pull`
-
-* Runs `git fetch --all`
-* Runs `git reset --hard origin/<current_branch_name>`
-
-### Gem
-
-- Gem release
-  - `aw grls`
-  - `autowow gem_release`
-  - [doc](doc/grls.md)
-
-### Ruby
-
-#### Ruby versions
-
-`aw rv` / `autowow ruby_versions`
-
-* Shows Ruby versions in use
-* Searches for repositories on paths: `.`, `./*/`
-
-### Misc
-
-#### Execute
-
-`aw e` / `autowow execute`
-
-* Executes given command
-
-## Contribution and feedback
-
-This project is built around known use-cases. If you have one that isn't covered don't hesitate to open an issue and start a discussion.
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/thisismydesign/autowow. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-## Conventions
-
-This project follows [C-Hive guides](https://github.com/c-hive/guides) for code style, way of working and other development concerns.
 
 ## License
 
