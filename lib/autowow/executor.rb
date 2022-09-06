@@ -80,15 +80,15 @@ module Autowow
     end
 
     def self.pretty
-      @pretty ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: Pretty)))
+      @pretty ||= RunWrapper.new(TTY::Command.new(**tty_params.merge(printer: Pretty)))
     end
 
     def self.pretty_with_output
-      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: BufferingPretty)), fail_silently: true)
+      @pretty_with_output ||= RunWrapper.new(TTY::Command.new(**tty_params.merge(printer: BufferingPretty)), fail_silently: true)
     end
 
     def self.quiet
-      @quiet ||= RunWrapper.new(TTY::Command.new(tty_params.merge(printer: :null)))
+      @quiet ||= RunWrapper.new(TTY::Command.new(**tty_params.merge(printer: :null)))
     end
 
     def self.tty_params
