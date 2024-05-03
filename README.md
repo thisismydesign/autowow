@@ -5,8 +5,8 @@
 Status and support
 
 - &#x2714; stable
-- &#x2714; supported
-- &#x2714; ongoing development
+- &#x2716; no longer supported
+- &#x2716; no ongoing development
 
 <!--- Version informartion -->
 *You are viewing the README of the development version. You can find releases [here](https://github.com/thisismydesign/autowow/tags).*
